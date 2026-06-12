@@ -1,0 +1,22 @@
+RewriteEngine On
+
+# Public entry points moved under /public/{feature}/ while keeping legacy root URLs working.
+RewriteRule ^analytics\.php$ public/admin/analytics.php [L]
+RewriteRule ^debug_upload\.php$ public/admin/debug_upload.php [L]
+
+RewriteRule ^login\.php$ public/auth/login.php [L]
+RewriteRule ^forgotpassword\.php$ public/auth/forgotpassword.php [L]
+
+RewriteRule ^faculty\.php$ public/faculty/faculty.php [L]
+RewriteRule ^facultyclass\.php$ public/faculty/facultyclass.php [L]
+RewriteRule ^facultysubject\.php$ public/faculty/facultysubject.php [L]
+
+RewriteRule ^classRoom\.php$ public/classroom/classRoom.php [L]
+RewriteRule ^lesson_view\.php$ public/classroom/lesson_view.php [L]
+RewriteRule ^manageQuiz\.php$ public/classroom/manageQuiz.php [L]
+RewriteRule ^post_manage\.php$ public/classroom/post_manage.php [L]
+
+RewriteRule ^studentClassRoom\.php$ public/student/studentClassRoom.php [L]
+RewriteRule ^submitwork\.php$ public/student/submitwork.php [L]
+RewriteRule ^takequiz\.php$ public/student/takequiz.php [L]
+RewriteRule ^quiz_result\.php$ public/student/quiz_result.php [L]

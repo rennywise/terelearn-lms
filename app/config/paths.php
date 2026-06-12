@@ -1,0 +1,10 @@
+<?php
+define('TERELEARN_ROOT', dirname(__DIR__, 2));
+define('TERELEARN_APP', TERELEARN_ROOT . '/app');
+define('TERELEARN_PUBLIC', TERELEARN_ROOT . '/public');
+define('TERELEARN_STORAGE', TERELEARN_ROOT . '/storage');
+define('TERELEARN_BASE_URL', '/finalbackup1/TERELEARN/');
+define('TERELEARN_PUBLIC_URL', TERELEARN_BASE_URL . 'public/');
+define('TERELEARN_ASSETS_URL', TERELEARN_PUBLIC_URL . 'assets/');
+define('TERELEARN_UPLOADS_URL', TERELEARN_PUBLIC_URL . 'uploads/');
+define('TERELEARN_API_URL', TERELEARN_BASE_URL . 'API/');

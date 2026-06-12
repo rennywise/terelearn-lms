@@ -1,0 +1,9 @@
+storage/previews/
+storage/cache/
+storage/logs/
+*.log
+
+uploads/
+uploads_files/
+uploads_previews/
+backups/

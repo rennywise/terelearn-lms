@@ -1,0 +1,7 @@
+RewriteEngine On
+
+# Keep old root API URLs working after moving bridge files into legacy/root.
+# Example: API/authenticate.php -> API/legacy/root/authenticate.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([A-Za-z0-9_-]+\.php)$ legacy/root/$1 [L,QSA]

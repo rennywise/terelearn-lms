@@ -1,0 +1,93 @@
+ a {
+        text-decoration: none !important;
+      }
+
+      @media (max-width: 768px) {
+        table {
+          font-size: 0.9rem;
+        }
+
+        .table-responsive {
+          font-size: 0.8rem;
+        }
+      }
+
+      .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+      }
+
+      .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+      }
+
+      .nav-treeview .nav-link p {
+        font-size: 0.85rem !important;
+      }
+
+      .dark-mode .form-control,
+      .dark-mode .input-group-text {
+        /* Set background to white for inputs and input-group-text */
+        background-color: #ffffff !important;
+        /* Set text color to dark for readability */
+        color: #212529 !important;
+        /* Remove the dark border that might appear */
+        border-color: #ced4da !important;
+      }
+      /* Also ensure the disabled input is light for "Type: Faculty Member" */
+      .dark-mode .form-control:disabled {
+        background-color: #e9ecef !important;
+        color: #495057 !important;
+      }
+      /* Light mode */
+      #user-text {
+        color: #6c757d;
+      }
+
+      /* Dark mode */
+      .dark-mode #user-text {
+        color: #adb5bd;
+      }
+      /* Light mode (default) */
+      #user-text {
+        color: #6c757d; /* Muted gray text */
+      }
+
+      /* Dark mode */
+      .dark-mode #user-text {
+        color: #adb5bd; /* Lighter gray for visibility in dark mode */
+      }
+
+      /* Alternative: If you want different colors */
+      /* Light mode */
+      .sidebar .text-muted {
+        color: #6c757d;
+      }
+
+      /* Dark mode */
+      .dark-mode .sidebar .text-muted {
+        color: #adb5bd !important;
+      }
+
+      /* If you want even more contrast in dark mode */
+      .dark-mode #user-text {
+        color: #e9ecef; /* Almost white for maximum contrast */
+      }
+
+      .animation__shake {
+  animation: shake 3s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-5px, 0); }
+  20% { transform: translate(5px, 0); }
+  30% { transform: translate(-5px, 0); }
+  40% { transform: translate(5px, 0); }
+  50% { transform: translate(-5px, 0); }
+  60% { transform: translate(5px, 0); }
+  70% { transform: translate(-5px, 0); }
+  80% { transform: translate(5px, 0); }
+  90% { transform: translate(-5px, 0); }
+}
