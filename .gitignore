@@ -1,9 +1,10 @@
-storage/previews/
-storage/cache/
-storage/logs/
-*.log
+backups/
 
+storage/
 uploads/
 uploads_files/
 uploads_previews/
-backups/
+public/uploads/
+
+*.log
+*.bin
