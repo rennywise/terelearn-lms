@@ -28,42 +28,42 @@ if ($class_id === '') {
 
 <style>
 :root {
-    --primary: #1a9e78;
-    --primary-dark: #0d7a5e;
-    --primary-light: #e6f7f2;
-    --primary-mid: rgba(26,158,120,.15);
-    --accent: #1f73db;
-    --accent-light: #e8f0fe;
+    --primary: #795548;
+    --primary-dark: #654337;
+    --primary-light: #f0e7e2;
+    --primary-mid: rgba(121,85,72,.16);
+    --accent: #a98f85;
+    --accent-light: #f3ebe7;
     --danger: #d93025;
     --warning: #f57c00;
-    --border: #e8eaed;
-    --text: #1c2027;
-    --text-muted: #5f6368;
-    --bg: #f4f6f9;
+    --border: #ded1ca;
+    --text: #3f302b;
+    --text-muted: #9b7b72;
+    --bg: #eee8e5;
     --surface: #ffffff;
     --nav-h: 60px;
     --radius: 14px;
     --radius-sm: 8px;
-    --shadow: 0 2px 12px rgba(0,0,0,.07);
-    --shadow-md: 0 4px 20px rgba(0,0,0,.10);
-    --shadow-lg: 0 10px 34px rgba(15,23,42,.12);
+    --shadow: 0 2px 8px rgba(68,45,36,.09);
+    --shadow-md: 0 8px 22px rgba(68,45,36,.12);
+    --shadow-lg: 0 16px 34px rgba(68,45,36,.15);
     --trans: .22s cubic-bezier(.4,0,.2,1);
     --trans-fast: .16s cubic-bezier(.4,0,.2,1);
     --trans-smooth: .28s cubic-bezier(.2,.8,.2,1);
 }
 
 body.dark {
-    --primary: #2ecc9a;
-    --primary-dark: #1a9e78;
-    --primary-light: rgba(46,204,154,.12);
-    --primary-mid: rgba(46,204,154,.10);
-    --accent: #4d90e2;
-    --accent-light: rgba(77,144,226,.14);
-    --border: #2e3849;
-    --text: #e4ecf7;
-    --text-muted: #8a9ab5;
-    --bg: #0f1724;
-    --surface: #182030;
+    --primary: #c7a99c;
+    --primary-dark: #a98f85;
+    --primary-light: rgba(199,169,156,.14);
+    --primary-mid: rgba(199,169,156,.10);
+    --accent: #fbd990;
+    --accent-light: rgba(251,217,144,.13);
+    --border: #3d332f;
+    --text: #f6eee9;
+    --text-muted: #c1aaa1;
+    --bg: #1b1411;
+    --surface: #261d19;
 }
 
 * {
@@ -76,7 +76,7 @@ body {
     font-family: 'DM Sans', sans-serif;
     background: var(--bg);
     background-image:
-        radial-gradient(circle at 8% 0%, rgba(26,158,120,.06), transparent 28%),
+        radial-gradient(circle at 8% 0%, rgba(250,203,140,.12), transparent 28%),
         linear-gradient(180deg, rgba(255,255,255,.52), transparent 220px);
     color: var(--text);
     transition: background var(--trans), color var(--trans);
@@ -148,7 +148,7 @@ textarea,
 .sq-live-now .sq-ico{background:var(--danger);color:#fff;}
 .sq-live-now .sq-dot{width:8px;height:8px;border-radius:50%;background:var(--danger);animation:sq-pulse 1.1s ease-in-out infinite;display:inline-block;margin-right:.4rem;}
 
-.sq-due{background:var(--primary-light);color:var(--primary);border:1px solid rgba(26,158,120,.25);}
+.sq-due{background:var(--primary-light);color:var(--primary);border:1px solid rgba(121,85,72,.25);}
 .sq-due .sq-ico{background:var(--primary);color:#fff;}
 
 .sq-closed{background:var(--bg);color:var(--text-muted);border:1px solid var(--border);}
@@ -190,15 +190,15 @@ textarea,
   border:none;cursor:pointer;
 }
 .sq-btn:disabled{opacity:.55;cursor:not-allowed;}
-.sq-btn-primary{background:var(--primary);color:#fff;box-shadow:0 2px 10px rgba(26,158,120,.3);}
+.sq-btn-primary{background:var(--primary);color:#fff;box-shadow:0 2px 10px rgba(121,85,72,.24);}
 .sq-btn-primary:hover:not(:disabled){background:var(--primary-dark);transform:translateY(-2px);}
-.sq-btn-view{font-size:1rem;padding:.82rem 1.55rem;border-radius:12px;box-shadow:0 4px 16px rgba(26,158,120,.35);}
+.sq-btn-view{font-size:1rem;padding:.82rem 1.55rem;border-radius:12px;box-shadow:0 4px 16px rgba(121,85,72,.28);}
 .sq-btn-danger{background:var(--danger);color:#fff;box-shadow:0 2px 10px rgba(217,48,37,.3);}
 .sq-btn-danger:hover:not(:disabled){background:#b1271c;transform:translateY(-2px);}
 .sq-btn-ghost{background:var(--bg);color:var(--text-muted);border:1.5px solid var(--border);}
 .sq-btn-ghost:hover:not(:disabled){background:#fdecea;color:var(--danger);border-color:#f5c2c7;}
-.sq-btn-take{background:var(--primary);color:#fff;box-shadow:0 2px 12px rgba(26,158,120,.4);font-size:.92rem;padding:.7rem 1.3rem;}
-.sq-btn-take:hover:not(:disabled){background:var(--primary-dark);transform:translateY(-2px);box-shadow:0 4px 16px rgba(26,158,120,.5);}
+.sq-btn-take{background:var(--primary);color:#fff;box-shadow:0 2px 12px rgba(121,85,72,.26);font-size:.92rem;padding:.7rem 1.3rem;}
+.sq-btn-take:hover:not(:disabled){background:var(--primary-dark);transform:translateY(-2px);box-shadow:0 4px 16px rgba(121,85,72,.32);}
 
 .topbar {
     position: fixed;
@@ -302,18 +302,56 @@ textarea,
 .banner-bg {
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg,#1a9e78,#0d47a1);
+    background: linear-gradient(135deg,#795548,#291304);
 }
 
 .banner-overlay {
     position: absolute;
     inset: 0;
     background: linear-gradient(90deg, rgba(0,0,0,.28), rgba(0,0,0,.08)), rgba(0,0,0,.18);
+    z-index: 1;
+}
+
+.banner-pattern {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: .16;
+    overflow: hidden;
+}
+
+.banner-pattern-icon {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: var(--s);
+    height: var(--s);
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,.62);
+    background: rgba(255,255,255,.11);
+    border: 1px solid rgba(255,255,255,.12);
+    transform: translate(-50%, -50%) rotate(var(--r,0deg));
+    box-shadow: 0 12px 26px rgba(15,23,42,.08);
+}
+
+.banner-pattern-icon.is-ghost {
+    background: transparent;
+    border-color: transparent;
+    color: rgba(255,255,255,.38);
+}
+
+.banner-pattern-icon i {
+    font-size: calc(var(--s) * .42);
+    line-height: 1;
 }
 
 .banner-content {
     position: relative;
-    z-index: 1;
+    z-index: 2;
     padding: 1.65rem 2rem;
     color: #fff;
     width: 100%;
@@ -501,7 +539,7 @@ textarea,
 }
 
 .side-card:hover {
-    border-color: rgba(26,158,120,.18);
+    border-color: rgba(121,85,72,.18);
     box-shadow: var(--shadow-md);
 }
 
@@ -605,7 +643,7 @@ textarea,
 }
 .cw-filter-search:hover,
 .cw-filter-select:hover{
-    border-color:rgba(26,158,120,.45);
+    border-color:rgba(121,85,72,.35);
     box-shadow:0 6px 18px rgba(15,23,42,.06);
 }
 .lesson-period-filter{
@@ -656,7 +694,7 @@ textarea,
     border-color:var(--primary);
     background:var(--primary-light);
     color:var(--primary-dark);
-    box-shadow:0 6px 16px rgba(26,158,120,.12);
+    box-shadow:0 6px 16px rgba(121,85,72,.12);
     transform:translateY(-1px);
 }
 .lesson-period-filter-option input{
@@ -723,7 +761,7 @@ textarea,
 }
 
 .post-card:hover {
-    border-color: rgba(26,158,120,.22);
+    border-color: rgba(121,85,72,.22);
     box-shadow: var(--shadow-lg);
     transform: translateY(-2px);
 }
@@ -1165,7 +1203,7 @@ textarea,
 }
 
 .resource-card:hover {
-    border-color: rgba(26,158,120,.22);
+    border-color: rgba(121,85,72,.22);
     box-shadow: var(--shadow-md);
     transform: translateY(-1px);
 }
@@ -1380,7 +1418,7 @@ textarea,
     width: 36px;
     height: 36px;
     border: 3px solid rgba(255,255,255,.08);
-    border-top-color: #1a9e78;
+    border-top-color: #795548;
     border-radius: 50%;
     animation: sp .7s linear infinite;
 }
@@ -1552,7 +1590,7 @@ textarea,
     height: 28px;
     border: none;
     border-radius: 50%;
-    background: #1a9e78;
+    background: #795548;
     color: #fff;
     cursor: pointer;
     font-size: .7rem;
@@ -1586,7 +1624,7 @@ textarea,
     align-items: center;
     gap: .4rem;
     padding: .55rem 1.4rem;
-    background: #1a9e78;
+    background: #795548;
     color: #fff;
     border-radius: 8px;
     text-decoration: none;
@@ -1618,9 +1656,9 @@ textarea,
 }
 
 .submission-bar.sb-submitted {
-    background: #e6f7f2;
-    color: #1a9e78;
-    border-top-color: #b2dfdb;
+    background: #f0e7e2;
+    color: #795548;
+    border-top-color: #d8cac4;
 }
 
 .submission-bar.sb-graded {
@@ -1641,9 +1679,9 @@ body.dark .submission-bar.sb-none {
 }
 
 body.dark .submission-bar.sb-submitted {
-    background: rgba(26,158,120,.12);
-    color: #2ecc9a;
-    border-top-color: rgba(26,158,120,.3);
+    background: rgba(199,169,156,.14);
+    color: #c7a99c;
+    border-top-color: rgba(199,169,156,.3);
 }
 
 body.dark .submission-bar.sb-graded {
@@ -1669,7 +1707,7 @@ body.dark .submission-bar.sb-returned {
     flex-shrink: 0;
 }
 
-.sb-submitted .sb-icon { background: #1a9e78; color: #fff; }
+.sb-submitted .sb-icon { background: #795548; color: #fff; }
 .sb-graded .sb-icon   { background: #1f73db; color: #fff; }
 .sb-returned .sb-icon  { background: #f57c00; color: #fff; }
 .sb-none .sb-icon      { background: var(--border); color: var(--text-muted); }
@@ -1735,12 +1773,12 @@ body.dark .sb-file-chip {
     white-space: nowrap;
 }
 
-.due-countdown.cd-ok      { background: #e6f7f2; color: #1a9e78; }
+.due-countdown.cd-ok      { background: #f0e7e2; color: #795548; }
 .due-countdown.cd-warn    { background: #fff8e1; color: #f9a825; }
 .due-countdown.cd-urgent  { background: #fff3e0; color: #f57c00; }
 .due-countdown.cd-overdue { background: #fce8e6; color: #d93025; }
 
-body.dark .due-countdown.cd-ok      { background: rgba(26,158,120,.15);  color: #2ecc9a; }
+body.dark .due-countdown.cd-ok      { background: rgba(199,169,156,.15);  color: #c7a99c; }
 body.dark .due-countdown.cd-warn    { background: rgba(249,168,37,.12);  color: #ffd54f; }
 body.dark .due-countdown.cd-urgent  { background: rgba(245,124,0,.12);   color: #ffb74d; }
 body.dark .due-countdown.cd-overdue { background: rgba(217,48,37,.12);   color: #ef5350; }
@@ -1988,6 +2026,783 @@ body.dark .sub-field textarea { background: rgba(255,255,255,.04); color: var(--
 .sub-btn-submit:hover { background: var(--primary-dark); }
 .sub-btn-submit:disabled { opacity: .6; cursor: not-allowed; }
 
+/* Warm student stream layout */
+body {
+    background:
+        radial-gradient(circle at 50% -18%, rgba(250,203,140,.18), transparent 34%),
+        linear-gradient(180deg, #f8f5f2 0%, #eee8e5 280px, #eee8e5 100%);
+}
+
+#tab-stream {
+    background: #eee8e5;
+    min-height: calc(100vh - var(--nav-h));
+}
+
+#tab-stream .cr-layout {
+    width: min(100%, 980px);
+    max-width: 980px;
+    grid-template-columns: minmax(0, 1fr);
+    padding: 2rem clamp(1rem, 3vw, 2rem) 3rem;
+    gap: 1rem;
+}
+
+#tab-stream .cr-side {
+    display: none;
+}
+
+.tabs-bar {
+    justify-content: center;
+    background: #fffefd;
+}
+
+.tab-btn.active,
+.tab-btn:hover {
+    color: #795548;
+}
+
+.tab-btn.active {
+    border-bottom-color: #795548;
+}
+
+.filter-row {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    padding: 0;
+    margin: 0 0 .9rem;
+}
+
+.cw-filter-wrap {
+    gap: .55rem;
+    flex-wrap: nowrap;
+}
+
+@media(min-width: 900px) {
+    #tab-stream .cr-main {
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    #tab-stream .filter-row {
+        margin-bottom: 1.1rem;
+    }
+
+    #tab-stream .cw-filter-wrap {
+        display: grid;
+        grid-template-columns: minmax(330px, 1fr) minmax(190px, 240px) minmax(170px, 220px);
+        align-items: center;
+    }
+
+    #tab-stream .cw-search-shell,
+    #tab-stream .advanced-filter,
+    #tab-stream .advanced-sort {
+        width: 100%;
+        min-width: 0;
+    }
+
+    #tab-stream .advanced-filter,
+    #tab-stream .advanced-sort {
+        flex: none;
+    }
+
+    #tab-stream .post-card {
+        margin-bottom: .9rem;
+    }
+}
+
+@media(min-width: 1280px) {
+    #tab-stream .cr-layout {
+        max-width: 1080px;
+    }
+
+    #tab-stream .cr-main {
+        max-width: 940px;
+    }
+}
+
+@media(max-width: 899px) {
+    #tab-stream .cr-layout {
+        width: min(100%, 704px);
+        max-width: 704px;
+        padding: 1.35rem 1rem 2.6rem;
+    }
+}
+
+.cw-search-shell {
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.cw-search-shell i {
+    position: absolute;
+    left: .92rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #a98f85;
+    font-size: .82rem;
+    pointer-events: none;
+}
+
+.cw-search-shell .cw-filter-search {
+    width: 100%;
+    height: 40px;
+    padding-left: 2.35rem;
+    padding-right: 2.35rem;
+    border-radius: 12px;
+    border-color: #d8cac4;
+    background: rgba(255,255,255,.82);
+    color: #3f302b;
+}
+
+.cw-search-clear {
+    position: absolute;
+    right: .4rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: #a98f85;
+    cursor: pointer;
+}
+
+.cw-search-clear:hover {
+    background: #f0e7e2;
+    color: #795548;
+}
+
+.advanced-filter,
+.advanced-sort {
+    position: relative;
+    flex: 0 0 190px;
+    width: 190px;
+}
+
+.advanced-filter-toggle,
+.advanced-sort-toggle {
+    width: 100%;
+    height: 40px;
+    min-height: 40px;
+    padding: .45rem .62rem;
+    border: 1px solid #d8cac4;
+    border-radius: 12px;
+    background: rgba(255,255,255,.84);
+    color: #3f302b;
+    display: flex;
+    align-items: center;
+    gap: .65rem;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(68,45,36,.04);
+}
+
+.advanced-filter-toggle:hover,
+.advanced-filter.open .advanced-filter-toggle,
+.advanced-sort-toggle:hover,
+.advanced-sort.open .advanced-sort-toggle {
+    border-color: #bdaaa2;
+    box-shadow: 0 7px 16px rgba(121,85,72,.12);
+}
+
+.advanced-filter-icon,
+.advanced-sort-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 9px;
+    background: #f0e7e2;
+    color: #795548;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.advanced-filter-copy,
+.advanced-sort-copy {
+    flex: 1;
+    min-width: 0;
+    text-align: left;
+}
+
+.advanced-filter-label,
+.advanced-sort-label {
+    display: block;
+    color: #3f302b;
+    font-size: .84rem;
+    font-weight: 900;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.advanced-filter-sub,
+.advanced-sort-sub {
+    display: none;
+    color: #a07f73;
+    font-size: .72rem;
+    font-weight: 700;
+    margin-top: .08rem;
+}
+
+.advanced-filter-caret,
+.advanced-sort-caret {
+    color: #795548;
+    transition: transform var(--trans);
+}
+
+.advanced-filter.open .advanced-filter-caret,
+.advanced-sort.open .advanced-sort-caret {
+    transform: rotate(180deg);
+}
+
+.advanced-filter-menu,
+.advanced-sort-menu {
+    display: none;
+    position: absolute;
+    left: auto;
+    right: 0;
+    width: min(310px, calc(100vw - 2rem));
+    top: calc(100% + .45rem);
+    z-index: 140;
+    padding: .42rem;
+    border: 1px solid #d8cac4;
+    border-radius: 14px;
+    background: #fffefd;
+    box-shadow: 0 18px 42px rgba(68,45,36,.18);
+}
+
+.advanced-filter.open .advanced-filter-menu,
+.advanced-sort.open .advanced-sort-menu {
+    display: block;
+}
+
+.advanced-filter-option,
+.advanced-sort-option {
+    width: 100%;
+    min-height: 46px;
+    padding: .48rem .55rem;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: #3f302b;
+    display: flex;
+    align-items: center;
+    gap: .62rem;
+    cursor: pointer;
+    text-align: left;
+}
+
+.advanced-filter-option:hover,
+.advanced-sort-option:hover {
+    background: #fbf7f5;
+}
+
+.advanced-filter-option.active,
+.advanced-sort-option.active {
+    background: #795548;
+    color: #fff;
+}
+
+.advanced-filter-option.active .advanced-filter-sub,
+.advanced-filter-option.active .filter-option-count,
+.advanced-sort-option.active .advanced-sort-sub,
+.advanced-sort-option.active .sort-option-hint {
+    color: rgba(255,255,255,.78);
+}
+
+.advanced-filter-option.active .filter-option-icon,
+.advanced-sort-option.active .sort-option-icon {
+    background: rgba(255,255,255,.16);
+    color: #fff;
+}
+
+.filter-option-icon,
+.sort-option-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    background: #f0e7e2;
+    color: #795548;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.filter-option-copy,
+.sort-option-copy {
+    flex: 1;
+    min-width: 0;
+}
+
+.filter-option-label,
+.sort-option-label {
+    display: block;
+    font-size: .84rem;
+    font-weight: 900;
+}
+
+.filter-option-count,
+.sort-option-hint {
+    color: #a07f73;
+    font-size: .78rem;
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+@media(max-width: 640px) {
+    .cw-filter-wrap {
+        flex-wrap: wrap;
+    }
+
+    .cw-search-shell,
+    .advanced-filter,
+    .advanced-sort {
+        flex: 1 1 100%;
+        width: 100%;
+    }
+
+    .advanced-filter-menu,
+    .advanced-sort-menu {
+        left: 0;
+        width: 100%;
+    }
+}
+
+.lesson-period-filter {
+    background: rgba(255,255,255,.68);
+    border: 1px solid #dfd3cd;
+    border-radius: 14px;
+    padding: 0 .65rem;
+}
+
+.lesson-period-filter.show {
+    padding: .65rem;
+    margin-top: .15rem;
+}
+
+.lesson-period-filter-option {
+    border-color: #d8cac4;
+    background: #fffefd;
+    color: #795548;
+}
+
+.lesson-period-filter-option:has(input:checked) {
+    border-color: #795548;
+    background: #f0e7e2;
+    color: #654337;
+    box-shadow: none;
+}
+
+.post-card {
+    border-color: #d8cac4;
+    border-radius: 14px;
+    box-shadow: 0 2px 7px rgba(68,45,36,.11);
+    margin-bottom: .72rem;
+    background: #fffefd;
+    cursor: pointer;
+}
+
+.post-card:hover {
+    border-color: #c5b4ac;
+    box-shadow: 0 10px 24px rgba(68,45,36,.13);
+    transform: translateY(-1px);
+}
+
+.pc-head {
+    align-items: flex-start;
+    padding: 1rem 1rem .5rem;
+    gap: .72rem;
+}
+
+.pc-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: #f0e7e2 !important;
+    color: #654337 !important;
+}
+
+.pc-author {
+    font-size: 1.02rem;
+    color: #3f302b;
+}
+
+.pc-title-row {
+    display: flex;
+    align-items: center;
+    gap: .45rem;
+    flex-wrap: wrap;
+}
+
+.pc-date {
+    font-size: .82rem;
+    color: #a07f73;
+}
+
+.pc-points {
+    margin-left: auto;
+    text-align: right;
+    color: #3f302b;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.pc-card-status {
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: .35rem;
+    flex-shrink: 0;
+}
+
+.pc-card-status .pc-points {
+    margin-left: 0;
+}
+
+.pc-open-indicator {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 42px;
+    min-width: 36px;
+    min-height: 42px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #795548;
+    box-shadow: none;
+    font-size: .95rem;
+    font-weight: 900;
+    line-height: 1;
+    opacity: .78;
+    transition: color var(--trans), opacity var(--trans), transform var(--trans);
+}
+
+.pc-open-indicator i {
+    font-size: .98rem;
+    line-height: 1;
+}
+
+.post-card:hover .pc-open-indicator {
+    color: #654337;
+    opacity: 1;
+    transform: translateX(3px);
+}
+
+.post-card:hover .pc-author {
+    color: #654337;
+}
+
+.pc-left-status {
+    display: flex;
+    align-items: center;
+    gap: .35rem;
+    margin-top: .45rem;
+    flex-wrap: wrap;
+}
+
+.pc-status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 24px;
+    padding: .25rem .65rem;
+    border-radius: 999px;
+    font-size: .72rem;
+    font-weight: 900;
+    letter-spacing: .04em;
+}
+
+.pc-status-badge.is-late {
+    background: #fdecea;
+    color: #b42318;
+    border: 1px solid #f5c2c7;
+}
+
+.pc-status-badge.is-unavailable {
+    background: #f0e7e2;
+    color: #654337;
+    border: 1px solid #d7c8c1;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+.pc-points span {
+    display: block;
+    margin-top: .18rem;
+    color: #a07f73;
+    font-size: .72rem;
+    font-weight: 700;
+}
+
+.pc-type-badge,
+.pc-meta-row span,
+.quiz-info-chip,
+.sub-mode-badge {
+    border-color: #d7c8c1 !important;
+    background: #f0e7e2 !important;
+    color: #795548 !important;
+}
+
+.pc-body {
+    padding: .2rem 1rem .65rem;
+}
+
+.pc-meta-row {
+    margin-top: .35rem;
+    gap: .48rem;
+}
+
+.pc-meta-row span,
+.quiz-info-chip {
+    padding: .34rem .72rem;
+    font-size: .78rem;
+    font-weight: 800;
+}
+
+.quiz-info-row {
+    margin: .2rem 1rem .75rem;
+}
+
+.pc-attachments {
+    padding: 0 1rem .75rem;
+}
+
+.sq-slot {
+    padding: 0 1rem 1rem;
+}
+
+.submission-bar {
+    display: block;
+    padding: 0 1rem 1rem;
+    border-top: 0;
+    background: transparent !important;
+    color: #795548;
+}
+
+.submission-bar:has(.sb-submit-btn) > span:not(.sb-icon):not(.sb-grade-pill),
+.submission-bar:has(.sb-submit-btn) .sb-icon,
+.submission-bar:has(.sb-submit-btn) .sb-file-chip,
+.submission-bar:has(.sb-submit-btn) .sb-grade-pill {
+    display: none;
+}
+
+.submission-bar:not(:has(.sb-submit-btn)) {
+    display: flex;
+    align-items: center;
+    gap: .55rem;
+    padding: .75rem 1rem;
+    border-top: 1px solid #e3d8d3;
+    background: #fbf7f5 !important;
+}
+
+.sb-submit-btn,
+.sq-btn-primary,
+.sq-btn-take,
+.sq-btn-view {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 44px;
+    justify-content: center;
+    border-radius: 9px;
+    border: 0;
+    background: #795548;
+    color: #fff;
+    font-size: .93rem;
+    font-weight: 900;
+    box-shadow: none;
+}
+
+.sb-submit-btn:hover,
+.sq-btn-primary:hover:not(:disabled),
+.sq-btn-take:hover:not(:disabled),
+.sq-btn-view:hover:not(:disabled) {
+    background: #654337;
+    transform: translateY(-1px);
+    box-shadow: none;
+}
+
+.post-card[data-kind="quiz"] .sb-submit-btn,
+.post-card[data-kind="quiz"] .sq-btn-take,
+.post-card[data-kind="quiz"] .sq-btn-primary,
+.post-card[data-kind="exam"] .sb-submit-btn,
+.post-card[data-kind="exam"] .sq-btn-take,
+.post-card[data-kind="exam"] .sq-btn-primary {
+    background: #a98f85;
+}
+
+.post-card[data-kind="quiz"] .sb-submit-btn:hover,
+.post-card[data-kind="quiz"] .sq-btn-take:hover:not(:disabled),
+.post-card[data-kind="quiz"] .sq-btn-primary:hover:not(:disabled),
+.post-card[data-kind="exam"] .sb-submit-btn:hover,
+.post-card[data-kind="exam"] .sq-btn-take:hover:not(:disabled),
+.post-card[data-kind="exam"] .sq-btn-primary:hover:not(:disabled) {
+    background: #96786e;
+}
+
+.post-card[data-result-released="1"] .sb-submit-btn,
+.post-card[data-result-released="1"] .sq-btn-primary,
+.post-card[data-result-released="1"] .sq-btn-view {
+    background: #795548;
+}
+
+.pc-comments {
+    border-top-color: #e3d8d3;
+}
+
+.pc-comments-toggle {
+    color: #a98f85;
+    padding: .78rem 1rem;
+}
+
+.pc-comments-toggle:hover {
+    background: #f8f3ef;
+    color: #795548;
+}
+
+.empty-feed {
+    background: #fffefd;
+    border: 1px solid #d8cac4;
+    border-radius: 14px;
+    box-shadow: 0 2px 7px rgba(68,45,36,.08);
+}
+
+.classwork-tools {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: .75rem;
+    margin-bottom: .9rem;
+    color: #795548;
+    font-size: .78rem;
+    font-weight: 800;
+}
+
+.classwork-summary {
+    display: inline-flex;
+    align-items: center;
+    gap: .42rem;
+    padding: .4rem .72rem;
+    border: 1px solid #d8cac4;
+    border-radius: 999px;
+    background: rgba(255,255,255,.72);
+}
+
+.cw-period-grid {
+    display: grid;
+    gap: .78rem;
+    margin-bottom: .9rem;
+}
+
+.cw-period-box,
+.cw-topic-group {
+    background: #fffefd;
+    border: 1px solid #d8cac4;
+    border-radius: 14px;
+    box-shadow: 0 2px 7px rgba(68,45,36,.08);
+    overflow: hidden;
+}
+
+.cw-period-head,
+.cw-topic-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .72rem .9rem;
+    border-bottom: 1px solid #eadfd9;
+    color: #3f302b;
+    font-size: .82rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+}
+
+.cw-period-count {
+    min-width: 24px;
+    height: 24px;
+    padding: 0 .45rem;
+    border-radius: 999px;
+    background: #f0e7e2;
+    color: #795548;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .74rem;
+}
+
+.cw-period-empty {
+    padding: .9rem;
+    color: #a07f73;
+    font-size: .82rem;
+}
+
+.cw-item {
+    display: grid;
+    grid-template-columns: 38px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: .72rem;
+    padding: .82rem .9rem;
+    border-bottom: 1px solid #f0e7e2;
+    cursor: pointer;
+    background: #fffefd;
+}
+
+.cw-item:last-child {
+    border-bottom: 0;
+}
+
+.cw-item:hover {
+    background: #fbf7f5;
+}
+
+.cw-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f0e7e2 !important;
+    color: #795548 !important;
+}
+
+.cw-title {
+    color: #3f302b;
+    font-size: .9rem;
+    font-weight: 900;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.cw-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .36rem;
+    margin-top: .22rem;
+    color: #a07f73;
+    font-size: .74rem;
+    font-weight: 700;
+}
+
+.cw-points {
+    color: #795548;
+    font-size: .8rem;
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+.cw-topic-group {
+    margin-bottom: .78rem;
+}
+
 @media(max-width: 1200px) {
     .cr-layout {
         grid-template-columns: 1fr;
@@ -2069,6 +2884,48 @@ body.dark .sub-field textarea { background: rgba(255,255,255,.04); color: var(--
     .cr-layout {
         padding: .85rem;
         gap: .9rem;
+    }
+
+    #tab-stream .cr-layout {
+        padding: 1rem .75rem 2.2rem;
+    }
+
+    .cw-item {
+        grid-template-columns: 34px minmax(0, 1fr);
+    }
+
+    .cw-points {
+        grid-column: 2;
+        justify-self: start;
+    }
+
+    .classwork-tools {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: .45rem;
+    }
+
+    .pc-head {
+        align-items: center;
+        gap: .62rem;
+    }
+
+    .pc-card-status {
+        align-self: stretch;
+        justify-content: center;
+    }
+
+    .pc-open-indicator {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        min-height: 44px;
+        color: #795548;
+        opacity: .9;
+    }
+
+    .pc-open-indicator i {
+        font-size: 1.05rem;
     }
 
     .class-banner {
@@ -2188,6 +3045,7 @@ body.dark .sub-field textarea { background: rgba(255,255,255,.04); color: var(--
 <div class="class-banner">
     <div class="banner-bg" id="bannerBg"></div>
     <div class="banner-overlay"></div>
+    <div class="banner-pattern" id="bannerPattern" aria-hidden="true"></div>
 
     <div class="banner-content">
         <div class="banner-row">
@@ -2208,6 +3066,11 @@ body.dark .sub-field textarea { background: rgba(255,255,255,.04); color: var(--
 <div class="tabs-bar">
     <button class="tab-btn active" data-tab="stream">
         <i class="fas fa-stream" style="margin-right:.35rem;font-size:.8rem"></i>Stream
+    </button>
+
+    <button class="tab-btn" data-tab="classwork">
+        <i class="fas fa-tasks" style="margin-right:.35rem;font-size:.8rem"></i>Classwork
+        <span class="tab-count" id="classworkCount">0</span>
     </button>
 
     <button class="tab-btn" data-tab="resources">
@@ -2234,6 +3097,27 @@ body.dark .sub-field textarea { background: rgba(255,255,255,.04); color: var(--
             <div class="side-card">
                 <div class="side-card-title">Class Info</div>
                 <div class="info-list" id="classInfoList"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="tab-section" id="tab-classwork">
+    <div class="cr-layout">
+        <div class="cr-main">
+            <div class="classwork-tools">
+                <span class="classwork-summary"><i class="fas fa-layer-group"></i> Organized classwork</span>
+                <span id="classworkSummaryText">Loading...</span>
+            </div>
+            <div id="classworkFeed"></div>
+        </div>
+
+        <div class="cr-side">
+            <div class="side-card">
+                <div class="side-card-title">Classwork View</div>
+                <div class="info-list">
+                    Lessons are grouped by coverage. Activities, quizzes, exams, and assignments stay grouped by topic.
+                </div>
             </div>
         </div>
     </div>
@@ -2321,7 +3205,9 @@ let meetingData = null;
 let activeTypeFilter = 'all';
 let streamLessonPeriodFilter = 'all';
 let streamSearchQuery = '';
+let activeStreamSort = 'smart';
 const TYPE_FILTER_KEY = 'tl_classwork_filter';
+const STREAM_SORT_KEY = 'tl_classwork_sort';
 
 function _toastText(msg, type = 'success') {
     const s = String(msg || '').toLowerCase();
@@ -2401,6 +3287,12 @@ function countdownText(due) {
     return { text: 'Due now', cls: 'cd-overdue' };
 }
 
+function isOverdue(due) {
+    if (!due) return false;
+    const d = new Date(String(due).includes('T') ? due : String(due).replace(' ', 'T'));
+    return !Number.isNaN(d.getTime()) && d.getTime() < Date.now();
+}
+
 function refreshCountdowns() {
     document.querySelectorAll('.due-countdown[data-due]').forEach(el => {
         const r = countdownText(el.dataset.due);
@@ -2421,6 +3313,85 @@ function mediaUrl(path) {
     if (!value) return '';
     if (/^(https?:)?\/\//i.test(value) || value.startsWith('data:') || value.startsWith('/')) return value;
     return value.replace(/^(\.\/)+/, '');
+}
+
+const STUDENT_ROOM_PALETTE_GRADIENTS = {
+    'b-forest': 'linear-gradient(135deg,#115e59 0%,#0f766e 48%,#0d9488 100%)',
+    'b-ocean': 'linear-gradient(135deg,#1e3a8a 0%,#1d4ed8 52%,#0284c7 100%)',
+    'b-sunset': 'linear-gradient(135deg,#9a3412 0%,#c2410c 52%,#ea580c 100%)',
+    'b-plum': 'linear-gradient(135deg,#581c87 0%,#6d28d9 52%,#7c3aed 100%)',
+    'b-teal': 'linear-gradient(135deg,#164e63 0%,#0e7490 52%,#0891b2 100%)',
+    'b-rose': 'linear-gradient(135deg,#881337 0%,#be123c 52%,#e11d48 100%)',
+    'b-slate': 'linear-gradient(135deg,#1e293b 0%,#334155 56%,#475569 100%)',
+    'b-indigo': 'linear-gradient(135deg,#312e81 0%,#4338ca 52%,#4f46e5 100%)'
+};
+const STUDENT_ROOM_LEGACY_PALETTES = {
+    'linear-gradient(135deg,#1a9e78,#0a5c45)': 'b-forest',
+    'linear-gradient(135deg,#1f73db,#0d47a1)': 'b-ocean',
+    'linear-gradient(135deg,#f57c00,#bf360c)': 'b-sunset',
+    'linear-gradient(135deg,#7b1fa2,#4a148c)': 'b-plum',
+    'linear-gradient(135deg,#00838f,#00474d)': 'b-teal',
+    'linear-gradient(135deg,#c62828,#880e4f)': 'b-rose',
+    'linear-gradient(135deg,#455a64,#263238)': 'b-slate',
+    'linear-gradient(135deg,#3949ab,#1a237e)': 'b-indigo'
+};
+const STUDENT_ROOM_PALETTE_KEYS = Object.keys(STUDENT_ROOM_PALETTE_GRADIENTS);
+const studentRoomCompactPalette = value => String(value || '').toLowerCase().replace(/\s+/g, '');
+const STUDENT_ROOM_PALETTE_LOOKUP = {};
+Object.entries(STUDENT_ROOM_PALETTE_GRADIENTS).forEach(([key, gradient]) => {
+    STUDENT_ROOM_PALETTE_LOOKUP[studentRoomCompactPalette(gradient)] = key;
+});
+Object.entries(STUDENT_ROOM_LEGACY_PALETTES).forEach(([gradient, key]) => {
+    STUDENT_ROOM_PALETTE_LOOKUP[studentRoomCompactPalette(gradient)] = key;
+});
+
+function studentRoomHashPaletteKey(seed) {
+    let h = 0;
+    for (const ch of String(seed || 'class').toLowerCase()) h = ((h << 5) - h) + ch.charCodeAt(0);
+    return STUDENT_ROOM_PALETTE_KEYS[Math.abs(h) % STUDENT_ROOM_PALETTE_KEYS.length];
+}
+
+function studentRoomSharedPaletteKey(raw) {
+    const value = String(raw || '').trim();
+    if (!value) return '';
+    if (STUDENT_ROOM_PALETTE_GRADIENTS[value]) return value;
+    return STUDENT_ROOM_PALETTE_LOOKUP[studentRoomCompactPalette(value)] || '';
+}
+
+function studentRoomBannerGradient(c, titleLine) {
+    const sharedKey = studentRoomSharedPaletteKey(c.banner_palette || '');
+    if (sharedKey) return STUDENT_ROOM_PALETTE_GRADIENTS[sharedKey];
+    const seed = [c.subject_name, c.subject_code, c.course_name, c.course_code, c.class_code, titleLine].filter(Boolean).join('|');
+    return STUDENT_ROOM_PALETTE_GRADIENTS[studentRoomHashPaletteKey(seed)];
+}
+
+function studentRoomPatternIconSet(c) {
+    const text = [c.subject_name, c.subject_code, c.course_name, c.course_code, c.class_code, c.section].join(' ').toLowerCase();
+    if (/mobile|android|ios|app/.test(text)) return ['fa-mobile-screen-button','fa-code','fa-layer-group','fa-bug'];
+    if (/web|html|css|javascript|system/.test(text)) return ['fa-window-maximize','fa-code','fa-laptop-code','fa-diagram-project'];
+    if (/data|database|dbms|sql/.test(text)) return ['fa-database','fa-server','fa-table','fa-chart-line'];
+    if (/network|security|cyber/.test(text)) return ['fa-network-wired','fa-shield-halved','fa-lock','fa-server'];
+    if (/tour|travel|hospitality/.test(text)) return ['fa-plane-departure','fa-location-dot','fa-suitcase-rolling','fa-ticket'];
+    if (/math|stat|analytics/.test(text)) return ['fa-chart-simple','fa-square-root-variable','fa-calculator','fa-chart-pie'];
+    return ['fa-book-open','fa-clipboard-list','fa-graduation-cap','fa-comments'];
+}
+
+function renderStudentRoomPattern(c) {
+    const wrap = document.getElementById('bannerPattern');
+    if (!wrap) return;
+    const icons = studentRoomPatternIconSet(c || {});
+    const slots = [
+        [7, 28, 48, -2, true],
+        [39, 43, 74, -7, false],
+        [62, 33, 50, 2, false],
+        [87, 63, 70, -10, true],
+        [23, 72, 58, 7, false],
+        [74, 78, 42, 4, true]
+    ];
+    wrap.innerHTML = slots.map((slot, i) => {
+        const [x, y, size, rot, ghost] = slot;
+        return `<span class="banner-pattern-icon${ghost ? ' is-ghost' : ''}" style="--x:${x}%;--y:${y}%;--s:${size}px;--r:${rot}deg;"><i class="fas ${icons[i % icons.length]}"></i></span>`;
+    }).join('');
 }
 
 function facultyRoleLabel(c) {
@@ -2477,6 +3448,7 @@ async function refreshStream() {
         await loadClassroom();
         renderFilters();
         renderStream();
+        renderClasswork();
         renderResources();
     } catch (e) { }
 }
@@ -2485,6 +3457,8 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
         const savedFilter = localStorage.getItem(TYPE_FILTER_KEY);
         if (savedFilter) activeTypeFilter = savedFilter;
+        const savedSort = localStorage.getItem(STREAM_SORT_KEY);
+        if (savedSort) activeStreamSort = savedSort;
     } catch (e) {}
     initPage();
     setInterval(refreshStream, 5000);
@@ -2493,6 +3467,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 document.addEventListener('click', e => {
+    if (!e.target.closest('#postTypeAdvancedFilter')) closeAdvancedFilter();
+    if (!e.target.closest('#streamSortAdvancedFilter')) closeStreamSort();
     const b = e.target.closest('.fv-trigger');
     if (b) openFileViewer(b.dataset.url, b.dataset.name, b.dataset.mime, b.dataset.attachId || '');
 });
@@ -2505,7 +3481,9 @@ async function initPage() {
         renderMeet();
         renderFilters();
         renderStream();
+        renderClasswork();
         renderResources();
+        openInitialPostFromUrl();
         refreshCountdowns();
         setInterval(refreshCountdowns, 60000);
     } catch (e) {
@@ -2554,8 +3532,8 @@ function buildPostTypesFromPosts() {
                 type_key: p.post_type,
                 type_label: p.sub_label || titleCase(p.post_type || 'Post'),
                 icon: iconForType(p.post_type),
-                color_bg: '#e6f7f2',
-                color_text: '#1a9e78'
+                color_bg: '#f0e7e2',
+                color_text: '#795548'
             });
         }
     });
@@ -2594,7 +3572,8 @@ function renderBanner() {
             facultyAvatar.textContent = initials(faculty, 'F');
         }, { once: true });
     }
-    document.getElementById('bannerBg').style.background = c.banner_palette || 'linear-gradient(135deg,#1a9e78,#0d47a1)';
+    document.getElementById('bannerBg').style.background = studentRoomBannerGradient(c, n);
+    renderStudentRoomPattern(c);
     document.title = n + ' - TERELEARN';
     const ch = document.getElementById('bannerChips');
     ch.innerHTML = '';
@@ -2623,30 +3602,89 @@ function renderClassInfo() {
 function renderFilters() {
     const w = document.getElementById('typeFilters');
     const kinds = ['lesson', 'activity', 'quiz', 'assignment', 'exam'];
-    const labels = { lesson: 'Lesson', activity: 'Activity', quiz: 'Quiz', assignment: 'Assignment', exam: 'Exam' };
+    const labels = { lesson: 'Lessons', activity: 'Activities', quiz: 'Quizzes', assignment: 'Assignments', exam: 'Exams' };
+    const icons = { all: 'fa-layer-group', lesson: 'fa-book-open', activity: 'fa-pencil-ruler', quiz: 'fa-question-circle', assignment: 'fa-file-signature', exam: 'fa-clipboard-list' };
     const counts = new Map(kinds.map(k => [k, 0]));
-    allPosts.filter(p => postKind(p) !== 'announcement').forEach(p => {
+    const streamPosts = allPosts.filter(p => postKind(p) !== 'announcement');
+    streamPosts.forEach(p => {
         const k = postKind(p);
         if (counts.has(k)) counts.set(k, (counts.get(k) || 0) + 1);
     });
-    if (activeTypeFilter !== 'all' && !(counts.get(activeTypeFilter) > 0)) {
+    const visibleKinds = ['activity', 'quiz', 'lesson'];
+    ['assignment', 'exam'].forEach(k => {
+        if ((counts.get(k) || 0) > 0) visibleKinds.push(k);
+    });
+    const validFilters = new Set(['all', ...visibleKinds]);
+    if (activeTypeFilter !== 'all' && !validFilters.has(activeTypeFilter)) {
         activeTypeFilter = 'all';
         try { localStorage.setItem(TYPE_FILTER_KEY, activeTypeFilter); } catch (e) {}
     }
 
-    let opts = `<option value="all">All post types</option>`;
-    kinds.forEach(k => {
-        if ((counts.get(k) || 0) > 0) {
-            opts += `<option value="${esc(k)}">${labels[k]} (${counts.get(k) || 0})</option>`;
-        }
-    });
+    const filters = [{ value: 'all', label: 'All post types', short: 'All', count: streamPosts.length, icon: icons.all }].concat(
+        visibleKinds.map(k => ({ value: k, label: labels[k] || titleCase(k), short: labels[k] || titleCase(k), count: counts.get(k) || 0, icon: icons[k] || 'fa-file-alt' }))
+    );
+    const selected = filters.find(f => f.value === activeTypeFilter) || filters[0];
+    const sortOptions = [
+        { value: 'smart', label: 'Smart sort', short: 'Smart', hint: 'Late, due soon, newest', icon: 'fa-magic' },
+        { value: 'newest', label: 'Newest first', short: 'Newest', hint: 'Recently posted', icon: 'fa-arrow-down-wide-short' },
+        { value: 'due', label: 'Due soon', short: 'Due soon', hint: 'Nearest deadlines', icon: 'fa-clock' },
+        { value: 'type', label: 'Post type', short: 'Type', hint: 'Activities, quizzes, lessons', icon: 'fa-layer-group' },
+        { value: 'title', label: 'A-Z title', short: 'A-Z', hint: 'Alphabetical', icon: 'fa-arrow-down-a-z' }
+    ];
+    if (!sortOptions.some(o => o.value === activeStreamSort)) activeStreamSort = 'smart';
+    const selectedSort = sortOptions.find(o => o.value === activeStreamSort) || sortOptions[0];
+    const options = filters.map(f => {
+        const countLabel = `${f.count} post${f.count !== 1 ? 's' : ''}`;
+        return `<button type="button" class="advanced-filter-option${activeTypeFilter === f.value ? ' active' : ''}" onclick="setTypeFilter('${esc(f.value)}')" role="option" aria-selected="${activeTypeFilter === f.value ? 'true' : 'false'}">
+            <span class="filter-option-icon"><i class="fas ${esc(f.icon)}"></i></span>
+            <span class="filter-option-copy">
+                <span class="filter-option-label">${esc(f.label)}</span>
+                <span class="advanced-filter-sub">${esc(countLabel)}</span>
+            </span>
+            <span class="filter-option-count">${esc(String(f.count))}</span>
+        </button>`;
+    }).join('');
+    const sortHtml = sortOptions.map(o => `
+        <button type="button" class="advanced-sort-option${activeStreamSort === o.value ? ' active' : ''}" onclick="setStreamSort('${esc(o.value)}')" role="option" aria-selected="${activeStreamSort === o.value ? 'true' : 'false'}">
+            <span class="sort-option-icon"><i class="fas ${esc(o.icon)}"></i></span>
+            <span class="sort-option-copy">
+                <span class="sort-option-label">${esc(o.label)}</span>
+                <span class="advanced-sort-sub">${esc(o.hint)}</span>
+            </span>
+            <span class="sort-option-hint">${activeStreamSort === o.value ? 'On' : ''}</span>
+        </button>
+    `).join('');
     w.innerHTML = `
       <div class="cw-filter-wrap">
-        <input id="streamSearch" class="cw-filter-search" type="text" placeholder="Search title..." value="${esc(streamSearchQuery)}" oninput="onStreamFilterChange()">
-        <span class="cw-filter-label"><i class="fas fa-filter"></i> Type</span>
-        <select id="streamTypeFilter" class="cw-filter-select" onchange="setTypeFilter(this.value)">
-          ${opts}
-        </select>
+        <div class="cw-search-shell">
+          <i class="fas fa-search"></i>
+          <input id="streamSearch" class="cw-filter-search" type="search" placeholder="Search posts..." value="${esc(streamSearchQuery)}" oninput="onStreamFilterChange()">
+          <button type="button" class="cw-search-clear" onclick="clearStreamSearch()" title="Clear search" aria-label="Clear search"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="advanced-filter" id="postTypeAdvancedFilter">
+          <button type="button" class="advanced-filter-toggle" onclick="toggleAdvancedFilter(event)" aria-haspopup="listbox" aria-expanded="false">
+            <span class="advanced-filter-icon"><i class="fas ${esc(selected.icon)}"></i></span>
+            <span class="advanced-filter-copy">
+              <span class="advanced-filter-label">Type: ${esc(selected.short || selected.label || 'All')}</span>
+            </span>
+            <i class="fas fa-chevron-down advanced-filter-caret"></i>
+          </button>
+          <div class="advanced-filter-menu" role="listbox" aria-label="Post type filters">
+            ${options}
+          </div>
+        </div>
+        <div class="advanced-sort" id="streamSortAdvancedFilter">
+          <button type="button" class="advanced-sort-toggle" onclick="toggleStreamSort(event)" aria-haspopup="listbox" aria-expanded="false" title="Sort posts">
+            <span class="advanced-sort-icon"><i class="fas ${esc(selectedSort.icon)}"></i></span>
+            <span class="advanced-sort-copy">
+              <span class="advanced-sort-label">Sort: ${esc(selectedSort.short || selectedSort.label || 'Smart')}</span>
+            </span>
+            <i class="fas fa-chevron-down advanced-sort-caret"></i>
+          </button>
+          <div class="advanced-sort-menu" role="listbox" aria-label="Post sorting">
+            ${sortHtml}
+          </div>
+        </div>
         <div class="lesson-period-filter" id="lessonPeriodFilter">
           <span class="lesson-period-filter-label"><i class="fas fa-book-open"></i> Coverage</span>
           <label class="lesson-period-filter-option"><input type="radio" name="streamLessonPeriod" value="all" ${streamLessonPeriodFilter === 'all' ? 'checked' : ''} onchange="onLessonPeriodFilterChange()"> All</label>
@@ -2655,36 +3693,89 @@ function renderFilters() {
           <label class="lesson-period-filter-option"><input type="radio" name="streamLessonPeriod" value="finals" ${streamLessonPeriodFilter === 'finals' ? 'checked' : ''} onchange="onLessonPeriodFilterChange()"> Finals</label>
         </div>
       </div>`;
-    const typeEl = document.getElementById('streamTypeFilter');
-    if (typeEl) {
-        typeEl.value = activeTypeFilter;
-        if (typeEl.value !== activeTypeFilter) {
-            activeTypeFilter = 'all';
-            typeEl.value = 'all';
-        }
-    }
     syncLessonPeriodFilter();
+}
+
+function toggleAdvancedFilter(evt) {
+    if (evt) evt.stopPropagation();
+    closeStreamSort();
+    const wrap = document.getElementById('postTypeAdvancedFilter');
+    if (!wrap) return;
+    const isOpen = wrap.classList.toggle('open');
+    const btn = wrap.querySelector('.advanced-filter-toggle');
+    if (btn) btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+}
+
+function closeAdvancedFilter() {
+    const wrap = document.getElementById('postTypeAdvancedFilter');
+    if (!wrap) return;
+    wrap.classList.remove('open');
+    const btn = wrap.querySelector('.advanced-filter-toggle');
+    if (btn) btn.setAttribute('aria-expanded', 'false');
+}
+
+function toggleStreamSort(evt) {
+    if (evt) evt.stopPropagation();
+    closeAdvancedFilter();
+    const wrap = document.getElementById('streamSortAdvancedFilter');
+    if (!wrap) return;
+    const isOpen = wrap.classList.toggle('open');
+    const btn = wrap.querySelector('.advanced-sort-toggle');
+    if (btn) btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+}
+
+function closeStreamSort() {
+    const wrap = document.getElementById('streamSortAdvancedFilter');
+    if (!wrap) return;
+    wrap.classList.remove('open');
+    const btn = wrap.querySelector('.advanced-sort-toggle');
+    if (btn) btn.setAttribute('aria-expanded', 'false');
 }
 
 function isUserInteractingWithFilters() {
     const el = document.activeElement;
+    const dropdown = document.getElementById('postTypeAdvancedFilter');
+    const sortDropdown = document.getElementById('streamSortAdvancedFilter');
+    if (dropdown && dropdown.classList.contains('open')) return true;
+    if (sortDropdown && sortDropdown.classList.contains('open')) return true;
     if (!el) return false;
     const id = String(el.id || '');
     if (id === 'streamSearch' || id === 'streamTypeFilter') return true;
+    if (el.closest && el.closest('#postTypeAdvancedFilter')) return true;
+    if (el.closest && el.closest('#streamSortAdvancedFilter')) return true;
     const tag = String(el.tagName || '').toLowerCase();
     return tag === 'input' || tag === 'textarea' || tag === 'select';
 }
 
 function setTypeFilter(f) {
-    activeTypeFilter = f;
+    activeTypeFilter = f || 'all';
     try { localStorage.setItem(TYPE_FILTER_KEY, activeTypeFilter); } catch (e) {}
-    syncLessonPeriodFilter();
+    closeAdvancedFilter();
+    renderFilters();
+    renderStream(true);
+}
+
+function setStreamSort(sortKey) {
+    activeStreamSort = sortKey || 'smart';
+    try { localStorage.setItem(STREAM_SORT_KEY, activeStreamSort); } catch (e) {}
+    closeStreamSort();
+    renderFilters();
     renderStream(true);
 }
 
 function onStreamFilterChange() {
     const qEl = document.getElementById('streamSearch');
     streamSearchQuery = qEl ? String(qEl.value || '').trim().toLowerCase() : '';
+    renderStream(true);
+}
+
+function clearStreamSearch() {
+    streamSearchQuery = '';
+    const qEl = document.getElementById('streamSearch');
+    if (qEl) {
+        qEl.value = '';
+        qEl.focus();
+    }
     renderStream(true);
 }
 
@@ -2729,9 +3820,66 @@ function updateStreamFeed(feed, html, animate = false) {
     }, 150);
 }
 
+function postTimestamp(p, field = 'created_at') {
+    const raw = p ? p[field] : '';
+    const ts = new Date(String(raw || '').replace(' ', 'T')).getTime();
+    return Number.isFinite(ts) ? ts : 0;
+}
+
+function dueTimestamp(p) {
+    const ts = postTimestamp(p, 'due_date');
+    return ts || Number.POSITIVE_INFINITY;
+}
+
+function postTitleText(p) {
+    return String((p && (p.title || p.topic || p.sub_label)) || postKindLabel(postKind(p)) || '').toLowerCase();
+}
+
+function postSortWeight(p) {
+    const kind = postKind(p);
+    if ((kind === 'quiz' || kind === 'exam') && p.due_date && isOverdue(p.due_date)) return 0;
+    if (kind !== 'lesson' && p.due_date && isOverdue(p.due_date)) return 1;
+    if (p.due_date) return 2;
+    if (kind === 'activity' || kind === 'assignment') return 3;
+    if (kind === 'quiz' || kind === 'exam') return 4;
+    if (kind === 'lesson') return 5;
+    return 6;
+}
+
+function typeSortWeight(kind) {
+    const order = { activity: 0, assignment: 1, quiz: 2, exam: 3, lesson: 4, post: 5 };
+    return Object.prototype.hasOwnProperty.call(order, kind) ? order[kind] : 9;
+}
+
+function sortStreamPosts(posts) {
+    const sorter = activeStreamSort || 'smart';
+    posts.sort((a, b) => {
+        if (sorter === 'due') {
+            const dueDiff = dueTimestamp(a) - dueTimestamp(b);
+            if (dueDiff) return dueDiff;
+        } else if (sorter === 'type') {
+            const typeDiff = typeSortWeight(postKind(a)) - typeSortWeight(postKind(b));
+            if (typeDiff) return typeDiff;
+            const titleDiff = postTitleText(a).localeCompare(postTitleText(b));
+            if (titleDiff) return titleDiff;
+        } else if (sorter === 'title') {
+            const titleDiff = postTitleText(a).localeCompare(postTitleText(b));
+            if (titleDiff) return titleDiff;
+        } else if (sorter === 'smart') {
+            const weightDiff = postSortWeight(a) - postSortWeight(b);
+            if (weightDiff) return weightDiff;
+            const dueDiff = dueTimestamp(a) - dueTimestamp(b);
+            if (Number.isFinite(dueDiff) && dueDiff) return dueDiff;
+        }
+        return postTimestamp(b) - postTimestamp(a);
+    });
+    return posts;
+}
+
 function renderStream(animate = false) {
     const f = document.getElementById('streamFeed');
     let posts = allPosts.filter(x => postKind(x) !== 'announcement');
+    const hadPosts = posts.length > 0;
     if (activeTypeFilter !== 'all') {
         posts = posts.filter(x => postKind(x) === activeTypeFilter);
     }
@@ -2739,13 +3887,166 @@ function renderStream(animate = false) {
         posts = posts.filter(x => String(x.lesson_period || '').toLowerCase() === streamLessonPeriodFilter);
     }
     if (streamSearchQuery) {
-        posts = posts.filter(x => String(x.title || '').toLowerCase().includes(streamSearchQuery));
+        posts = posts.filter(x => postSearchText(x).includes(streamSearchQuery));
     }
+    sortStreamPosts(posts);
     if (!posts.length) {
-        updateStreamFeed(f, empty('fa-stream', 'No posts yet', 'Class updates and activities will appear here.'), animate);
+        const hasCriteria = activeTypeFilter !== 'all' || streamLessonPeriodFilter !== 'all' || !!streamSearchQuery;
+        updateStreamFeed(
+            f,
+            hasCriteria && hadPosts
+                ? empty('fa-filter', 'No matching posts', 'Try another search or post type filter.')
+                : empty('fa-stream', 'No posts yet', 'Class updates and activities will appear here.'),
+            animate
+        );
         return;
     }
     updateStreamFeed(f, posts.map(postCard).join(''), animate);
+}
+
+function postSearchText(p) {
+    const t = typeFor(p);
+    return [
+        p.title,
+        p.topic,
+        p.body,
+        p.sub_label,
+        p.post_type,
+        t.type_label,
+        t.type_key,
+        p.author_name,
+        p.faculty_name
+    ].filter(Boolean).join(' ').toLowerCase();
+}
+
+function renderClasswork() {
+    const f = document.getElementById('classworkFeed');
+    if (!f) return;
+    const posts = allPosts.filter(x => postKind(x) !== 'announcement');
+    const countEl = document.getElementById('classworkCount');
+    const summaryEl = document.getElementById('classworkSummaryText');
+    if (countEl) countEl.textContent = posts.length;
+    if (summaryEl) summaryEl.textContent = `${posts.length} item${posts.length !== 1 ? 's' : ''}`;
+    if (!posts.length) {
+        f.innerHTML = empty('fa-tasks', 'No classwork yet', 'Lessons, activities, quizzes, and assignments will appear here.');
+        return;
+    }
+
+    const lessons = posts.filter(p => postKind(p) === 'lesson');
+    const otherPosts = posts.filter(p => postKind(p) !== 'lesson');
+    const periods = [
+        ['prelim', 'Prelim'],
+        ['midterm', 'Midterm'],
+        ['finals', 'Finals']
+    ];
+    const periodBoxes = periods.map(([key, label]) => {
+        const items = lessons
+            .filter(p => String(p.lesson_period || '').toLowerCase() === key)
+            .sort(postDateDesc);
+        return `<div class="cw-period-box">
+            <div class="cw-period-head"><span>${esc(label)}</span><span class="cw-period-count">${items.length}</span></div>
+            <div class="cw-period-body">${items.length ? items.map(buildClassworkItem).join('') : '<div class="cw-period-empty">No lessons yet.</div>'}</div>
+        </div>`;
+    }).join('');
+    const unassignedLessons = lessons
+        .filter(p => !['prelim', 'midterm', 'finals'].includes(String(p.lesson_period || '').toLowerCase()))
+        .sort(postDateDesc);
+    const unassignedHtml = unassignedLessons.length
+        ? `<div class="cw-topic-group"><div class="cw-topic-label">Other Lessons</div>${unassignedLessons.map(buildClassworkItem).join('')}</div>`
+        : '';
+    const groupedHtml = renderClassworkGroups(otherPosts.sort(postDateDesc));
+
+    f.innerHTML = `<div class="cw-period-grid">${periodBoxes}</div>${unassignedHtml}${groupedHtml}`;
+}
+
+function renderClassworkGroups(posts) {
+    if (!posts.length) return '';
+    const groups = new Map();
+    posts.forEach(p => {
+        const key = p.topic || postKindLabel(postKind(p)) || 'General';
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(p);
+    });
+    return Array.from(groups.entries()).map(([topic, items]) => `
+        <div class="cw-topic-group">
+            <div class="cw-topic-label">${esc(topic)}</div>
+            ${items.map(buildClassworkItem).join('')}
+        </div>
+    `).join('');
+}
+
+function buildClassworkItem(p) {
+    const t = typeFor(p);
+    const kind = postKind(p);
+    const points = kind !== 'lesson' && p.points !== undefined && p.points !== null && p.points !== ''
+        ? `<span class="cw-points">${esc(p.points)} pts</span>`
+        : '';
+    const due = p.due_date ? `<span><i class="fas fa-calendar-check"></i> Due ${esc(fmtDate(p.due_date))}</span>` : '';
+    const mode = (kind === 'quiz' || kind === 'exam') ? `<span><i class="fas fa-circle-question"></i> ${esc(quizModeLabel(p))}</span>` : '';
+    const coverage = kind === 'lesson' && p.lesson_period ? `<span><i class="fas fa-bookmark"></i> ${esc(titleCase(p.lesson_period))}</span>` : '';
+    return `<div class="cw-item" onclick="openPostDetail('${esc(p.id)}')">
+        <div class="cw-icon" style="background:${esc(t.color_bg || '#f0e7e2')};color:${esc(t.color_text || '#795548')};"><i class="fas ${esc(t.icon || iconForType(kind))}"></i></div>
+        <div>
+            <div class="cw-title">${esc(p.title || p.topic || p.sub_label || postKindLabel(kind))}</div>
+            <div class="cw-meta">
+                <span>${esc(postKindLabel(kind))}</span>
+                ${due}
+                ${coverage}
+                ${mode}
+            </div>
+        </div>
+        ${points}
+    </div>`;
+}
+
+function postDetailUrl(postId) {
+    return `submitwork.php?post_id=${encodeURIComponent(postId)}&class_id=${encodeURIComponent(CLASS_ID)}`;
+}
+
+function openPostDetail(postId) {
+    if (!postId) return;
+    window.location.href = postDetailUrl(postId);
+}
+
+function focusPost(id) {
+    openPostDetail(id);
+}
+
+function openInitialPostFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const postId = params.get('post_id') || params.get('task_id');
+    if (!postId) return;
+
+    const exists = allPosts.some(p => String(p.id) === String(postId));
+    if (!exists) {
+        showToast('That post is no longer available in this class.', 'warning');
+        return;
+    }
+
+    setTimeout(() => openPostDetail(postId), 80);
+}
+
+function postDateDesc(a, b) {
+    const ad = new Date(String(a.created_at || '').replace(' ', 'T')).getTime() || 0;
+    const bd = new Date(String(b.created_at || '').replace(' ', 'T')).getTime() || 0;
+    return bd - ad;
+}
+
+function postKindLabel(kind) {
+    const labels = {
+        lesson: 'Lesson',
+        activity: 'Activity',
+        quiz: 'Quiz',
+        exam: 'Exam',
+        assignment: 'Assignment',
+        post: 'Post'
+    };
+    return labels[kind] || titleCase(kind || 'Post');
+}
+
+function quizModeLabel(p) {
+    const mode = String(p.quiz_mode || p.mode || '').toLowerCase();
+    return mode === 'live' ? 'Live mode' : 'Self-paced';
 }
 
 function renderResources() {
@@ -2774,7 +4075,7 @@ function empty(icon, title, sub) {
 }
 
 function showError(m) {
-    ['streamFeed', 'resourceFeed'].forEach(id => {
+    ['streamFeed', 'classworkFeed', 'resourceFeed'].forEach(id => {
         const e = document.getElementById(id);
         if (e) e.innerHTML = empty('fa-exclamation-circle', 'Could not load classroom', m);
     });
@@ -2794,7 +4095,7 @@ function iconForType(t) {
 function typeFor(p) {
     return postTypes.find(x => String(x.id) === String(p.post_type_id))
         || postTypes.find(x => String(x.type_key) === String(p.post_type))
-        || { icon: iconForType(p.post_type), color_bg: '#e6f7f2', color_text: '#1a9e78', type_label: titleCase(p.post_type || 'Post') };
+        || { icon: iconForType(p.post_type), color_bg: '#f0e7e2', color_text: '#795548', type_label: titleCase(p.post_type || 'Post') };
 }
 
 function postCard(p) {
@@ -2804,57 +4105,51 @@ function postCard(p) {
         return ''; // Hide unpublished quizzes/exams from students completely.
     }
     const a = p.author_name || p.faculty_name || 'Faculty';
-    const m = [];
-    if (p.due_date && kind !== 'lesson') {
-        const cd = countdownText(p.due_date);
-        m.push(`<span><i class="fas fa-calendar-check"></i> Due ${esc(fmtDate(p.due_date))}</span>`);
-        if (cd) {
-            m.push(`<span class="due-countdown ${cd.cls}" data-due="${esc(p.due_date)}"><i class="fas fa-clock"></i><span class="cd-text">${cd.text}</span></span>`);
-        }
-    }
-    if (kind !== 'lesson' && p.points !== undefined && p.points !== null && p.points !== '') {
-        m.push(`<span><i class="fas fa-star"></i> ${esc(p.points)} pts</span>`);
-    }
-    if (kind === 'activity') {
-        if (p.submission_mode === 'group') {
-            m.push(`<span class="sub-mode-badge sub-mode-group" style="margin:0;"><i class="fas fa-users"></i> Group</span>`);
-        } else if (p.submission_mode === 'individual') {
-            m.push(`<span class="sub-mode-badge sub-mode-individual" style="margin:0;"><i class="fas fa-user"></i> Individual</span>`);
-        }
-    }
-    const at = Array.isArray(p.attachments) && p.attachments.length
-        ? `<div class="pc-attachments">${p.attachments.map(attachChip).join('')}</div>`
+    const pointsValue = kind !== 'lesson' && p.points !== undefined && p.points !== null && p.points !== ''
+        ? String(p.points)
         : '';
-    const q = (kind === 'quiz' || kind === 'exam')
-        ? quizActionBar(p, kind)
+    const assessmentMode = String(p.quiz_mode || p.mode || '').toLowerCase();
+    const isExpiredDueAssessment = (kind === 'quiz' || kind === 'exam') && assessmentMode !== 'live' && p.due_date && isOverdue(p.due_date);
+    const at = '';
+    const q = (kind === 'quiz' || kind === 'exam') && !isExpiredDueAssessment
+        ? quizInfoChips(p, kind)
         : '';
-    const sb = (kind === 'activity' || kind === 'assignment')
-    ? submissionBar(p)
-    : '';
+    const sb = '';
     const typeLabel = esc(p.sub_label || t.type_label || titleCase(kind));
-    const typeStyle = `background:${esc(t.color_bg || '#e6f7f2')};color:${esc(t.color_text || '#1a9e78')};`;
+    const typeStyle = `background:${esc(t.color_bg || '#f0e7e2')};color:${esc(t.color_text || '#795548')};`;
     const typeIcon = `<i class="fas ${esc(t.icon || iconForType(kind))}"></i>`;
     const postTitle = esc(p.title || p.topic || p.sub_label || t.type_label || titleCase(kind));
     const headDateLabel = `${esc(fmtDate(p.created_at))} &bull; ${esc(a)}`;
     const releasedAssessment = (kind === 'quiz' || kind === 'exam') && !!p.results_released_at;
-    const typeBadge = releasedAssessment
-        ? `<button type="button" class="pc-type-badge is-clickable" style="${typeStyle}" data-sq-viewscore="${esc(p.id)}" data-sq-kind="${esc(kind)}" title="Review ${esc(kind === 'exam' ? 'Exam' : 'Quiz')} results">${typeIcon} ${typeLabel}</button>`
-        : `<span class="pc-type-badge" style="${typeStyle}">${typeIcon} ${typeLabel}</span>`;
-    return `<div class="post-card" data-post-id="${esc(p.id)}">
+    const typeBadge = `<span class="pc-type-badge" style="${typeStyle}">${typeIcon} ${typeLabel}</span>`;
+    const attempt = p.quiz_attempt || p.exam_attempt || p.attempt || null;
+    const earnedScore = attempt?.score ?? attempt?.auto_score ?? p.score ?? p.result_score ?? '';
+    const maxScore = attempt?.max_score ?? p.max_score ?? pointsValue;
+    const pointBox = releasedAssessment && earnedScore !== '' && maxScore !== ''
+        ? `<div class="pc-points">${esc(earnedScore)}/${esc(maxScore)}<span>score</span></div>`
+        : (pointsValue ? `<div class="pc-points">${esc(pointsValue)}<span>pts</span></div>` : '');
+    const statusBadge = isExpiredDueAssessment
+        ? `<div class="pc-left-status"><span class="pc-status-badge is-unavailable">Unable to Take ${kind === 'exam' ? 'Exam' : 'Quiz'}</span></div>`
+        : (kind !== 'lesson' && p.due_date && isOverdue(p.due_date)
+            ? `<div class="pc-left-status"><span class="pc-status-badge is-late">LATE</span></div>`
+            : '');
+    const openIndicator = `<div class="pc-open-indicator" aria-label="Open post"><i class="fas fa-angle-right"></i></div>`;
+    const rightStatus = `<div class="pc-card-status">${pointBox}${openIndicator}</div>`;
+    const bodyContent = `
+        ${p.body ? `<div class="pc-text" style="font-size:.88rem;line-height:1.65;color:var(--text-muted);margin-bottom:.35rem;">${esc(p.body)}</div>` : ''}
+    `.trim();
+    return `<div class="post-card" data-post-id="${esc(p.id)}" data-kind="${esc(kind)}" data-result-released="${releasedAssessment ? '1' : '0'}" data-assessment-closed="${isExpiredDueAssessment ? '1' : '0'}">
         <div class="pc-head">
             <div class="pc-avatar" style="${typeStyle}">${typeIcon}</div>
             <div class="pc-meta">
-                <div class="pc-author">${postTitle}</div>
+                <div class="pc-title-row"><div class="pc-author">${postTitle}</div>${typeBadge}</div>
                 <div class="pc-date">${headDateLabel}</div>
+                ${statusBadge}
             </div>
-            ${typeBadge}
+            ${rightStatus}
         </div>
-        <div class="pc-body">
-    ${p.body  ? `<div class="pc-text" style="font-size:.88rem;line-height:1.65;color:var(--text-muted);margin-bottom:.35rem;">${esc(p.body)}</div>` : ''}
-            ${kind === 'lesson' ? `<div class="pc-meta-row"><span><i class="fas fa-book-open"></i> Lesson material only</span><span><i class="fas fa-eye"></i> Review / download only</span></div>` : ''}
-            ${m.length ? `<div class="pc-meta-row">${m.join('')}</div>` : ''}
-        </div>
-        ${at}${q}${sb}${commentBox(p)}
+        ${bodyContent ? `<div class="pc-body">${bodyContent}</div>` : ''}
+        ${at}${q}${sb}
     </div>`;
 }
 function postKind(p) {
@@ -2886,7 +4181,6 @@ function secondsLabel(seconds) {
 
 function quizInfoChips(p, kind) {
     const questionCount = Array.isArray(p.questions) ? p.questions.length : (parseInt(p.question_count, 10) || 0);
-    const points = p.points !== undefined && p.points !== null && p.points !== '' ? parseFloat(p.points) : 0;
     const mode = String(p.quiz_mode || p.mode || '').toLowerCase();
     const timeMode = String(p.time_mode || p.time_limit_mode || p.timer_mode || '').toLowerCase();
     const firstQuestionTime = Array.isArray(p.questions)
@@ -2896,7 +4190,6 @@ function quizInfoChips(p, kind) {
     const isPerQuestion = timeMode.includes('question') || parseInt(p.is_per_question_timer, 10) === 1 || (!!firstQuestionTime && !parseInt(p.time_limit_seconds, 10));
     const timing = isPerQuestion ? `${secondsLabel(timeLimit)} / question` : `${secondsLabel(timeLimit)} total`;
     const chips = [];
-    if (points) chips.push(`<span class="quiz-info-chip"><i class="fas fa-star"></i> ${esc(points)} pts</span>`);
     chips.push(`<span class="quiz-info-chip ${mode === 'live' ? 'is-live' : ''}"><i class="fas ${mode === 'live' ? 'fa-stopwatch' : 'fa-unlock'}"></i> ${mode === 'live' ? 'Live mode' : 'Self-paced'}</span>`);
     chips.push(`<span class="quiz-info-chip"><i class="fas fa-clock"></i> ${esc(timing)}</span>`);
     chips.push(`<span class="quiz-info-chip"><i class="fas fa-circle-question"></i> ${esc(questionCount)} question${questionCount !== 1 ? 's' : ''}</span>`);
@@ -2926,7 +4219,7 @@ if (!sub) {
     return `<div class="submission-bar sb-none">
         <span class="sb-icon"><i class="fas fa-paper-plane"></i></span>
         <span>Not yet submitted</span>
-        <button class="sb-submit-btn" onclick="openSubmitModal('${pid}','${ptitle}', false)">
+        <button class="sb-submit-btn" onclick="openPostDetail('${pid}')">
             <i class="fas fa-upload"></i> Submit Work
         </button>
     </div>`;
@@ -2935,7 +4228,7 @@ if (!sub) {
     const late = isLateSubmission(p, sub);
     const lateBadge = late
         ? `<span class="sb-grade-pill" style="background:#fdecea;color:#d93025;"><i class="fas fa-clock" style="font-size:.6rem;"></i> Late</span>`
-        : `<span class="sb-grade-pill" style="background:#e6f7f2;color:#1a9e78;"><i class="fas fa-check" style="font-size:.6rem;"></i> On time</span>`;
+        : `<span class="sb-grade-pill" style="background:#f0e7e2;color:#795548;"><i class="fas fa-check" style="font-size:.6rem;"></i> On time</span>`;
     const fileChip = sub.file_name
         ? `<a class="sb-file-chip" href="API/student/studentClassroom/download_submission.php?id=${esc(sub.submission_id)}" target="_blank" title="${esc(sub.file_name)}"><i class="fas fa-paperclip"></i><span class="sb-file-name">${esc(sub.file_name)}</span><i class="fas fa-eye sb-file-eye"></i></a>`
         : '';
@@ -2959,7 +4252,7 @@ if (!sub) {
             <span>Returned <span class="sb-time">${esc(fmtDate(sub.submitted_at))}</span></span>
             ${fileChip}
             ${lateBadge}
-            <button class="sb-submit-btn" onclick="openSubmitModal('${pid}','${ptitle}', true)">
+            <button class="sb-submit-btn" onclick="openPostDetail('${pid}')">
                 <i class="fas fa-upload"></i> Resubmit
             </button>
         </div>`;
@@ -2969,7 +4262,7 @@ if (!sub) {
         <span>Submitted <span class="sb-time">${esc(fmtDate(sub.submitted_at))}</span></span>
         ${fileChip}
         ${lateBadge}
-        <button class="sb-submit-btn" onclick="openSubmitModal('${pid}','${ptitle}', true)">
+        <button class="sb-submit-btn" onclick="openPostDetail('${pid}')">
             <i class="fas fa-pen-to-square"></i> Edit / Resubmit
         </button>
     </div>`;
@@ -2987,15 +4280,15 @@ if (kind === 'quiz' || kind === 'exam') {
     const released = !!p.results_released_at;
     const info = quizInfoChips(p, kind);
     return `
-      <div class="sq-slot" data-sq-state="${esc(p.id)}" data-sq-kind="${esc(kind)}">
+      <div class="sq-slot" data-sq-kind="${esc(kind)}">
         ${info}
         <div class="sq-actions">
           ${released
-            ? `<button type="button" class="sq-btn sq-btn-primary sq-btn-view" data-sq-viewscore="${esc(p.id)}">
-                 <i class="fa-solid fa-file-lines"></i> Review Results
+            ? `<button type="button" class="sq-btn sq-btn-primary sq-btn-view" onclick="openPostDetail('${esc(p.id)}')">
+                 <i class="fa-solid fa-file-lines"></i> Open Results
                </button>`
-            : `<button type="button" class="sq-btn sq-btn-ghost" disabled>
-                 <i class="fa-solid fa-spinner fa-spin"></i> Checking status...
+            : `<button type="button" class="sq-btn sq-btn-take" onclick="openPostDetail('${esc(p.id)}')">
+                 <i class="fa-solid fa-up-right-from-square"></i> Open ${esc(label)} Details
                </button>`}
         </div>
       </div>`;
@@ -3074,7 +4367,7 @@ function takeQuiz(postId, kind) {
 }
 
 function lessonViewUrl(postId) {
-    return `lesson_view.php?post_id=${encodeURIComponent(postId)}&class_id=${encodeURIComponent(CLASS_ID)}`;
+    return postDetailUrl(postId);
 }
 
 function fileIcon(m, n) {
@@ -3350,17 +4643,25 @@ async function loadPostModalComments(id) {
 }
 
 document.addEventListener('click', function(e){
-    const t = e.target.closest('.post-card .pc-head, .post-card .pc-body');
+    const t = e.target.closest('.post-card .pc-head, .post-card .pc-body, .post-card .pc-card-status');
     if (!t) return;
     if (e.target.closest('button,a,input,textarea,.fv-trigger,.sb-submit-btn,.sq-btn,.pa-chip')) return;
     const card = t.closest('.post-card');
     if (!card) return;
     const pid = card.getAttribute('data-post-id');
     if (!pid) return;
-    const post = allPosts.find(item => String(item.id) === String(pid));
-    if (post && postKind(post) === 'lesson') {
-        window.location.href = lessonViewUrl(pid);
+    if (card.getAttribute('data-assessment-closed') === '1') {
+        const kind = card.getAttribute('data-kind') === 'exam' ? 'Exam' : 'Quiz';
+        Swal.fire({
+            icon: 'info',
+            title: `Unable to Take ${kind}`,
+            text: `The due date has passed. Please contact your professor for assistance.`,
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#795548'
+        });
+        return;
     }
+    openPostDetail(pid);
 });
 
 (function () {
@@ -3423,6 +4724,7 @@ document.addEventListener('click', function(e){
         else if (['mp4', 'webm', 'ogg', 'mov'].includes(e) || String(mime || '').startsWith('video/')) showMedia(url, 'video', mime);
         else if (['mp3', 'wav', 'aac', 'm4a'].includes(e) || String(mime || '').startsWith('audio/')) showMedia(url, 'audio', mime);
         else if (['txt', 'csv', 'json', 'xml', 'css', 'js', 'md', 'sql', 'log'].includes(e)) showText(url);
+        else if (['ppt', 'pptx'].includes(e) && attachId) showPowerPoint(url, name);
         else if (['doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx'].includes(e)) showOffice(url);
         else noPreview(url, name);
         loadNotes();
@@ -3435,7 +4737,7 @@ document.addEventListener('click', function(e){
         pdf = null; attachId = '';
     }
 
-    function openPdf(url) {
+    function openPdf(url, fallbackUrl = url, fallbackLabel = 'PDF') {
         const go = () => {
             window.pdfjsLib.GlobalWorkerOptions.workerSrc = WORKER;
             const wrap = document.createElement('div');
@@ -3447,14 +4749,14 @@ document.addEventListener('click', function(e){
             window.pdfjsLib.getDocument(url).promise.then(d => {
                 pdf = d; pages = d.numPages; pageNo = 1; stripText();
                 renderPdf(); loadNotes();
-            }).catch(() => noPreview(url, 'PDF'));
+            }).catch(() => noPreview(fallbackUrl, fallbackLabel));
         };
         if (window.pdfjsLib) go();
         else {
             const s = document.createElement('script');
             s.src = PDFJS;
             s.onload = go;
-            s.onerror = () => noPreview(url, 'PDF');
+            s.onerror = () => noPreview(fallbackUrl, fallbackLabel);
             document.head.appendChild(s);
         }
     }
@@ -3503,6 +4805,11 @@ document.addEventListener('click', function(e){
             d.textContent = t;
             body.appendChild(d); busy(false);
         }).catch(() => noPreview(url, 'Text'));
+    }
+
+    function showPowerPoint(url, name) {
+        const preview = `${API_ROOT}/get_attachment_preview.php?attach_id=${encodeURIComponent(attachId)}`;
+        openPdf(preview, url, name || 'PowerPoint');
     }
 
     function showOffice(url) {
@@ -4358,7 +5665,7 @@ document.addEventListener('visibilitychange', () => {
         <div id="qmResultSub" style="font-size:.88rem;color:var(--text-muted);margin-bottom:1.2rem;"></div>
         <div id="qmScoreBox" style="
           display:inline-block;background:var(--primary-light);
-          border:2px solid rgba(26,158,120,.3);border-radius:16px;
+          border:2px solid rgba(121,85,72,.3);border-radius:16px;
           padding:1rem 2.5rem;margin-bottom:1rem;
         ">
           <div style="font-size:2.4rem;font-weight:800;color:var(--primary);" id="qmScoreVal"></div>
@@ -4394,7 +5701,7 @@ document.addEventListener('visibilitychange', () => {
           background:var(--primary);color:#fff;
           border:none;font-size:.84rem;font-weight:700;cursor:pointer;
           display:flex;align-items:center;gap:.4rem;transition:all .15s;
-          box-shadow:0 2px 10px rgba(26,158,120,.3);
+          box-shadow:0 2px 10px rgba(121,85,72,.28);
         ">Next <i class="fas fa-chevron-right"></i></button>
 
         <button id="qmSubmitBtn" style="
@@ -4788,7 +6095,7 @@ document.addEventListener('visibilitychange', () => {
     if (qmScoreEl) {
       let col = 'var(--text-muted)';
       if (pct !== null) {
-        if (pct > 50) col = '#1a9e78';
+        if (pct > 50) col = '#795548';
         else if (pct === 50) col = '#f59e0b';
         else col = '#d93025';
       }
@@ -4922,7 +6229,7 @@ document.addEventListener('visibilitychange', () => {
           <div id="scoreModalIcon" style="font-size:2.2rem;margin-bottom:.35rem;"></div>
           <div id="scoreModalTitle" style="font-size:1.08rem;font-weight:800;margin-bottom:.15rem;"></div>
           <div id="scoreModalPct" style="font-size:.88rem;color:var(--text-muted);margin-bottom:.6rem;"></div>
-          <div id="scoreModalBox" style="display:inline-block;background:var(--primary-light);border:2px solid rgba(26,158,120,.3);border-radius:14px;padding:.75rem 1.8rem;">
+          <div id="scoreModalBox" style="display:inline-block;background:var(--primary-light);border:2px solid rgba(121,85,72,.3);border-radius:14px;padding:.75rem 1.8rem;">
             <div id="scoreModalVal" style="font-size:1.9rem;font-weight:800;color:var(--primary);"></div>
             <div style="font-size:.72rem;font-weight:700;color:var(--text-muted);"></div>
           </div>
@@ -5051,7 +6358,7 @@ document.addEventListener('visibilitychange', () => {
       if (smVal) {
         let col = 'var(--text-muted)';
         if (pct !== null) {
-          if (pct > 50) col = '#1a9e78';
+          if (pct > 50) col = '#795548';
           else if (pct === 50) col = '#f59e0b';
           else col = '#d93025';
         }

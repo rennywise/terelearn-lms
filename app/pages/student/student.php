@@ -132,7 +132,12 @@ $hInit      = htmlspecialchars($initials);
     .nav-item i { width: 18px; text-align: center; font-size: .95rem; flex-shrink: 0; }
     .nav-item:hover { background: var(--primary-light); color: var(--primary); }
     .nav-item.active { background: var(--primary-light); color: var(--primary); border-left-color: var(--primary); font-weight: 600; }
+    .nav-item.nav-soft { margin: .08rem 1rem; width: calc(100% - 2rem); border-left: 0; border-radius: 999px; padding: .72rem 1rem; color: var(--text); }
+    .nav-item.nav-soft i { font-size: 1.05rem; }
+    .nav-item.nav-soft.active { background: #bfe7ff; color: #003f63; border-left-color: transparent; font-weight: 700; }
+    .nav-item.nav-soft.active i { color: #003f63; }
     .sidebar.collapsed .nav-item { justify-content: center; padding: .6rem; }
+    .sidebar.collapsed .nav-item.nav-soft { width: auto; margin: .08rem .65rem; padding: .72rem; }
     .sidebar.collapsed .nav-item span { display: none; }
     .nav-badge { margin-left: auto; background: var(--primary); color: #fff; font-size: .65rem; font-weight: 700; padding: .1rem .45rem; border-radius: 20px; flex-shrink: 0; }
     .sidebar.collapsed .nav-badge { display: none; }
@@ -320,6 +325,115 @@ $hInit      = htmlspecialchars($initials);
     body.dark .meet-code-pill { background: var(--bg); }
 
     /* â”€â”€ EMPTY STATE â”€â”€ */
+    /* Student class cards aligned with the faculty/classroom treatment */
+    .class-grid { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.25rem; align-items: stretch; }
+    .class-card { border-radius: 18px; border: 1px solid rgba(148,163,184,.28); overflow: hidden; background: var(--surface); box-shadow: 0 12px 28px rgba(15,23,42,.10); transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+    .class-card:hover { transform: translateY(-5px); box-shadow: 0 22px 46px rgba(15,23,42,.16); border-color: rgba(26,158,120,.35); }
+    .class-card.kebab-open, .class-card.kebab-open:hover { transform: none; z-index: 320; overflow: visible; }
+    .class-card.kebab-open .card-banner, .class-card.kebab-open .tl-card-top { overflow: visible; }
+    .class-card.kebab-open .tl-card-top { z-index: 80; }
+    .class-card.kebab-open .tl-card-meta,
+    .class-card.kebab-open .tl-week-progress { z-index: 1; }
+    .card-banner { min-height: 214px; height: auto; padding: 1.05rem; justify-content: flex-start; border-radius: 18px 18px 0 0; }
+    .card-banner::after { display: none; }
+    .card-banner.b-forest { background: linear-gradient(135deg,#115e59 0%,#0f766e 48%,#0d9488 100%); }
+    .card-banner.b-ocean { background: linear-gradient(135deg,#1e3a8a 0%,#1d4ed8 52%,#0284c7 100%); }
+    .card-banner.b-sunset { background: linear-gradient(135deg,#9a3412 0%,#c2410c 52%,#ea580c 100%); }
+    .card-banner.b-plum { background: linear-gradient(135deg,#581c87 0%,#6d28d9 52%,#7c3aed 100%); }
+    .card-banner.b-teal { background: linear-gradient(135deg,#164e63 0%,#0e7490 52%,#0891b2 100%); }
+    .card-banner.b-rose { background: linear-gradient(135deg,#881337 0%,#be123c 52%,#e11d48 100%); }
+    .card-banner.b-slate { background: linear-gradient(135deg,#1e293b 0%,#334155 56%,#475569 100%); }
+    .card-banner.b-indigo { background: linear-gradient(135deg,#312e81 0%,#4338ca 52%,#4f46e5 100%); }
+    .tl-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: .75rem; position: relative; z-index: 2; }
+    .tl-card-main { min-width: 0; flex: 1; }
+    .tl-card-dot { width: 8px; height: 8px; border-radius: 999px; background: #5eead4; box-shadow: 0 0 0 5px rgba(255,255,255,.08); flex-shrink: 0; }
+    .card-banner.b-slate .tl-card-dot { background: #cbd5e1; }
+    .card-banner.b-rose .tl-card-dot { background: #fda4af; }
+    .card-banner.b-plum .tl-card-dot, .card-banner.b-indigo .tl-card-dot { background: #c4b5fd; }
+    .card-banner.b-sunset .tl-card-dot { background: #fcd34d; }
+    .tl-program-silhouette { position: absolute; top: 42px; right: -54px; z-index: 0; width: 150px; height: 150px; display: flex; align-items: center; justify-content: center; pointer-events: none; transform: rotate(-5deg); opacity: .045; }
+    .tl-program-silhouette.has-image img { width: 100%; height: 100%; object-fit: contain; filter: grayscale(1) contrast(1.12); mix-blend-mode: multiply; }
+    .tl-program-silhouette.is-fallback { width: 146px; height: 146px; border-radius: 999px; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.08); color: rgba(255,255,255,.38); font-size: 1.9rem; font-weight: 900; letter-spacing: .06em; text-align: center; }
+    .tl-program-silhouette.is-fallback span { max-width: 110px; overflow: hidden; white-space: nowrap; }
+    .tl-program-side-icons { position: absolute; top: 34px; right: 104px; z-index: 0; width: 132px; height: 128px; pointer-events: none; opacity: .095; }
+    .tl-program-side-icon { position: absolute; left: var(--x); top: var(--y); width: var(--s); height: var(--s); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,.72); background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.14); transform: translate(-50%,-50%) rotate(var(--r,0deg)); box-shadow: 0 8px 18px rgba(15,23,42,.08); }
+    .tl-program-side-icon.is-ghost { background: transparent; border-color: transparent; color: rgba(255,255,255,.46); }
+    .tl-program-side-icon i { font-size: calc(var(--s) * .46); line-height: 1; }
+    .student-banner-title-wrap {
+      display: grid;
+      grid-template-columns: 48px minmax(0, 1fr);
+      grid-template-rows: auto auto;
+      column-gap: .72rem;
+      align-items: center;
+      margin-top: .35rem;
+      max-width: calc(100% - 58px);
+      position: relative;
+      z-index: 2;
+    }
+    .student-banner-faculty-avatar {
+      grid-row: 1 / span 2;
+      width: 48px;
+      height: 48px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      color: #fff;
+      font-size: .85rem;
+      font-weight: 900;
+      border: 2px solid rgba(255,255,255,.34);
+      box-shadow: 0 12px 24px rgba(15,23,42,.18);
+      background: rgba(255,255,255,.16);
+      backdrop-filter: blur(8px);
+    }
+    .student-banner-faculty-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .student-banner-title-copy {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .banner-title { font-size: 1.26rem; font-weight: 900; line-height: 1.15; letter-spacing: -.015em; margin: 0; }
+    .banner-code { font-size: .78rem; color: rgba(255,255,255,.78); margin-top: .3rem; line-height: 1.35; }
+    .tl-card-meta { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: 1rem; position: relative; z-index: 2; }
+    .tl-card-chip { display: inline-flex; align-items: center; gap: .32rem; max-width: 100%; border-radius: 999px; background: rgba(255,255,255,.13); color: rgba(255,255,255,.92); padding: .25rem .56rem; font-size: .64rem; font-weight: 800; backdrop-filter: blur(8px); }
+    .tl-card-chip i { font-size: .58rem; opacity: .9; }
+    .tl-week-progress { margin-top: 1rem; position: relative; z-index: 2; }
+    .tl-week-line { display: flex; align-items: center; justify-content: space-between; gap: .75rem; color: rgba(255,255,255,.68); font-size: .62rem; font-weight: 800; }
+    .tl-progress-track { margin-top: .42rem; height: 5px; border-radius: 999px; background: rgba(255,255,255,.12); overflow: hidden; }
+    .tl-progress-fill { height: 100%; border-radius: 999px; background: rgba(255,255,255,.58); transition: width .35s ease; }
+    .card-kebab-wrap { top: .72rem; right: .72rem; z-index: 90; }
+    .card-kebab-menu { z-index: 95; }
+    .card-kebab-btn { width: 42px; height: 42px; background: rgba(15,23,42,.18); border: 1px solid rgba(255,255,255,.18); box-shadow: 0 10px 24px rgba(15,23,42,.14); }
+    .card-kebab-btn:hover, .card-kebab-btn:focus-visible { background: rgba(255,255,255,.92); color: #0f172a; outline: none; }
+    .card-body { padding: .75rem .95rem .9rem; margin-top: 0; position: relative; z-index: 4; border-radius: 0 0 18px 18px; background: var(--surface); min-height: 0; display: grid; gap: .68rem; }
+    .student-prof-line { display: flex; align-items: center; gap: .65rem; min-width: 0; border: 1px solid var(--border); border-radius: 13px; background: var(--bg); padding: .56rem .62rem; }
+    .student-prof-avatar { width: 34px; height: 34px; border-radius: 999px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #fff; font-size: .72rem; font-weight: 900; overflow: hidden; box-shadow: 0 4px 12px rgba(15,23,42,.15); }
+    .student-prof-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .student-prof-main { min-width: 0; flex: 1; }
+    .student-prof-name { display: block; font-size: .78rem; font-weight: 800; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .student-prof-sub { display: block; margin-top: .1rem; font-size: .66rem; font-weight: 700; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .student-prof-badge { flex: 0 0 auto; width: 28px; height: 28px; border-radius: 9px; display: grid; place-items: center; background: var(--primary-light); color: var(--primary); }
+    .card-foot { width: 100%; min-height: 38px; border-top: 0; padding: 0; margin-top: 0; display: flex; align-items: center; justify-content: space-between; gap: .6rem; }
+    .tl-avatar-stack { display: flex; align-items: center; gap: .55rem; min-width: 0; flex: 1 1 auto; overflow: hidden; }
+    .tl-avatar-stack .stack { display: flex; align-items: center; margin-left: 2px; }
+    .tl-student-avatar { width: 28px; height: 28px; border-radius: 999px; border: 2px solid var(--surface); margin-left: -8px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: var(--primary); color: #fff; font-size: .62rem; font-weight: 900; box-shadow: 0 4px 10px rgba(15,23,42,.16); }
+    .tl-student-avatar:first-child { margin-left: 0; }
+    .tl-student-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .tl-student-count { color: var(--text-muted); font-size: .78rem; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .tl-student-count i { margin-right: .24rem; }
+    .tl-meet-btn { display: inline-flex; align-items: center; justify-content: center; gap: .38rem; min-width: 86px; min-height: 34px; margin-left: auto; padding: 0 .85rem; border-radius: 10px; border: 1px solid transparent; background: #1a73e8; color: #fff; font-size: .74rem; font-weight: 900; text-decoration: none; cursor: pointer; box-shadow: 0 8px 18px rgba(26,115,232,.24); transition: transform .16s ease, box-shadow .16s ease, background .16s ease; }
+    .tl-meet-btn:hover { background: #1558b0; color: #fff; transform: translateY(-1px); box-shadow: 0 12px 24px rgba(26,115,232,.32); }
+    .tl-meet-btn[href="#"] { opacity: .78; }
+    .tl-meet-state { display: none !important; }
+    body.dark .student-prof-line { background: rgba(0,0,0,.16); }
+
     .empty-state { padding: 2.5rem 1rem; text-align: center; color: var(--text-muted); grid-column: 1 / -1; }
     .empty-icon { font-size: 2.5rem; margin-bottom: .75rem; opacity: .35; }
     .empty-title { font-size: 1rem; font-weight: 600; margin-bottom: .3rem; }
@@ -396,6 +510,38 @@ $hInit      = htmlspecialchars($initials);
     .gp-fail { background: #fdecea; color: var(--danger); border: 1px solid #fecaca; }
     .gp-pending { background: #fff3e0; color: var(--warning); border: 1px solid #ffe0b2; }
     .gp-na { background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); }
+
+    /* Task timeline */
+    .work-timeline { position: relative; display: grid; gap: .85rem; }
+    .work-card { position: relative; display: grid; grid-template-columns: 46px minmax(0, 1fr) auto; gap: .9rem; align-items: start; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: .95rem 1.05rem; box-shadow: var(--shadow); cursor: pointer; transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition); overflow: hidden; }
+    .work-card::before { content: ''; position: absolute; left: 22px; top: 58px; bottom: -18px; width: 2px; background: var(--border); }
+    .work-card:last-child::before { display: none; }
+    .work-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: rgba(121,85,72,.35); }
+    .work-icon { width: 46px; height: 46px; border-radius: 13px; display: grid; place-items: center; font-size: 1rem; position: relative; z-index: 1; }
+    .work-main { min-width: 0; }
+    .work-title-row { display: flex; align-items: center; gap: .45rem; flex-wrap: wrap; min-width: 0; }
+    .work-title { font-size: .96rem; font-weight: 800; color: var(--text); line-height: 1.25; }
+    .work-type { display: inline-flex; align-items: center; gap: .28rem; border-radius: 999px; padding: .16rem .48rem; font-size: .62rem; font-weight: 900; text-transform: uppercase; letter-spacing: .04em; background: #f0e7e2; color: #795548; border: 1px solid #decac0; }
+    .work-meta { display: flex; align-items: center; gap: .45rem; flex-wrap: wrap; margin-top: .4rem; font-size: .74rem; color: var(--text-muted); font-weight: 600; }
+    .work-meta span { display: inline-flex; align-items: center; gap: .28rem; min-width: 0; }
+    .work-due { margin-top: .55rem; display: inline-flex; align-items: center; gap: .38rem; border-radius: 999px; padding: .26rem .68rem; background: #fff7ed; color: #9a4d12; border: 1px solid #fed7aa; font-size: .74rem; font-weight: 800; }
+    .work-due.is-late { background: #fff1f2; color: #be123c; border-color: #fecdd3; }
+    .work-badges { display: flex; align-items: center; gap: .4rem; flex-wrap: wrap; margin-top: .55rem; }
+    .work-chip { display: inline-flex; align-items: center; gap: .3rem; border-radius: 999px; padding: .22rem .58rem; background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); font-size: .68rem; font-weight: 800; }
+    .work-side { display: flex; flex-direction: column; align-items: flex-end; gap: .45rem; min-width: 98px; }
+    .work-status { display: inline-flex; align-items: center; gap: .34rem; border-radius: 999px; padding: .26rem .7rem; font-size: .72rem; font-weight: 900; white-space: nowrap; background: #fff3e0; color: #b45309; border: 1px solid #fed7aa; }
+    .work-status.done { background: var(--primary-light); color: var(--primary); border-color: rgba(26,158,120,.22); }
+    .work-status.late { background: #fff1f2; color: #dc2626; border-color: #fecaca; }
+    .work-status.active { background: #e8f0fe; color: #1f73db; border-color: #bfdbfe; }
+    .work-points { font-size: .74rem; font-weight: 900; color: var(--text); text-align: right; }
+    .work-open { color: var(--text-muted); font-size: .78rem; font-weight: 800; display: inline-flex; align-items: center; gap: .28rem; }
+    .work-empty { background: var(--surface); border: 1px dashed var(--border); border-radius: 14px; padding: 2.1rem 1rem; text-align: center; color: var(--text-muted); }
+    @media (max-width: 720px) {
+      .work-card { grid-template-columns: 42px minmax(0, 1fr); }
+      .work-icon { width: 42px; height: 42px; }
+      .work-side { grid-column: 2; align-items: flex-start; min-width: 0; flex-direction: row; flex-wrap: wrap; }
+      .work-card::before { left: 20px; }
+    }
 
     /* â”€â”€ SKELETON â”€â”€ */
     .skeleton { background: linear-gradient(90deg, var(--border) 25%, var(--bg) 50%, var(--border) 75%); background-size: 200% 100%; animation: shimmer 1.3s infinite; border-radius: 8px; }
@@ -523,7 +669,7 @@ $hInit      = htmlspecialchars($initials);
       <i class="fas fa-bell"></i>
       <span class="notif-dot" id="notifDot" style="display:none;"></span>
     </button>
-    <div class="nav-avatar" id="navAvatar" title="Profile"><?= $hInit ?></div>
+    <div class="nav-avatar" id="navAvatar" title="Settings"><?= $hInit ?></div>
   </div>
 </nav>
 
@@ -552,20 +698,13 @@ $hInit      = htmlspecialchars($initials);
     </div>
   </div>
 
-  <div class="nav-section-label">Main</div>
-  <button class="nav-item active" data-page="dashboard"><i class="fas fa-th-large"></i><span>Dashboard</span></button>
-  <button class="nav-item" data-page="classes"><i class="fas fa-chalkboard"></i><span>My Classes</span><span class="nav-badge" id="classBadge">0</span></button>
-  <button class="nav-item" data-page="activity"><i class="fas fa-stream"></i><span>Activity Feed</span><span class="nav-badge" id="activityBadge" style="background:#7c3aed;">0</span></button>
-  
-  <div class="nav-section-label" style="margin-top:.75rem;">Academics</div>
+  <button class="nav-item active" data-page="dashboard"><i class="fas fa-home"></i><span>Home</span></button>
   <button class="nav-item" data-page="grades"><i class="fas fa-chart-bar"></i><span>Grades</span></button>
-  <button class="nav-item" data-page="schedule"><i class="fas fa-calendar-week"></i><span>Schedule</span></button>
-  <button class="nav-item" data-page="calendar"><i class="fas fa-calendar-day"></i><span>Calendar</span></button>
-  <button class="nav-item" data-page="quizzes"><i class="fas fa-tasks"></i><span>Quizzes &amp; Tasks</span><span class="nav-badge" id="quizBadge" style="background:var(--warning);">0</span></button>
+  <button class="nav-item" data-page="quizzes"><i class="fas fa-clipboard-check"></i><span>Task</span><span class="nav-badge" id="quizBadge" style="background:var(--warning);">0</span></button>
 
   <div class="nav-section-label" style="margin-top:.75rem;">Account</div>
-  <button class="nav-item" data-page="profile"><i class="fas fa-user-circle"></i><span>Profile</span></button>
-  <button class="nav-item" data-page="settings"><i class="fas fa-sliders-h"></i><span>Settings</span></button>
+  <button class="nav-item nav-soft" data-page="archive"><i class="far fa-window-restore"></i><span>Archived classes</span></button>
+  <button class="nav-item nav-soft" data-page="settings"><i class="fas fa-cog"></i><span>Settings</span></button>
 
   <div class="sidebar-footer-inner">
     <a href="signin.php" class="signout-btn"><i class="fas fa-sign-out-alt"></i><span>Sign Out</span></a>
@@ -795,17 +934,17 @@ $hInit      = htmlspecialchars($initials);
   <div class="page" data-page="quizzes">
     <div class="page-header">
       <div>
-        <div class="page-title">Quizzes &amp; Tasks</div>
-        <div class="page-subtitle">Track your pending and completed work</div>
+        <div class="page-title">Task Timeline</div>
+        <div class="page-subtitle">Track activities, assignments, and due-date quizzes across your classes</div>
       </div>
     </div>
 
     <!-- Pending -->
     <div class="section-divider">
       <div class="sd-icon"><i class="fas fa-clock"></i></div>
-      Pending
+      To do
     </div>
-    <div id="pendingTasks">
+    <div class="work-timeline" id="pendingTasks">
       <div style="text-align:center;padding:2rem;color:var(--text-muted);font-size:.85rem;">
         <i class="fas fa-spinner fa-spin" style="margin-right:.4rem;"></i>Loading…
       </div>
@@ -816,14 +955,14 @@ $hInit      = htmlspecialchars($initials);
       <div class="sd-icon" style="background:#e0f2fe;color:#0284c7;"><i class="fas fa-check"></i></div>
       Completed
     </div>
-    <div id="completedTasks">
+    <div class="work-timeline" id="completedTasks">
       <div style="text-align:center;padding:2rem;color:var(--text-muted);font-size:.85rem;">Loading…</div>
     </div>
   </div>
 
   <!-- â”€â”€ PROFILE â”€â”€ -->
-  <div class="page" data-page="profile">
-    <div class="page-header"><div><div class="page-title">Profile</div><div class="page-subtitle">Your student information</div></div></div>
+  <div class="page" data-page="settings">
+    <div class="page-header"><div><div class="page-title">Settings</div><div class="page-subtitle">Manage your profile and account preferences</div></div></div>
     <div class="profile-card">
       <div class="profile-banner">
         <div class="profile-cover-action"><i class="fas fa-camera"></i>Cover</div>
@@ -883,29 +1022,39 @@ $hInit      = htmlspecialchars($initials);
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- â”€â”€ SETTINGS â”€â”€ -->
-  <div class="page" data-page="settings">
-    <div class="page-header"><div><div class="page-title">Settings</div><div class="page-subtitle">Manage your account preferences</div></div></div>
-    <div class="profile-card" style="max-width:480px;">
+    <div class="profile-card" style="max-width:760px;margin-top:1rem;">
       <div style="padding:1.1rem 1.6rem;display:flex;flex-direction:column;">
-        <div style="padding:1rem 0;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+        <div style="padding:1rem 0;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem;">
           <div><div style="font-weight:600;font-size:.9rem;"><i class="fas fa-moon" style="margin-right:.5rem;color:var(--text-muted);"></i>Dark Mode</div><div style="font-size:.8rem;color:var(--text-muted);margin-top:.15rem;">Toggle light / dark theme</div></div>
           <button class="icon-btn" id="settingsDark"><i class="fas fa-moon"></i></button>
         </div>
-        <div style="padding:1rem 0;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+        <div style="padding:1rem 0;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem;">
           <div><div style="font-weight:600;font-size:.9rem;"><i class="fas fa-bell" style="margin-right:.5rem;color:var(--text-muted);"></i>Notifications</div><div style="font-size:.8rem;color:var(--text-muted);margin-top:.15rem;">Activity feed alerts</div></div>
-          <label style="position:relative;width:38px;height:21px;cursor:pointer;">
+          <label style="position:relative;width:38px;height:21px;cursor:pointer;flex-shrink:0;">
             <input type="checkbox" id="notifToggle" checked style="position:absolute;opacity:0;width:0;">
             <span id="notifSlider" style="position:absolute;inset:0;background:var(--primary);border-radius:21px;transition:background .22s;"></span>
             <span id="notifKnob" style="position:absolute;width:15px;height:15px;background:#fff;border-radius:50%;top:3px;left:3px;transition:transform .22s;box-shadow:0 1px 4px rgba(0,0,0,.25);transform:translateX(17px);"></span>
           </label>
         </div>
-        <div style="padding:1rem 0;display:flex;align-items:center;justify-content:space-between;">
+        <div style="padding:1rem 0;display:flex;align-items:center;justify-content:space-between;gap:1rem;">
           <div><div style="font-weight:600;font-size:.9rem;"><i class="fas fa-key" style="margin-right:.5rem;color:var(--text-muted);"></i>Change Password</div><div style="font-size:.8rem;color:var(--text-muted);margin-top:.15rem;">Update your account password</div></div>
           <i class="fas fa-chevron-right" style="color:var(--text-muted);font-size:.8rem;"></i>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- â”€â”€ SETTINGS â”€â”€ -->
+  <div class="page" data-page="archive">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Archived classes</div>
+        <div class="page-subtitle">Classes you have hidden from Home</div>
+      </div>
+    </div>
+    <div class="class-grid" id="archiveClassGrid">
+      <div style="text-align:center;padding:2rem;color:var(--text-muted);font-size:.85rem;">
+        <i class="fas fa-spinner fa-spin" style="margin-right:.4rem;"></i>Loading...
       </div>
     </div>
   </div>
@@ -1020,6 +1169,116 @@ function paletteFor(str) {
   let h = 0;
   for (const c of String(str||'').toLowerCase()) h = ((h<<5)-h)+c.charCodeAt(0);
   return PALETTES[Math.abs(h) % PALETTES.length];
+}
+function escAttr(s) {
+  return esc(s).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+function storedPaletteClass(value) {
+  const raw = String(value || '').trim();
+  if (PALETTES.includes(raw)) return raw;
+  const compact = raw.toLowerCase().replace(/\s+/g, '');
+  const legacy = {
+    'linear-gradient(135deg,#115e590%,#0f766e48%,#0d9488100%)': 'b-forest',
+    'linear-gradient(135deg,#1e3a8a0%,#1d4ed852%,#0284c7100%)': 'b-ocean',
+    'linear-gradient(135deg,#9a34120%,#c2410c52%,#ea580c100%)': 'b-sunset',
+    'linear-gradient(135deg,#581c870%,#6d28d952%,#7c3aed100%)': 'b-plum',
+    'linear-gradient(135deg,#164e630%,#0e749052%,#0891b2100%)': 'b-teal',
+    'linear-gradient(135deg,#8813370%,#be123c52%,#e11d48100%)': 'b-rose',
+    'linear-gradient(135deg,#1e293b0%,#33415556%,#475569100%)': 'b-slate',
+    'linear-gradient(135deg,#312e810%,#4338ca52%,#4f46e5100%)': 'b-indigo',
+    'linear-gradient(135deg,#1a9e78,#0a5c45)': 'b-forest',
+    'linear-gradient(135deg,#1f73db,#0d47a1)': 'b-ocean',
+    'linear-gradient(135deg,#f57c00,#bf360c)': 'b-sunset',
+    'linear-gradient(135deg,#7b1fa2,#4a148c)': 'b-plum',
+    'linear-gradient(135deg,#00838f,#00474d)': 'b-teal',
+    'linear-gradient(135deg,#c62828,#880e4f)': 'b-rose',
+    'linear-gradient(135deg,#455a64,#263238)': 'b-slate',
+    'linear-gradient(135deg,#3949ab,#1a237e)': 'b-indigo'
+  };
+  return legacy[compact] || '';
+}
+function publicAssetUrl(path) {
+  const value = String(path || '').trim().replace(/\\/g, '/');
+  if (!value) return '';
+  if (/^(https?:)?\/\//i.test(value) || /^data:image\//i.test(value)) return value;
+  return value.replace(/^(\.\/)+/, '').replace(/^\/+/, '');
+}
+function studentProgramInitials(cls) {
+  const source = cls.dept_code || cls.course_code || cls.subject_code || cls.section || 'TL';
+  const initials = String(source).toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 4);
+  return initials || 'TL';
+}
+function studentProgramSilhouette(cls) {
+  const image = publicAssetUrl(cls.dept_image || cls.department_image || cls.program_image || '');
+  if (image) {
+    return `<div class="tl-program-silhouette has-image" aria-hidden="true"><img src="${escAttr(image)}" alt=""></div>`;
+  }
+  return `<div class="tl-program-silhouette is-fallback" aria-hidden="true"><span>${esc(studentProgramInitials(cls))}</span></div>`;
+}
+function studentProgramSideIconSet(cls) {
+  const text = [
+    cls?.subject_name,
+    cls?.subject_code,
+    cls?.course_name,
+    cls?.course_code,
+    cls?.class_code,
+    cls?.section
+  ].join(' ').toLowerCase();
+  if (/mobile|android|ios|app/.test(text)) return ['fa-mobile-screen-button','fa-code','fa-layer-group','fa-bug'];
+  if (/web|html|css|javascript|system/.test(text)) return ['fa-window-maximize','fa-code','fa-laptop-code','fa-diagram-project'];
+  if (/data|database|dbms|sql/.test(text)) return ['fa-database','fa-server','fa-table','fa-chart-line'];
+  if (/network|security|cyber/.test(text)) return ['fa-network-wired','fa-shield-halved','fa-lock','fa-server'];
+  if (/tour|travel|hospitality/.test(text)) return ['fa-plane-departure','fa-location-dot','fa-suitcase-rolling','fa-ticket'];
+  if (/math|stat|analytics/.test(text)) return ['fa-chart-simple','fa-square-root-variable','fa-calculator','fa-chart-pie'];
+  return ['fa-book-open','fa-clipboard-list','fa-graduation-cap','fa-comments'];
+}
+function studentProgramSideIcons(cls) {
+  const icons = studentProgramSideIconSet(cls);
+  const slots = [
+    [10, 22, 34, -7, false],
+    [54, 10, 42, 4, true],
+    [20, 68, 44, 6, false],
+    [68, 56, 34, -5, true],
+    [46, 92, 30, 9, false]
+  ];
+  return `<div class="tl-program-side-icons" aria-hidden="true">${
+    slots.map((slot, i) => {
+      const [x, y, size, rot, ghost] = slot;
+      return `<span class="tl-program-side-icon${ghost ? ' is-ghost' : ''}" style="--x:${x}%;--y:${y}%;--s:${size}px;--r:${rot}deg;"><i class="fas ${icons[i % icons.length]}"></i></span>`;
+    }).join('')
+  }</div>`;
+}
+function classTimeText(cls) {
+  if (!cls.schedule) return '';
+  return String(cls.schedule).split('-').map(t => fmt12(t.trim())).filter(Boolean).join(' - ');
+}
+function studentWeekProgress(cls) {
+  const total = Math.max(1, Math.min(30, parseInt(cls.total_weeks || cls.week_count || 18, 10) || 18));
+  const current = Math.max(1, Math.min(total, parseInt(cls.current_week || cls.week_no || 4, 10) || 4));
+  return { current, total, pct: Math.round((current / total) * 100) };
+}
+function recentStudentInitials(student) {
+  const first = String(student?.first_name || '').trim();
+  const last = String(student?.last_name || '').trim();
+  if (first || last) return `${first.charAt(0)}${last.charAt(0)}`.toUpperCase() || 'S';
+  const parts = String(student?.full_name || student?.name || '').trim().split(/\s+/).filter(Boolean);
+  if (parts.length >= 2) return `${parts[0].charAt(0)}${parts[parts.length - 1].charAt(0)}`.toUpperCase();
+  return (parts[0]?.slice(0, 2) || 'S').toUpperCase();
+}
+function recentStudentStack(count, students = []) {
+  const total = Math.max(0, Number(count || 0));
+  const recent = Array.isArray(students) ? students.slice(0, 3) : [];
+  const colors = ['#14b8a6', '#8b5cf6', '#f59e0b'];
+  const avatars = recent.map((student, i) => {
+    const pic = publicAssetUrl(student.profile_picture || student.student_profile_picture || student.avatar_url || '');
+    const name = student.full_name || `${student.first_name || ''} ${student.last_name || ''}`.trim() || 'Student';
+    return `<span class="tl-student-avatar" title="${escAttr(name)}" style="background:${colors[i % colors.length]}">${pic ? `<img src="${escAttr(pic)}" alt="${escAttr(name)}">` : esc(recentStudentInitials(student))}</span>`;
+  }).join('');
+  const label = total === 1 ? '1 student' : `${total} students`;
+  if (recent.length) {
+    return `<div class="tl-avatar-stack"><span class="stack">${avatars}</span><span class="tl-student-count">${esc(label)}</span></div>`;
+  }
+  return `<div class="tl-avatar-stack"><span class="tl-student-count"><i class="fas fa-users"></i>No students yet</span></div>`;
 }
 function getClassMeet(cls) {
   const cached = meetCache[String(cls.id || '')] || {};
@@ -1294,7 +1553,8 @@ async function loadClasses() {
     const data = await res.json();
     if (data.status !== 'success') { renderClassGrids([]); return; }
     enrolledClasses = data.classes || [];
-    document.getElementById('classBadge').textContent = enrolledClasses.length;
+    const classBadge = document.getElementById('classBadge');
+    if (classBadge) classBadge.textContent = enrolledClasses.length;
     document.getElementById('statClasses').textContent = enrolledClasses.length;
     document.getElementById('psClasses').textContent  = enrolledClasses.length;
     renderClassGrids(enrolledClasses);
@@ -1531,7 +1791,7 @@ function studentTblSort(col) {
 document.addEventListener('click', closeStudentClassMenus);
 
 
-function buildClassCard(cls) {
+function buildClassCardLegacyStudent(cls) {
   const normYear = Number(cls.year_level || 0);
   const hasValidYear = Number.isFinite(normYear) && normYear > 0;
   const sectionText = String(cls.section || '').trim();
@@ -1602,11 +1862,11 @@ function buildClassCard(cls) {
           <button class="card-kebab-btn" id="kebab-btn-${esc(cls.id)}" onclick="toggleKebab('${esc(cls.id)}', event)">            <i class="fas fa-ellipsis-v"></i>
           </button>
           <div class="card-kebab-menu" id="kebab-menu-${esc(cls.id)}" style="display:none;">
-            <button class="ckm-item warn" onclick="event.stopPropagation();confirmArchiveClass('${esc(cls.id)}')">
+            <button class="ckm-item warn" onclick="event.stopPropagation();closeAllKebabMenus();confirmArchiveClass('${esc(cls.id)}')">
               <i class="fas fa-archive"></i> Archive
             </button>
             <div class="ckm-sep"></div>
-            <button class="ckm-item danger" onclick="event.stopPropagation();confirmLeaveClass('${esc(cls.id)}')">
+            <button class="ckm-item danger" onclick="event.stopPropagation();closeAllKebabMenus();confirmLeaveClass('${esc(cls.id)}')">
               <i class="fas fa-sign-out-alt"></i> Leave Class
             </button>
           </div>
@@ -1692,6 +1952,106 @@ function buildClassCard(cls) {
  
     </div>`;
 }
+function buildClassCard(cls) {
+  const normYear = Number(cls.year_level || 0);
+  const hasValidYear = Number.isFinite(normYear) && normYear > 0;
+  const sectionText = String(cls.section || '').trim();
+  const hasValidSection = !!sectionText && sectionText !== '0';
+  const palKey = cls.subject_name || cls.subject_code || cls.course_name || cls.course_code || cls.class_code || '';
+  const pal = storedPaletteClass(cls.banner_palette) || paletteFor(palKey);
+  const name = [hasValidSection ? sectionText : '', cls.subject_code].filter(Boolean).join(' ') || cls.class_code || 'Class';
+  const code = cls.subject_name || cls.course_name || cls.subject_code || cls.course_code || '';
+  const timeText = classTimeText(cls);
+  const week = studentWeekProgress(cls);
+
+  const facFirst = cls.faculty_first_name || '';
+  const facLast = cls.faculty_last_name || '';
+  const facName = (facFirst || facLast) ? `${facFirst} ${facLast}`.trim() : (cls.faculty_name || '');
+  const facEmail = cls.faculty_email || '';
+  const facPhone = cls.faculty_phone || '';
+  const isDean = cls.faculty_is_dean == 1;
+  const facPhoto = publicAssetUrl(cls.faculty_profile_picture || '');
+  const facInit = facName ? ((facFirst[0] || '') + (facLast[0] || '')).toUpperCase() || facName.substring(0, 2).toUpperCase() : '?';
+  const avatarColors = ['#1a9e78','#1f73db','#7b1fa2','#00838f','#c62828','#f57c00','#455a64','#3949ab'];
+  let h = 0;
+  for (const c of facName) h = ((h << 5) - h) + c.charCodeAt(0);
+  const avatarBg = facName ? avatarColors[Math.abs(h) % avatarColors.length] : '#94a3b8';
+  const facSubText = !facName ? 'No professor assigned' : (isDean ? 'Dean' : (facEmail || facPhone || 'Professor'));
+
+  const metaHtml = [
+    cls.class_semester ? `<span class="tl-card-chip"><i class="fas fa-calendar-alt"></i>${esc(cls.class_semester)}</span>` : '',
+    cls.class_days ? `<span class="tl-card-chip"><i class="fas fa-calendar-week"></i>${esc(cls.class_days)}</span>` : '',
+    timeText ? `<span class="tl-card-chip"><i class="fas fa-clock"></i>${esc(timeText)}</span>` : '',
+    hasValidYear ? `<span class="tl-card-chip"><i class="fas fa-graduation-cap"></i>${esc(normYear)}</span>` : '',
+    hasValidSection ? `<span class="tl-card-chip"><i class="fas fa-layer-group"></i>${esc(sectionText)}</span>` : ''
+  ].filter(Boolean).join('');
+  const meet = getClassMeet(cls);
+  const meetHref = meet.meet_url || '#';
+
+  return `
+    <div class="class-card" onclick="openClass('${esc(cls.id)}')">
+      <div class="card-banner ${pal}">
+        ${studentProgramSilhouette(cls)}
+        ${studentProgramSideIcons(cls)}
+        <div class="tl-card-top">
+          <div class="tl-card-main">
+            <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.45rem;">
+              <span class="tl-card-dot"></span>
+              <span style="font-size:.66rem;font-weight:900;text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,.72);">${esc(cls.class_semester || 'Class')}</span>
+            </div>
+            <div class="student-banner-title-wrap">
+              <div class="student-banner-faculty-avatar" style="background:${avatarBg};">
+                ${facPhoto ? `<img src="${escAttr(facPhoto)}" alt="${escAttr(facName || 'Faculty')}">` : esc(facInit)}
+              </div>
+              <div class="student-banner-title-copy">
+                <div class="banner-title">${esc(name)}</div>
+                <div class="banner-code">${esc(code)}</div>
+              </div>
+            </div>
+          </div>
+          <div class="card-kebab-wrap" onclick="event.stopPropagation()">
+            <button class="card-kebab-btn" id="kebab-btn-${esc(cls.id)}" onclick="toggleKebab('${esc(cls.id)}', event)" title="Class options" aria-haspopup="menu">
+              <i class="fas fa-ellipsis-v"></i>
+            </button>
+            <div class="card-kebab-menu" id="kebab-menu-${esc(cls.id)}" style="display:none;">
+              <button class="ckm-item warn" onclick="event.stopPropagation();closeAllKebabMenus();confirmArchiveClass('${esc(cls.id)}')">
+                <i class="fas fa-archive"></i> Archive
+              </button>
+              <div class="ckm-sep"></div>
+              <button class="ckm-item danger" onclick="event.stopPropagation();closeAllKebabMenus();confirmLeaveClass('${esc(cls.id)}')">
+                <i class="fas fa-sign-out-alt"></i> Leave Class
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="tl-card-meta">${metaHtml}</div>
+        <div class="tl-week-progress">
+          <div class="tl-week-line">
+            <span><i class="fas fa-hashtag"></i> Week ${week.current} of ${week.total}</span>
+            <span>${week.pct}%</span>
+          </div>
+          <div class="tl-progress-track"><div class="tl-progress-fill" style="width:${week.pct}%"></div></div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-foot">
+          ${recentStudentStack(cls.student_count, cls.recent_students)}
+          <a id="meetlink-${esc(cls.id)}" href="${escAttr(meetHref)}" target="_blank" class="tl-meet-btn" onclick="event.stopPropagation();if(this.getAttribute('href')==='#'){toast('Meet unavailable','info');return false;}">
+            <i class="fas fa-video"></i> Meet
+          </a>
+        </div>
+      </div>
+      <div class="meet-bar tl-meet-state" id="meetbar-${esc(cls.id)}" onclick="event.stopPropagation()">
+        <div class="meet-loading" id="meetloading-${esc(cls.id)}" style="display:none;">
+          <i class="fas fa-circle-notch fa-spin" style="font-size:.7rem;color:#1a73e8;"></i>
+          <span style="font-size:.7rem;">Loading Meet...</span>
+        </div>
+        <div id="meetready-${esc(cls.id)}" style="display:none;align-items:center;gap:.5rem;flex-wrap:wrap;"></div>
+        <span class="meet-code-pill" id="meetcodepill-${esc(cls.id)}" onclick="event.stopPropagation();copyMeetCode('${esc(cls.id)}')" title="Click to copy">${esc(meet.meeting_code || '-')}</span>
+      </div>
+    </div>`;
+}
+
 function loadMeetForCards() {
   document.querySelectorAll('[id^="meetbar-"]').forEach(bar => {
     const classId = bar.id.replace('meetbar-', '');
@@ -1725,9 +2085,9 @@ function applyMeet(classId, meet) {
   const linkEl  = document.getElementById(`meetlink-${classId}`);
   const pillEl  = document.getElementById(`meetcodepill-${classId}`);
   if (!loadEl || !readyEl) return;
-  if (meet && meet.meeting_code) {
-    if (linkEl) linkEl.href = meet.meet_url;
-    if (pillEl) pillEl.textContent = meet.meeting_code;
+  if (meet && (meet.meeting_code || meet.meet_url)) {
+    if (linkEl) linkEl.href = meet.meet_url || '#';
+    if (pillEl) pillEl.textContent = meet.meeting_code || 'Meet';
     loadEl.style.display  = 'none';
     readyEl.style.display = 'flex';
   } else hideMeetLoad(classId);
@@ -1748,58 +2108,38 @@ function copyMeetCode(classId) {
   });
 }
 let _kebabActiveId = null;
-let _kebabMenuEl = null;
-let _kebabMenuHost = null;
-let _kebabMenuNext = null;
 
 function closeAllKebabMenus() {
-  if (_kebabMenuEl) {
-    _kebabMenuEl.style.display = 'none';
-    _kebabMenuEl.style.position = '';
-    _kebabMenuEl.style.top = '';
-    _kebabMenuEl.style.left = '';
-    _kebabMenuEl.style.right = '';
-    _kebabMenuEl.style.zIndex = '';
-    if (_kebabMenuHost) {
-      _kebabMenuHost.insertBefore(_kebabMenuEl, _kebabMenuNext);
-    }
-    _kebabMenuEl = null;
-    _kebabMenuHost = null;
-    _kebabMenuNext = null;
-  }
   document.querySelectorAll('.card-kebab-menu').forEach(menu => { menu.style.display = 'none'; });
   document.querySelectorAll('.class-card.kebab-open').forEach(card => card.classList.remove('kebab-open'));
+  document.querySelectorAll('.card-kebab-btn[aria-expanded="true"]').forEach(btn => btn.setAttribute('aria-expanded', 'false'));
   _kebabActiveId = null;
 }
 
 function toggleKebab(classId, ev) {
   if (ev) ev.stopPropagation();
-  const menu = document.getElementById('kebab-menu-' + classId);
   const btn  = document.getElementById('kebab-btn-' + classId);
-  const card = menu ? menu.closest('.class-card') : null;
+  const menu = document.getElementById('kebab-menu-' + classId);
   if (!menu || !btn) return;
 
-  if (_kebabActiveId === classId && menu.style.display === 'block') {
+  if (String(_kebabActiveId) === String(classId) && menu.style.display === 'block') {
     closeAllKebabMenus();
     return;
   }
 
   closeAllKebabMenus();
+  const card = btn.closest('.class-card');
   _kebabActiveId = classId;
-  const r = btn.getBoundingClientRect();
-  _kebabMenuEl = menu;
-  _kebabMenuHost = menu.parentNode;
-  _kebabMenuNext = menu.nextSibling;
-  document.body.appendChild(menu);
-  menu.style.position = 'fixed';
-  menu.style.top = `${Math.round(r.bottom + 6)}px`;
-  menu.style.left = `${Math.round(Math.max(8, r.right - 160))}px`;
-  menu.style.right = 'auto';
-  menu.style.zIndex = '100000';
   menu.style.display = 'block';
+  btn.setAttribute('aria-expanded', 'true');
   if (card) card.classList.add('kebab-open');
 }
 
+document.addEventListener('pointerdown', (e) => {
+  const insideMenu = e.target.closest('.card-kebab-menu');
+  const onKebabButton = e.target.closest('.card-kebab-btn');
+  if (!insideMenu && !onKebabButton) closeAllKebabMenus();
+}, true);
 document.addEventListener('click', (e) => {
   const withinKebab = e.target.closest('.card-kebab-wrap') || e.target.closest('.card-kebab-menu');
   if (!withinKebab) closeAllKebabMenus();
@@ -1809,6 +2149,10 @@ document.addEventListener('touchstart', (e) => {
   if (!withinKebab) closeAllKebabMenus();
 }, { passive: true });
 window.addEventListener('scroll', closeAllKebabMenus, true);
+window.addEventListener('resize', closeAllKebabMenus);
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeAllKebabMenus();
+});
 
 function openClass(classId) {
   window.location.href = 'studentClassRoom.php?class_id=' + encodeURIComponent(classId);
@@ -1831,6 +2175,50 @@ function confirmArchiveClass(classId) {
       else toast(data.message || 'Could not archive class', 'error');
     } catch { toast('Network error', 'error'); }
   });
+}
+
+async function loadArchivedClasses() {
+  const grid = document.getElementById('archiveClassGrid');
+  if (!grid) return;
+  grid.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--text-muted);font-size:.85rem;"><i class="fas fa-spinner fa-spin" style="margin-right:.4rem;"></i>Loading...</div>`;
+  try {
+    const res = await fetch('API/student/get_archived_classes.php');
+    const data = await res.json();
+    const classes = data.status === 'success' ? (data.classes || []) : [];
+    if (!classes.length) {
+      grid.innerHTML = `<div class="empty-state"><div class="empty-icon"><i class="fas fa-archive"></i></div><div class="empty-title">No archived classes</div><div style="font-size:.82rem;">Archived classes will appear here.</div></div>`;
+      return;
+    }
+    grid.innerHTML = classes.map(buildArchivedClassCard).join('');
+  } catch {
+    grid.innerHTML = `<div class="empty-state"><div class="empty-icon"><i class="fas fa-exclamation-circle"></i></div><div class="empty-title">Could not load archived classes</div></div>`;
+  }
+}
+
+function buildArchivedClassCard(cls) {
+  const card = buildClassCard(cls);
+  const restoreBtn = `<button type="button" class="tl-meet-btn" style="background:var(--primary);" onclick="event.stopPropagation();restoreArchivedClass('${esc(cls.id)}')"><i class="fas fa-undo"></i> Restore</button>`;
+  return card.replace(/<a id="meetlink-[\s\S]*?<\/a>/, restoreBtn);
+}
+
+async function restoreArchivedClass(classId) {
+  try {
+    const res = await fetch('API/student/restore_class.php', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ class_id: classId })
+    });
+    const data = await res.json();
+    if (data.status === 'success') {
+      toast('Class restored', 'success');
+      loadArchivedClasses();
+      loadClasses();
+    } else {
+      toast(data.message || 'Could not restore class', 'error');
+    }
+  } catch {
+    toast('Network error', 'error');
+  }
 }
 
 function confirmLeaveClass(classId) {
@@ -2067,7 +2455,91 @@ function renderTasks(pending, completed) {
 }
 
 function openTask(taskId, classId) {
-  window.location.href = `studentClassRoom.php?class_id=${encodeURIComponent(classId)}&task_id=${encodeURIComponent(taskId)}`;
+  window.location.href = `studentClassRoom.php?class_id=${encodeURIComponent(classId || '')}&post_id=${encodeURIComponent(taskId)}`;
+}
+
+function normalizeWorkType(type) {
+  const s = String(type || '').toLowerCase();
+  if (s.includes('quiz')) return 'quiz';
+  if (s.includes('exam')) return 'exam';
+  if (s.includes('assign')) return 'assignment';
+  if (s.includes('activity') || s.includes('task')) return 'activity';
+  return 'activity';
+}
+
+function workIcon(type) {
+  return { quiz:'fa-circle-question', exam:'fa-file-signature', assignment:'fa-clipboard-list', activity:'fa-screwdriver-wrench' }[type] || 'fa-clipboard';
+}
+
+function workColors(type) {
+  return {
+    quiz: { bg:'#ede9fe', fg:'#7c3aed', border:'#ddd6fe' },
+    exam: { bg:'#fdecea', fg:'#d93025', border:'#fecaca' },
+    assignment: { bg:'#fff7ed', fg:'#c2410c', border:'#fed7aa' },
+    activity: { bg:'#f0e7e2', fg:'#795548', border:'#decac0' }
+  }[type] || { bg:'#f0e7e2', fg:'#795548', border:'#decac0' };
+}
+
+function fmtWorkDue(value) {
+  if (!value) return '';
+  const d = new Date(String(value).replace(' ', 'T'));
+  if (Number.isNaN(d.getTime())) return String(value);
+  return d.toLocaleString(undefined, { month:'short', day:'numeric', hour:'numeric', minute:'2-digit' });
+}
+
+function formatSecondsShort(seconds) {
+  const n = Math.max(0, parseInt(seconds || 0, 10));
+  if (!n) return '';
+  if (n < 60) return `${n}s`;
+  return `${Math.round(n / 60)} min`;
+}
+
+function taskCard(item, pending = true) {
+  const kind = normalizeWorkType(item.type);
+  const icon = workIcon(kind);
+  const tone = item.status_tone || (pending ? 'pending' : 'done');
+  const colors = workColors(kind);
+  const dueText = item.due_date ? fmtWorkDue(item.due_date) : '';
+  const completedAt = item.status_at ? fmtWorkDue(item.status_at) : '';
+  const pointText = item.score_text ? `${item.score_text}` : (item.points !== null && item.points !== undefined && item.points !== '' ? `${item.points} pts` : '');
+  const modeChip = item.mode_label && kind === 'quiz' ? `<span class="work-chip"><i class="fas fa-gauge-high"></i>${esc(item.mode_label)}</span>` : '';
+  const timeChip = item.time_limit_seconds && kind === 'quiz' ? `<span class="work-chip"><i class="fas fa-clock"></i>${esc(formatSecondsShort(item.time_limit_seconds))}</span>` : '';
+  const submittedChip = completedAt && !pending ? `<span class="work-chip"><i class="fas fa-check"></i>${kind === 'quiz' ? 'Taken' : 'Submitted'} ${esc(completedAt)}</span>` : '';
+
+  return `<div class="work-card" onclick="openTask('${esc(item.id)}','${esc(item.class_id)}')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openTask('${esc(item.id)}','${esc(item.class_id)}')">
+    <div class="work-icon" style="background:${colors.bg};color:${colors.fg};border:1px solid ${colors.border};">
+      <i class="fas ${icon}"></i>
+    </div>
+    <div class="work-main">
+      <div class="work-title-row">
+        <div class="work-title">${esc(item.title || item.type_label || 'Task')}</div>
+        <span class="work-type" style="background:${colors.bg};color:${colors.fg};border-color:${colors.border};"><i class="fas ${icon}"></i>${esc(item.type_label || kind)}</span>
+      </div>
+      <div class="work-meta">
+        <span><i class="fas fa-chalkboard"></i>${esc(item.class_name || 'Class')}</span>
+        ${item.class_semester ? `<span><i class="fas fa-calendar-alt"></i>${esc(item.class_semester)}</span>` : ''}
+        ${item.faculty_name ? `<span><i class="fas fa-user-tie"></i>${esc(item.faculty_name)}</span>` : ''}
+      </div>
+      ${dueText ? `<div class="work-due ${item.is_late ? 'is-late' : ''}"><i class="fas ${item.is_late ? 'fa-triangle-exclamation' : 'fa-calendar-check'}"></i>Due ${esc(dueText)}</div>` : ''}
+      <div class="work-badges">${modeChip}${timeChip}${submittedChip}</div>
+    </div>
+    <div class="work-side">
+      <span class="work-status ${tone === 'done' ? 'done' : tone === 'late' ? 'late' : tone === 'active' ? 'active' : ''}">
+        <i class="fas ${tone === 'done' ? 'fa-check' : tone === 'late' ? 'fa-xmark' : tone === 'active' ? 'fa-play' : 'fa-hourglass-half'}"></i>${esc(item.status || (pending ? 'To do' : 'Done'))}
+      </span>
+      ${pointText ? `<div class="work-points">${esc(pointText)}</div>` : ''}
+      <div class="work-open">Open <i class="fas fa-arrow-right"></i></div>
+    </div>
+  </div>`;
+}
+
+function renderTasks(pending, completed) {
+  document.getElementById('pendingTasks').innerHTML = pending.length
+    ? pending.map(i => taskCard(i, true)).join('')
+    : `<div class="work-empty"><div class="empty-icon"><i class="fas fa-check-circle"></i></div><div class="empty-title">All caught up!</div><div style="font-size:.82rem;">No open tasks right now.</div></div>`;
+  document.getElementById('completedTasks').innerHTML = completed.length
+    ? completed.map(i => taskCard(i, false)).join('')
+    : `<div class="work-empty"><div class="empty-icon"><i class="fas fa-inbox"></i></div><div class="empty-title">No completed tasks yet</div></div>`;
 }
 
 /* â•â• NOTIFICATIONS â•â• */
@@ -2214,10 +2686,18 @@ function initNav() {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       document.querySelector(`.page[data-page="${btn.dataset.page}"]`).classList.add('active');
       if (btn.dataset.page === 'classes') loadMeetForCards();
+      if (btn.dataset.page === 'archive') loadArchivedClasses();
       if (btn.dataset.page === 'calendar') loadCalendar();
       if (window.innerWidth <= 768) closeMobileSidebar();
     });
   });
+  const navAvatar = document.getElementById('navAvatar');
+  if (navAvatar) {
+    navAvatar.style.cursor = 'pointer';
+    navAvatar.addEventListener('click', () => {
+      document.querySelector('.nav-item[data-page="settings"]')?.click();
+    });
+  }
 }
 
 /* â•â• SIDEBAR â•â• */

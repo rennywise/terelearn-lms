@@ -56,6 +56,17 @@ if (!$classRes || $classRes->num_rows === 0) {
 }
 $classData = $classRes->fetch_assoc();
 
+if (empty($classData['join_code']) || empty($classData['join_link_token'])) {
+    $newJoinCode = !empty($classData['join_code']) ? $classData['join_code'] : tl_generate_join_code($conn, $classData['id']);
+    $newJoinToken = !empty($classData['join_link_token']) ? $classData['join_link_token'] : bin2hex(random_bytes(24));
+    $repair = $conn->prepare("UPDATE tblclass SET join_code = ?, join_link_token = ? WHERE id = ?");
+    $repair->bind_param('sss', $newJoinCode, $newJoinToken, $classData['id']);
+    $repair->execute();
+    $repair->close();
+    $classData['join_code'] = $newJoinCode;
+    $classData['join_link_token'] = $newJoinToken;
+}
+
 /* ── POSTS ── */
 $postsRes = $conn->query("
     SELECT p.*,

@@ -129,12 +129,14 @@ if ($paletteInput !== '') {
     $pRow = $pStmt->get_result()->fetch_assoc();
     $pStmt->close();
 
+    $paletteSeed = $subjectName ?: ($subjectCode ?: (string)$subjectId);
     $palette = ($pRow && !empty($pRow['banner_palette']))
         ? $pRow['banner_palette']
-        : paletteForSubject($subjectId);
+        : getPaletteForSubject($conn, $paletteSeed);
 } else {
     // Keep whatever is currently stored (or compute if NULL)
-    $palette = $cls['banner_palette'] ?: paletteForSubject((string)$subjectId);
+    $paletteSeed = $subjectName ?: ($subjectCode ?: (string)$subjectId);
+    $palette = $cls['banner_palette'] ?: getPaletteForSubject($conn, $paletteSeed);
 }
 
 /* ── Build class_code ── */

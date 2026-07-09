@@ -1,0 +1,10 @@
+<svg width="520" height="120" viewBox="0 0 520 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Icon -->
+  <rect width="120" height="120" rx="24" fill="#1e40af"/>
+  <polygon points="60,18 99,60 60,102 21,60" fill="none" stroke="white" stroke-width="5" stroke-linejoin="round"/>
+  <polygon points="60,41 79,60 60,79 41,60" fill="white" stroke="none"/>
+  <!-- Wordmark -->
+  <text x="140" y="72" font-family="Arial, Helvetica, sans-serif" font-size="52" font-weight="700" fill="#1e40af" letter-spacing="6">VERIOX</text>
+  <!-- Tagline -->
+  <text x="143" y="96" font-family="Arial, Helvetica, sans-serif" font-size="13" font-weight="400" fill="#6b7280" letter-spacing="3">CREATOR OF NEXLEARN</text>
+</svg>

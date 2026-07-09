@@ -60,6 +60,52 @@ if ($res) {
         ];
     }
 }
+
+$studentSql = "
+    SELECT s.id,
+           TRIM(CONCAT(s.first_name, ' ', COALESCE(NULLIF(s.middle_name, ''), ''), CASE WHEN COALESCE(NULLIF(s.middle_name, ''), '') <> '' THEN ' ' ELSE '' END, s.last_name)) AS full_name,
+           s.student_number,
+           COUNT(r.id) AS total_records,
+           SUM(CASE WHEN r.status='present' THEN 1 ELSE 0 END) AS present_count,
+           SUM(CASE WHEN r.status='absent'  THEN 1 ELSE 0 END) AS absent_count
+    FROM   tblclassenrollment ce
+    JOIN   tblstudent s
+           ON s.id = ce.student_id
+          AND s.is_deleted = 0
+    LEFT JOIN tblattendance a
+           ON a.class_id = '$c'
+          AND a.is_deleted = 0
+          AND a.attendance_date BETWEEN '$ymStart' AND '$ymEnd'
+    LEFT JOIN tblattendancerecord r
+           ON r.attendance_id = a.id
+          AND r.student_id = s.id
+    WHERE  ce.class_id = '$c'
+      AND  ce.enrollment_status = 'enrolled'
+    GROUP  BY s.id, s.first_name, s.middle_name, s.last_name, s.student_number
+    ORDER  BY s.last_name ASC, s.first_name ASC
+";
+$students = [];
+$studentRes = $conn->query($studentSql);
+if ($studentRes) {
+    while ($row = $studentRes->fetch_assoc()) {
+        $total   = (int)$row['total_records'];
+        $present = (int)$row['present_count'];
+        $absent  = (int)$row['absent_count'];
+        $students[] = [
+            'id'                    => (string)$row['id'],
+            'full_name'             => trim((string)$row['full_name']),
+            'student_number'        => (string)($row['student_number'] ?? ''),
+            'total_records'         => $total,
+            'present_count'         => $present,
+            'absent_count'          => $absent,
+            'attendance_percentage' => $total > 0 ? round(($present / $total) * 100, 1) : null,
+        ];
+    }
+}
 $conn->close();
 
-echo json_encode(['status'=>'success', 'days'=>$days]);
+echo json_encode([
+    'status'   => 'success',
+    'days'     => $days,
+    'students' => $students,
+]);

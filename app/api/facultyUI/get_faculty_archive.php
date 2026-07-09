@@ -20,6 +20,23 @@ session_start();
 
 require_once __DIR__ . '/../../core/db_connect.php';
 
+function tl_column_exists(mysqli $conn, string $table, string $column): bool {
+    $stmt = $conn->prepare("
+        SELECT 1
+        FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_SCHEMA = DATABASE()
+          AND TABLE_NAME = ?
+          AND COLUMN_NAME = ?
+        LIMIT 1
+    ");
+    if (!$stmt) return false;
+    $stmt->bind_param('ss', $table, $column);
+    $stmt->execute();
+    $exists = $stmt->get_result()->num_rows > 0;
+    $stmt->close();
+    return $exists;
+}
+
 /* ── Auth guard ── */
 if (!isset($_SESSION['user_id']) || (int)($_SESSION['user_level_id'] ?? 0) !== 2) {
     http_response_code(401);
@@ -94,6 +111,15 @@ $active_sem_id = (int)($activeSemRow['id'] ?? 0);
  *    - semester_setting_id != active id     (not the current semester)
  *    - is_deleted = 0
  */
+$hasCourseDepartment = tl_column_exists($conn, 'tblcourse', 'department_id');
+$hasDepartmentImage  = tl_column_exists($conn, 'tbldepartment', 'dept_image');
+$hasClassPalette     = tl_column_exists($conn, 'tblclass', 'banner_palette');
+$classPaletteSelect  = $hasClassPalette ? ", c.banner_palette" : ", NULL AS banner_palette";
+$departmentSelect = $hasCourseDepartment
+    ? ", dept.dept_code, dept.dept_name" . ($hasDepartmentImage ? ", dept.dept_image" : ", NULL AS dept_image")
+    : ", NULL AS dept_code, NULL AS dept_name, NULL AS dept_image";
+$departmentJoin = $hasCourseDepartment ? "LEFT JOIN  tbldepartment dept ON dept.id = crs.department_id" : "";
+
 $cStmt = $conn->prepare("
     SELECT
         c.id,
@@ -107,13 +133,15 @@ $cStmt = $conn->prepare("
         c.class_days,
         c.is_active,
         c.created_at,
-        c.course_id,
+        c.course_id
+        {$classPaletteSelect},
         IFNULL(c.source, 'admin') AS source,
         sub.subject_code,
         sub.subject_name,
         sub.id AS subject_id,
         crs.course_code,
-        crs.course_name,
+        crs.course_name
+        {$departmentSelect},
         sem.school_year AS sem_school_year,
         sem.semester    AS sem_semester,
         (
@@ -124,6 +152,7 @@ $cStmt = $conn->prepare("
     INNER JOIN tblsemestersetting sem ON sem.id = c.semester_setting_id
     LEFT JOIN  tblsubject sub ON sub.id = c.subject_id
     LEFT JOIN  tblcourse  crs ON crs.id = c.course_id
+    {$departmentJoin}
     WHERE c.faculty_id            = ?
       AND c.is_deleted             = 0
       AND c.semester_setting_id   IS NOT NULL

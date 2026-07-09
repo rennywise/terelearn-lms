@@ -10,9 +10,16 @@
 header('Content-Type: application/json');
 require_once __DIR__ . '/../../core/db_connect.php';
 
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
+
 $body    = json_decode(file_get_contents('php://input'), true);
 $user_id = $body['user_id'] ?? null;
 $code    = $body['code']    ?? '';
+$context = $body['context'] ?? 'login';
+
+define('RECOVERY_MAX_OTP_ATTEMPTS', 5);
 
 if (!$user_id || strlen($code) !== 6) {
     echo json_encode(['success' => false, 'message' => 'Invalid request.']);
@@ -20,6 +27,18 @@ if (!$user_id || strlen($code) !== 6) {
 }
 
 try {
+    if ($context === 'recovery') {
+        $recoveryState = $_SESSION['recovery_otp'][$user_id] ?? ['attempts' => 0, 'locked_until' => 0];
+        if (!empty($recoveryState['locked_until']) && $recoveryState['locked_until'] > time()) {
+            echo json_encode([
+                'success' => false,
+                'session_expired' => true,
+                'message' => 'Recovery session expired. Please request a new code.'
+            ]);
+            exit;
+        }
+    }
+
     $stmt = $conn->prepare("
         SELECT otp_hash, otp_expiry
         FROM tbluser
@@ -44,6 +63,36 @@ try {
 
     // Check code
     if (!password_verify($code, $row['otp_hash'])) {
+        if ($context === 'recovery') {
+            $recoveryState['attempts'] = ($recoveryState['attempts'] ?? 0) + 1;
+
+            if ($recoveryState['attempts'] >= RECOVERY_MAX_OTP_ATTEMPTS) {
+                $recoveryState['locked_until'] = time() + 300;
+                $_SESSION['recovery_otp'][$user_id] = $recoveryState;
+
+                $clr = $conn->prepare("UPDATE tbluser SET otp_hash = NULL, otp_expiry = NULL WHERE id = ?");
+                $clr->bind_param('s', $user_id);
+                $clr->execute();
+                $clr->close();
+
+                echo json_encode([
+                    'success' => false,
+                    'session_expired' => true,
+                    'message' => 'Too many incorrect attempts. Recovery session expired. Please request a new code.'
+                ]);
+                exit;
+            }
+
+            $_SESSION['recovery_otp'][$user_id] = $recoveryState;
+
+            echo json_encode([
+                'success' => false,
+                'remaining_attempts' => RECOVERY_MAX_OTP_ATTEMPTS - $recoveryState['attempts'],
+                'message' => 'Incorrect code. Please try again.'
+            ]);
+            exit;
+        }
+
         echo json_encode(['success' => false, 'message' => 'Incorrect code. Please try again.']);
         exit;
     }
@@ -53,6 +102,10 @@ try {
     $clr->bind_param('s', $user_id);
     $clr->execute();
     $clr->close();
+
+    if ($context === 'recovery') {
+        unset($_SESSION['recovery_otp'][$user_id]);
+    }
 
     echo json_encode(['success' => true]);
 

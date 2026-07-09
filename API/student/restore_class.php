@@ -23,25 +23,46 @@ if (!$conn) {
     exit;
 }
 
-$stmt = $conn->prepare(
-    "UPDATE tblclassstudents
-     SET is_archived = 0
-     WHERE class_id = ?
-       AND student_id = ?
-       AND is_deleted = 0
-       AND is_archived = 1"
-);
-
-if (!$stmt) {
-    echo json_encode(['status' => 'error', 'message' => 'Query error: ' . $conn->error]);
-    $conn->close();
-    exit;
+$student_ids = [$user_id];
+$stmtFind = $conn->prepare("
+    SELECT s.id
+    FROM tblstudent s
+    INNER JOIN tbluser u ON (u.username = s.username OR u.email = s.email)
+    WHERE u.id = ? AND s.is_deleted = 0
+    LIMIT 1
+");
+if ($stmtFind) {
+    $stmtFind->bind_param('s', $user_id);
+    $stmtFind->execute();
+    $resFind = $stmtFind->get_result();
+    if ($row = $resFind->fetch_assoc()) {
+        $student_ids[] = $row['id'];
+    }
+    $stmtFind->close();
 }
 
-$stmt->bind_param('ss', $class_id, $user_id);
-$stmt->execute();
-$affected = $stmt->affected_rows;
-$stmt->close();
+$affected = 0;
+foreach (array_unique($student_ids) as $sid) {
+    $stmt = $conn->prepare(
+        "UPDATE tblclassstudents
+         SET is_archived = 0
+         WHERE class_id = ?
+           AND student_id = ?
+           AND is_deleted = 0
+           AND is_archived = 1"
+    );
+
+    if (!$stmt) {
+        echo json_encode(['status' => 'error', 'message' => 'Query error: ' . $conn->error]);
+        $conn->close();
+        exit;
+    }
+
+    $stmt->bind_param('ss', $class_id, $sid);
+    $stmt->execute();
+    $affected += $stmt->affected_rows;
+    $stmt->close();
+}
 $conn->close();
 
 if ($affected > 0) {

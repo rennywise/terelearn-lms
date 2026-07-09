@@ -67,12 +67,19 @@ $studentId = $studentUserId !== '' ? $studentUserId : $studentDbId;
 
 require_enrolled($conn, $classId, $studentId, $studentDbId);
 
+$deptImageSelect = table_has_column($conn, 'tbldepartment', 'dept_image')
+    ? 'd.dept_image'
+    : 'NULL AS dept_image';
+
 $stmt = $conn->prepare("
     SELECT c.*,
            s.subject_code,
            s.subject_name,
            co.course_code,
            co.course_name,
+           d.dept_code,
+           d.dept_name,
+           {$deptImageSelect},
            f.first_name,
            f.middle_name,
            f.last_name,
@@ -123,6 +130,7 @@ $stmt = $conn->prepare("
     FROM tblclass c
     LEFT JOIN tblsubject s ON s.id = c.subject_id
     LEFT JOIN tblcourse co ON co.id = c.course_id
+    LEFT JOIN tbldepartment d ON d.id = co.department_id AND COALESCE(d.is_deleted, 0) = 0
     LEFT JOIN tblfaculty f ON f.id = c.faculty_id
     LEFT JOIN tbluser u
         ON (u.username = f.username OR u.email = f.email)

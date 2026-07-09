@@ -11,6 +11,78 @@ $sub = $conn->query("SELECT COUNT(*) c FROM tblsubject  WHERE is_deleted=0 AND i
 $crs = $conn->query("SELECT COUNT(*) c FROM tblcourse   WHERE is_deleted=0")->fetch_assoc()['c'];
 $dep = $conn->query("SELECT COUNT(*) c FROM tbldepartment WHERE is_active=1")->fetch_assoc()['c'];
 
+$deptProgramRows = [];
+$deptProgramRes = $conn->query("
+    SELECT
+        d.id          AS department_id,
+        d.dept_code   AS department_code,
+        d.dept_name   AS department_name,
+        c.id          AS program_id,
+        c.course_code AS program_code,
+        c.course_name AS program_name,
+        COUNT(st.id)  AS student_count
+    FROM tbldepartment d
+    LEFT JOIN tblcourse c
+           ON c.department_id = d.id
+          AND c.is_deleted = 0
+    LEFT JOIN tblstudent st
+           ON st.course_id = c.id
+          AND st.is_deleted = 0
+          AND st.is_active = 1
+    WHERE d.is_active = 1
+      AND d.is_deleted = 0
+    GROUP BY d.id, d.dept_code, d.dept_name, c.id, c.course_code, c.course_name
+    ORDER BY d.dept_name ASC, c.course_code ASC
+");
+if ($deptProgramRes) {
+    while ($row = $deptProgramRes->fetch_assoc()) $deptProgramRows[] = $row;
+}
+
+$departmentAnalytics = [];
+foreach ($deptProgramRows as $row) {
+    $deptId = (string)($row['department_id'] ?? '');
+    if ($deptId === '') continue;
+    if (!isset($departmentAnalytics[$deptId])) {
+        $departmentAnalytics[$deptId] = [
+            'id' => $deptId,
+            'code' => $row['department_code'] ?: '—',
+            'name' => $row['department_name'] ?: 'Unassigned Department',
+            'total_students' => 0,
+            'programs' => [],
+        ];
+    }
+
+    $count = (int)($row['student_count'] ?? 0);
+    $departmentAnalytics[$deptId]['total_students'] += $count;
+
+    if (!empty($row['program_id'])) {
+        $departmentAnalytics[$deptId]['programs'][] = [
+            'id' => (string)$row['program_id'],
+            'code' => $row['program_code'] ?: '—',
+            'name' => $row['program_name'] ?: 'Unnamed Program',
+            'student_count' => $count,
+        ];
+    }
+}
+
+foreach ($departmentAnalytics as &$deptRow) {
+    usort($deptRow['programs'], static function ($a, $b) {
+        $countCompare = $b['student_count'] <=> $a['student_count'];
+        if ($countCompare !== 0) return $countCompare;
+        return strcmp($a['code'], $b['code']);
+    });
+}
+unset($deptRow);
+
+$departmentAnalytics = array_values($departmentAnalytics);
+usort($departmentAnalytics, static function ($a, $b) {
+    $countCompare = $b['total_students'] <=> $a['total_students'];
+    if ($countCompare !== 0) return $countCompare;
+    return strcmp($a['name'], $b['name']);
+});
+
+$topDepartment = $departmentAnalytics[0] ?? null;
+
 // Recent faculty (last 5)
 $recentFac = [];
 $rf = $conn->query("SELECT first_name,last_name,email,created_at FROM tblfaculty WHERE is_deleted=0 AND is_dean=0 ORDER BY created_at DESC LIMIT 5");
@@ -184,6 +256,41 @@ body.dark-mode #dark-mode-toggle i::before{content:"\f185";}
 .qnav-lbl{font-size:.78rem;font-weight:700;color:#1e2840;}
 .dark-mode .qnav-lbl{color:#e2e8f0!important;}
 .qnav-sub{font-size:.67rem;color:#6c757d;margin-top:.1rem;}
+
+/* ════ ANALYTICS ════ */
+.analytics-card{background:#fff;border:1px solid #e8ecf0;border-radius:16px;padding:1.1rem 1.1rem 1rem;box-shadow:0 2px 10px rgba(15,23,42,.05);height:100%;}
+.dark-mode .analytics-card{background:#1e2838!important;border-color:#2e3849!important;}
+.analytics-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1rem;flex-wrap:wrap;}
+.analytics-title{font-size:1rem;font-weight:800;color:#1e2840;line-height:1.2;}
+.dark-mode .analytics-title{color:#e2e8f0!important;}
+.analytics-sub{font-size:.74rem;color:#6c757d;margin-top:.18rem;max-width:44ch;}
+.analytics-filter{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap;}
+.analytics-filter label{font-size:.72rem;font-weight:700;color:#6c757d;text-transform:uppercase;letter-spacing:.08em;}
+.analytics-select{min-width:220px;border:1px solid #d7dee6;border-radius:10px;padding:.5rem .8rem;font-size:.82rem;font-weight:600;background:#fff;color:#1f2937;outline:none;}
+.dark-mode .analytics-select{background:#111827;border-color:#334155;color:#e2e8f0;}
+.analytics-canvas-wrap{position:relative;height:320px;}
+.analytics-meta-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem;margin-top:1rem;}
+.analytics-meta{background:#f8fafc;border:1px solid #e6edf5;border-radius:12px;padding:.8rem .9rem;}
+.dark-mode .analytics-meta{background:#16202d;border-color:#2e3849;}
+.analytics-meta-label{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6c757d;margin-bottom:.25rem;}
+.analytics-meta-value{font-size:1.2rem;font-weight:800;color:#1e2840;line-height:1.1;}
+.dark-mode .analytics-meta-value{color:#e2e8f0!important;}
+.analytics-meta-note{font-size:.74rem;color:#6c757d;margin-top:.18rem;}
+.analytics-program-list{display:grid;gap:.7rem;margin-top:1rem;}
+.analytics-program-item{display:flex;align-items:center;justify-content:space-between;gap:.9rem;padding:.8rem .9rem;border:1px solid #e8ecf0;border-radius:12px;background:#fbfdff;}
+.dark-mode .analytics-program-item{background:#16202d;border-color:#2e3849;}
+.analytics-program-main{min-width:0;}
+.analytics-program-code{display:inline-flex;align-items:center;padding:.18rem .48rem;border-radius:999px;background:#dbeafe;color:#1d4ed8;font-size:.68rem;font-weight:800;margin-bottom:.35rem;}
+.analytics-program-name{font-size:.84rem;font-weight:700;color:#1f2937;line-height:1.25;}
+.dark-mode .analytics-program-name{color:#e2e8f0!important;}
+.analytics-program-count{font-size:1.08rem;font-weight:800;color:#16a34a;white-space:nowrap;}
+.analytics-empty{padding:2rem 1rem;text-align:center;color:#6c757d;font-size:.82rem;border:1px dashed #d7dee6;border-radius:12px;background:#fbfdff;}
+.dark-mode .analytics-empty{background:#16202d;border-color:#334155;}
+@media(max-width:767px){
+  .analytics-canvas-wrap{height:280px;}
+  .analytics-meta-grid{grid-template-columns:1fr;}
+  .analytics-select{min-width:100%;}
+}
 </style>
 </head>
 
@@ -297,6 +404,71 @@ body.dark-mode #dark-mode-toggle i::before{content:"\f185";}
       </div>
     </div>
 
+    <div class="row p-1 mb-2">
+      <div class="col-12">
+        <div class="bg-white shadow-lg p-3 border border-muted rounded">
+          <div class="analytics-head">
+            <div>
+              <div class="analytics-title"><i class="fas fa-chart-bar me-2 text-success"></i>Student Distribution Analytics</div>
+              <div class="analytics-sub">Monitor how many students each department has, then drill down into the programs under that department.</div>
+            </div>
+            <div class="analytics-filter">
+              <label for="departmentAnalyticsSelect">View Programs</label>
+              <select id="departmentAnalyticsSelect" class="analytics-select">
+                <?php foreach ($departmentAnalytics as $deptRow): ?>
+                  <option value="<?= htmlspecialchars($deptRow['id']) ?>"><?= htmlspecialchars(($deptRow['code'] ?: '—') . ' - ' . $deptRow['name']) ?></option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-lg-7">
+              <div class="analytics-card">
+                <div class="analytics-title">Students Per Department</div>
+                <div class="analytics-sub">Click a bar to inspect that department’s program-level student counts.</div>
+                <div class="analytics-canvas-wrap">
+                  <canvas id="departmentStudentsChart"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-5">
+              <div class="analytics-card">
+                <div class="analytics-head" style="margin-bottom:.7rem;">
+                  <div>
+                    <div class="analytics-title" id="programAnalyticsTitle">Programs in <?= htmlspecialchars($topDepartment['name'] ?? 'Department') ?></div>
+                    <div class="analytics-sub" id="programAnalyticsSubtitle">Program-level student count inside the selected department.</div>
+                  </div>
+                </div>
+                <div class="analytics-canvas-wrap" style="height:260px;">
+                  <canvas id="programStudentsChart"></canvas>
+                </div>
+                <div class="analytics-meta-grid">
+                  <div class="analytics-meta">
+                    <div class="analytics-meta-label">Department Total</div>
+                    <div class="analytics-meta-value" id="selectedDeptStudentTotal"><?= number_format((int)($topDepartment['total_students'] ?? 0)) ?></div>
+                    <div class="analytics-meta-note">Active students in the selected department</div>
+                  </div>
+                  <div class="analytics-meta">
+                    <div class="analytics-meta-label">Programs</div>
+                    <div class="analytics-meta-value" id="selectedDeptProgramCount"><?= number_format(isset($topDepartment['programs']) ? count($topDepartment['programs']) : 0) ?></div>
+                    <div class="analytics-meta-note">Programs linked to this department</div>
+                  </div>
+                  <div class="analytics-meta">
+                    <div class="analytics-meta-label">Largest Program</div>
+                    <div class="analytics-meta-value" id="selectedDeptTopProgram"><?= htmlspecialchars($topDepartment['programs'][0]['code'] ?? '—') ?></div>
+                    <div class="analytics-meta-note" id="selectedDeptTopProgramCount"><?= isset($topDepartment['programs'][0]) ? number_format((int)$topDepartment['programs'][0]['student_count']) . ' students' : 'No program data yet' ?></div>
+                  </div>
+                </div>
+                <div class="analytics-program-list" id="departmentProgramList"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Quick navigation -->
     <div class="row p-1 mb-2">
       <div class="col-12">
@@ -403,6 +575,7 @@ body.dark-mode #dark-mode-toggle i::before{content:"\f185";}
 <script src="plugins/jquery/jquery.min.js"></script>
 <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <script src="dist/js/adminlte.js"></script>
 <script>
@@ -417,6 +590,191 @@ body.dark-mode #dark-mode-toggle i::before{content:"\f185";}
   window.addEventListener('resize',function(){if(window.innerWidth>=768)b.classList.remove('sb-open');});
 })();
 function sbToggle(id){document.getElementById(id).classList.toggle('open');}
+
+const departmentAnalytics = <?= json_encode($departmentAnalytics, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>;
+const departmentSelect = document.getElementById('departmentAnalyticsSelect');
+const programList = document.getElementById('departmentProgramList');
+const programTitle = document.getElementById('programAnalyticsTitle');
+const programSubtitle = document.getElementById('programAnalyticsSubtitle');
+const selectedDeptStudentTotal = document.getElementById('selectedDeptStudentTotal');
+const selectedDeptProgramCount = document.getElementById('selectedDeptProgramCount');
+const selectedDeptTopProgram = document.getElementById('selectedDeptTopProgram');
+const selectedDeptTopProgramCount = document.getElementById('selectedDeptTopProgramCount');
+
+const deptLabels = departmentAnalytics.map(d => d.code ? `${d.code}` : d.name);
+const deptTotals = departmentAnalytics.map(d => Number(d.total_students || 0));
+const deptBackground = departmentAnalytics.map((_, idx) => idx === 0 ? 'rgba(22, 163, 74, 0.85)' : 'rgba(34, 197, 94, 0.45)');
+const deptBorder = departmentAnalytics.map((_, idx) => idx === 0 ? 'rgba(21, 128, 61, 1)' : 'rgba(22, 163, 74, 0.9)');
+
+let activeDepartmentId = departmentSelect?.value || (departmentAnalytics[0]?.id ?? null);
+
+const departmentChart = new Chart(document.getElementById('departmentStudentsChart'), {
+  type: 'bar',
+  data: {
+    labels: deptLabels,
+    datasets: [{
+      label: 'Students',
+      data: deptTotals,
+      borderRadius: 10,
+      borderSkipped: false,
+      backgroundColor: deptBackground,
+      borderColor: deptBorder,
+      borderWidth: 1.5,
+      maxBarThickness: 52
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    indexAxis: 'y',
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          title(items) {
+            const i = items[0]?.dataIndex ?? 0;
+            const row = departmentAnalytics[i];
+            return row ? `${row.code} - ${row.name}` : '';
+          },
+          label(ctx) {
+            return `${ctx.raw} active students`;
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        beginAtZero: true,
+        ticks: { precision: 0 },
+        grid: { color: 'rgba(148, 163, 184, 0.18)' }
+      },
+      y: {
+        grid: { display: false }
+      }
+    },
+    onClick(_, elements) {
+      if (!elements.length) return;
+      const idx = elements[0].index;
+      const dept = departmentAnalytics[idx];
+      if (!dept) return;
+      activeDepartmentId = dept.id;
+      if (departmentSelect) departmentSelect.value = dept.id;
+      updateDepartmentChartHighlight();
+      renderProgramAnalytics(dept.id);
+    }
+  }
+});
+
+const programChart = new Chart(document.getElementById('programStudentsChart'), {
+  type: 'bar',
+  data: {
+    labels: [],
+    datasets: [{
+      label: 'Students',
+      data: [],
+      backgroundColor: 'rgba(30, 132, 73, 0.82)',
+      borderColor: 'rgba(20, 83, 45, 1)',
+      borderWidth: 1.5,
+      borderRadius: 10,
+      borderSkipped: false,
+      maxBarThickness: 48
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          title(items) {
+            return items[0]?.label || '';
+          },
+          label(ctx) {
+            return `${ctx.raw} active students`;
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: { display: false }
+      },
+      y: {
+        beginAtZero: true,
+        ticks: { precision: 0 },
+        grid: { color: 'rgba(148, 163, 184, 0.18)' }
+      }
+    }
+  }
+});
+
+function updateDepartmentChartHighlight() {
+  departmentChart.data.datasets[0].backgroundColor = departmentAnalytics.map(d =>
+    d.id === activeDepartmentId ? 'rgba(22, 163, 74, 0.85)' : 'rgba(34, 197, 94, 0.45)'
+  );
+  departmentChart.data.datasets[0].borderColor = departmentAnalytics.map(d =>
+    d.id === activeDepartmentId ? 'rgba(21, 128, 61, 1)' : 'rgba(22, 163, 74, 0.9)'
+  );
+  departmentChart.update();
+}
+
+function renderProgramAnalytics(departmentId) {
+  const dept = departmentAnalytics.find(row => String(row.id) === String(departmentId)) || departmentAnalytics[0];
+  if (!dept) return;
+
+  activeDepartmentId = dept.id;
+  programTitle.textContent = `Programs in ${dept.name}`;
+  programSubtitle.textContent = `${dept.code} department student counts by program`;
+  selectedDeptStudentTotal.textContent = new Intl.NumberFormat().format(Number(dept.total_students || 0));
+  selectedDeptProgramCount.textContent = new Intl.NumberFormat().format((dept.programs || []).length);
+
+  const topProgram = (dept.programs || [])[0] || null;
+  selectedDeptTopProgram.textContent = topProgram ? topProgram.code : '—';
+  selectedDeptTopProgramCount.textContent = topProgram ? `${new Intl.NumberFormat().format(Number(topProgram.student_count || 0))} students` : 'No program data yet';
+
+  const labels = (dept.programs || []).map(program => program.code);
+  const values = (dept.programs || []).map(program => Number(program.student_count || 0));
+  programChart.data.labels = labels.length ? labels : ['No programs'];
+  programChart.data.datasets[0].data = values.length ? values : [0];
+  programChart.update();
+
+  if (!(dept.programs || []).length) {
+    programList.innerHTML = '<div class="analytics-empty">No programs are linked to this department yet.</div>';
+  } else {
+    programList.innerHTML = dept.programs.map(program => `
+      <div class="analytics-program-item">
+        <div class="analytics-program-main">
+          <div class="analytics-program-code">${escapeHtml(program.code || '—')}</div>
+          <div class="analytics-program-name">${escapeHtml(program.name || 'Unnamed Program')}</div>
+        </div>
+        <div class="analytics-program-count">${new Intl.NumberFormat().format(Number(program.student_count || 0))}</div>
+      </div>
+    `).join('');
+  }
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+departmentSelect?.addEventListener('change', function() {
+  activeDepartmentId = this.value;
+  updateDepartmentChartHighlight();
+  renderProgramAnalytics(this.value);
+});
+
+if (departmentAnalytics.length) {
+  updateDepartmentChartHighlight();
+  renderProgramAnalytics(activeDepartmentId);
+} else if (programList) {
+  programList.innerHTML = '<div class="analytics-empty">No department analytics data is available yet.</div>';
+}
 </script>
 </body>
 </html>

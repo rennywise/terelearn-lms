@@ -9,6 +9,94 @@ session_start();
 
 require_once __DIR__ . '/../../core/db_connect.php';
 
+function tl_column_exists(mysqli $conn, string $table, string $column): bool {
+    $stmt = $conn->prepare("
+        SELECT 1
+        FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_SCHEMA = DATABASE()
+          AND TABLE_NAME = ?
+          AND COLUMN_NAME = ?
+        LIMIT 1
+    ");
+    if (!$stmt) return false;
+    $stmt->bind_param('ss', $table, $column);
+    $stmt->execute();
+    $exists = $stmt->get_result()->num_rows > 0;
+    $stmt->close();
+    return $exists;
+}
+
+function tl_attach_recent_students(mysqli $conn, array $classes, bool $hasProfilePicture): array {
+    if (empty($classes)) return $classes;
+
+    $hasEnrollmentDate = tl_column_exists($conn, 'tblclassenrollment', 'enrolled_at');
+    $hasClassStudentDate = tl_column_exists($conn, 'tblclassstudents', 'date_joined');
+    $photoSelect = $hasProfilePicture ? "COALESCE(u.profile_picture, '') AS profile_picture" : "'' AS profile_picture";
+    $photoGroupBy = $hasProfilePicture ? ",\n            u.profile_picture" : '';
+    $enrolledAtSelect = $hasEnrollmentDate ? 'ce.enrolled_at' : 'NOW()';
+    $joinedAtSelect = $hasClassStudentDate ? 'cs.date_joined' : 'NOW()';
+
+    $sql = "
+        SELECT
+            s.id,
+            s.user_id,
+            TRIM(CONCAT(s.first_name, ' ', COALESCE(s.middle_name, ''), ' ', s.last_name)) AS full_name,
+            s.first_name,
+            s.last_name,
+            s.student_number,
+            {$photoSelect},
+            MAX(src.joined_at) AS joined_at
+        FROM (
+            SELECT ce.class_id, ce.student_id AS student_ref, {$enrolledAtSelect} AS joined_at
+            FROM tblclassenrollment ce
+            WHERE ce.enrollment_status = 'enrolled'
+            UNION ALL
+            SELECT cs.class_id, cs.student_id AS student_ref, {$joinedAtSelect} AS joined_at
+            FROM tblclassstudents cs
+            WHERE cs.is_deleted = 0
+        ) src
+        JOIN tblstudent s
+          ON (CAST(s.id AS CHAR) = src.student_ref OR s.user_id = src.student_ref)
+         AND s.is_deleted = 0
+        LEFT JOIN tbluser u
+          ON (u.id = s.user_id OR u.email = s.email OR u.username = s.username)
+         AND u.is_deleted = 0
+        WHERE src.class_id = ?
+        GROUP BY
+            s.id,
+            s.user_id,
+            s.first_name,
+            s.middle_name,
+            s.last_name,
+            s.student_number
+            {$photoGroupBy}
+        ORDER BY MAX(src.joined_at) DESC, s.last_name ASC, s.first_name ASC
+        LIMIT 3
+    ";
+
+    $stmt = $conn->prepare($sql);
+    if (!$stmt) {
+        foreach ($classes as &$class) $class['recent_students'] = [];
+        unset($class);
+        return $classes;
+    }
+
+    foreach ($classes as &$class) {
+        $classId = (string)($class['id'] ?? '');
+        if ($classId === '') {
+            $class['recent_students'] = [];
+            continue;
+        }
+        $stmt->bind_param('s', $classId);
+        $stmt->execute();
+        $class['recent_students'] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+    unset($class);
+    $stmt->close();
+
+    return $classes;
+}
+
 /* ── Auth guard ── */
 if (!isset($_SESSION['user_id']) || (int)($_SESSION['user_level_id'] ?? 0) !== 2) {
     http_response_code(401);
@@ -164,21 +252,48 @@ if ($semRes) {
 
 /* ── Step 8: Fetch classes ── */
 $classes = [];
+$hasClassPalette = tl_column_exists($conn, 'tblclass', 'banner_palette');
+$classPaletteSelect = $hasClassPalette ? ", c.banner_palette" : ", NULL AS banner_palette";
+$hasCourseDepartment = tl_column_exists($conn, 'tblcourse', 'department_id');
+$hasDepartmentImage  = tl_column_exists($conn, 'tbldepartment', 'dept_image');
+$departmentSelect = $hasCourseDepartment
+    ? ", d.dept_code, d.dept_name" . ($hasDepartmentImage ? ", d.dept_image" : ", NULL AS dept_image")
+    : ", NULL AS dept_code, NULL AS dept_name, NULL AS dept_image";
+$departmentJoin = $hasCourseDepartment ? "LEFT JOIN tbldepartment d ON d.id = co.department_id" : "";
+$studentCountSelect = "
+            (
+                SELECT COUNT(DISTINCT COALESCE(st.user_id, CAST(st.id AS CHAR), src.student_ref))
+                FROM (
+                    SELECT ce.class_id, ce.student_id AS student_ref
+                    FROM tblclassenrollment ce
+                    WHERE ce.enrollment_status = 'enrolled'
+                    UNION ALL
+                    SELECT cs.class_id, cs.student_id AS student_ref
+                    FROM tblclassstudents cs
+                    WHERE cs.is_deleted = 0
+                ) src
+                LEFT JOIN tblstudent st
+                  ON (CAST(st.id AS CHAR) = src.student_ref OR st.user_id = src.student_ref)
+                 AND st.is_deleted = 0
+                WHERE src.class_id = c.id
+            ) AS student_count";
 
 if ($active_sem_id > 0) {
     $cStmt = $conn->prepare("
         SELECT
-            c.id, c.class_code, c.section, c.class_semester,
+            c.id, c.class_code, c.join_code, c.section, c.class_semester,
             c.semester_setting_id, c.year_level, c.schedule,
-            c.break_time, c.class_days, c.is_active, c.created_at, c.course_id,
+            c.break_time, c.class_days, c.is_active, c.created_at, c.course_id
+            {$classPaletteSelect},
             IFNULL(c.source, 'admin') AS source,
             s.subject_code, s.subject_name, s.id AS subject_id,
-            co.course_code, co.course_name,
-            (SELECT COUNT(*) FROM tblclassstudents cs
-             WHERE cs.class_id = c.id AND cs.is_deleted = 0) AS student_count
+            co.course_code, co.course_name
+            {$departmentSelect},
+            {$studentCountSelect}
         FROM tblclass c
         LEFT JOIN tblsubject s  ON s.id  = c.subject_id
         LEFT JOIN tblcourse  co ON co.id = c.course_id
+        {$departmentJoin}
         WHERE c.faculty_id = ?
           AND c.is_deleted = 0
           AND (c.semester_setting_id = ? OR c.semester_setting_id IS NULL)
@@ -199,17 +314,19 @@ if ($active_sem_id > 0) {
 if (empty($classes)) {
     $cStmt2 = $conn->prepare("
         SELECT
-            c.id, c.class_code, c.section, c.class_semester,
+            c.id, c.class_code, c.join_code, c.section, c.class_semester,
             c.semester_setting_id, c.year_level, c.schedule,
-            c.break_time, c.class_days, c.is_active, c.created_at, c.course_id,
+            c.break_time, c.class_days, c.is_active, c.created_at, c.course_id
+            {$classPaletteSelect},
             IFNULL(c.source, 'admin') AS source,
             s.subject_code, s.subject_name, s.id AS subject_id,
-            co.course_code, co.course_name,
-            (SELECT COUNT(*) FROM tblclassstudents cs
-             WHERE cs.class_id = c.id AND cs.is_deleted = 0) AS student_count
+            co.course_code, co.course_name
+            {$departmentSelect},
+            {$studentCountSelect}
         FROM tblclass c
         LEFT JOIN tblsubject s  ON s.id  = c.subject_id
         LEFT JOIN tblcourse  co ON co.id = c.course_id
+        {$departmentJoin}
         WHERE c.faculty_id = ?
           AND c.is_deleted = 0
         ORDER BY c.is_active DESC, c.created_at DESC
@@ -221,6 +338,8 @@ if (empty($classes)) {
         $cStmt2->close();
     }
 }
+
+$classes = tl_attach_recent_students($conn, $classes, $hasPicCol);
 
 $conn->close();
 

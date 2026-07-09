@@ -396,30 +396,175 @@ body.dark .tl-sem-chip { border-color: var(--primary); }
    STAT CARDS
 â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 .stat-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
-  gap: 1rem; margin-bottom: 1.75rem;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: .85rem; margin-bottom: 1.5rem;
 }
 .stat-card {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 1.2rem 1.4rem;
-  box-shadow: var(--shadow); display: flex; align-items: center; gap: .9rem;
-  transition: transform var(--transition), box-shadow var(--transition);
+  position: relative; overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.34), rgba(255,255,255,0)),
+    var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px; padding: .9rem .95rem .85rem;
+  box-shadow: var(--shadow);
+  min-height: 134px;
+  display: grid; grid-template-rows: auto 1fr auto; gap: .65rem;
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
 }
-.stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.stat-card::before {
+  content: '';
+  position: absolute; inset: 0 auto 0 0; width: 4px;
+  background: linear-gradient(180deg, var(--stat-accent, var(--primary)), transparent 82%);
+  opacity: .95;
+}
+.stat-card::after {
+  content: '';
+  position: absolute; inset: -35% -30% auto auto;
+  width: 110px; height: 110px; border-radius: 999px;
+  background: var(--stat-soft, var(--primary-light));
+  opacity: .55; filter: blur(8px); pointer-events: none;
+}
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--stat-accent, var(--primary));
+}
+.stat-card-head,
+.stat-card-main,
+.stat-card-foot {
+  position: relative; z-index: 1;
+}
+.stat-card-head {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: .7rem;
+}
+.stat-mini {
+  display: inline-flex; align-items: center; gap: .35rem;
+  width: fit-content;
+  font-size: .64rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--stat-accent, var(--primary));
+  background: var(--stat-soft, var(--primary-light));
+  border: 1px solid rgba(255,255,255,.3);
+  border-radius: 999px; padding: .28rem .52rem;
+}
 .stat-icon {
-  width: 44px; height: 44px; border-radius: 12px;
+  width: 42px; height: 42px; border-radius: 13px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 1.05rem; flex-shrink: 0;
+  font-size: .98rem; flex-shrink: 0;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.45);
 }
-.si-g  { background: var(--primary-light); color: var(--primary); }
-.si-b  { background: var(--accent-light);  color: var(--accent); }
-.si-o  { background: #fff3e0; color: var(--warning); }
-.si-p  { background: #f3e5f5; color: #7b1fa2; }
-.si-t  { background: #e0f7fa; color: #00838f; }
-.si-r  { background: #fce4ec; color: #c62828; }
-.si-s  { background: #f1f5f9; color: #475569; }
-.stat-val { font-size: 1.85rem; font-weight: 700; line-height: 1; }
-.stat-lbl { font-size: .73rem; color: var(--text-muted); margin-top: .18rem; }
+.stat-card.sc-g,
+.si-g  { --stat-accent: var(--primary); --stat-soft: var(--primary-light); background: var(--primary-light); color: var(--primary); }
+.stat-card.sc-b,
+.si-b  { --stat-accent: var(--accent); --stat-soft: var(--accent-light); background: var(--accent-light);  color: var(--accent); }
+.stat-card.sc-o,
+.si-o  { --stat-accent: var(--warning); --stat-soft: #fff3e0; background: #fff3e0; color: var(--warning); }
+.stat-card.sc-p,
+.si-p  { --stat-accent: #7b1fa2; --stat-soft: #f3e5f5; background: #f3e5f5; color: #7b1fa2; }
+.stat-card.sc-t,
+.si-t  { --stat-accent: #00838f; --stat-soft: #e0f7fa; background: #e0f7fa; color: #00838f; }
+.stat-card.sc-r,
+.si-r  { --stat-accent: #c62828; --stat-soft: #fce4ec; background: #fce4ec; color: #c62828; }
+.stat-card.sc-s,
+.si-s  { --stat-accent: #475569; --stat-soft: #f1f5f9; background: #f1f5f9; color: #475569; }
+.stat-card .stat-icon.si-g,
+.stat-card .stat-icon.si-b,
+.stat-card .stat-icon.si-o,
+.stat-card .stat-icon.si-p,
+.stat-card .stat-icon.si-t,
+.stat-card .stat-icon.si-r,
+.stat-card .stat-icon.si-s {
+  background: var(--stat-soft);
+  color: var(--stat-accent);
+}
+.stat-card-main {
+  display: grid; gap: .18rem;
+}
+.stat-val {
+  font-size: 2rem; font-weight: 800; line-height: .95;
+  letter-spacing: -.04em; color: var(--text);
+}
+.stat-lbl {
+  font-size: .83rem; font-weight: 700; color: var(--text);
+}
+.stat-card-foot {
+  display: flex; align-items: center; justify-content: space-between; gap: .5rem;
+}
+.stat-foot-note {
+  display: inline-flex; align-items: center; gap: .38rem;
+  font-size: .68rem; color: var(--text-muted); white-space: nowrap;
+}
+.stat-foot-note i {
+  font-size: .46rem; color: var(--stat-accent, var(--primary));
+}
+.stat-foot-arrow {
+  width: 28px; height: 28px; border-radius: 10px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--stat-soft, var(--primary-light));
+  color: var(--stat-accent, var(--primary));
+  transition: transform var(--transition), background var(--transition), color var(--transition);
+}
+.stat-card:hover .stat-foot-arrow {
+  transform: translate(2px, -2px);
+}
+body.dark .stat-card {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,0)),
+    var(--surface);
+}
+body.dark .stat-card::after {
+  opacity: .22;
+}
+body.dark .stat-mini {
+  border-color: rgba(255,255,255,.08);
+}
+
+.dash-analytics-grid {
+  display:grid; grid-template-columns:1.15fr .85fr; gap:1rem; margin-bottom:1.25rem;
+}
+.dash-analytics-stack {
+  display:grid; gap:1rem;
+}
+.analytics-card {
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+  box-shadow:var(--shadow); padding:1.1rem 1.2rem;
+}
+.analytics-card-head {
+  display:flex; align-items:flex-start; justify-content:space-between; gap:.8rem; margin-bottom:.95rem;
+}
+.analytics-card-title {
+  font-size:.92rem; font-weight:800; color:var(--text); line-height:1.2;
+}
+.analytics-card-sub {
+  font-size:.74rem; color:var(--text-muted); margin-top:.18rem;
+}
+.analytics-chart-wrap {
+  position:relative; height:300px;
+}
+.analytics-chart-wrap.compact {
+  height:255px;
+}
+.analytics-kicker {
+  display:inline-flex; align-items:center; gap:.35rem;
+  font-size:.68rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--primary); background:var(--primary-light); border-radius:999px; padding:.3rem .55rem;
+}
+.top-program-list {
+  display:grid; gap:.65rem; margin-top:1rem;
+}
+.top-program-item {
+  display:flex; align-items:center; justify-content:space-between; gap:.8rem;
+  padding:.75rem .85rem; border:1px solid var(--border); border-radius:12px; background:var(--bg);
+}
+.top-program-main { min-width:0; }
+.top-program-title {
+  font-size:.82rem; font-weight:700; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.top-program-meta {
+  font-size:.72rem; color:var(--text-muted); margin-top:.14rem;
+}
+.top-program-count {
+  font-size:1rem; font-weight:800; color:var(--primary); white-space:nowrap;
+}
 
 /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    SECTION DIVIDER
@@ -473,6 +618,17 @@ body.dark .tl-sem-chip { border-color: var(--primary); }
 }
 .dept-name { font-size: .88rem; font-weight: 700; flex: 1; }
 .dept-body { padding: .9rem 1rem; }
+.dept-photo {
+  width: 48px; height: 48px; border-radius: 12px; flex-shrink: 0;
+  object-fit: cover; border: 1px solid rgba(255,255,255,.35);
+  box-shadow: 0 6px 18px rgba(15,23,42,.12);
+}
+.dept-photo-fallback {
+  width: 48px; height: 48px; border-radius: 12px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: .95rem; font-weight: 800;
+  box-shadow: 0 6px 18px rgba(15,23,42,.12);
+}
 .dean-slot {
   display: flex; align-items: center; gap: .6rem;
   padding: .45rem .65rem; border-radius: 8px;
@@ -1179,6 +1335,24 @@ body.dark .search-wrap .form-control { background: #253044; border-color: var(--
   border-radius: 9px; padding: .75rem 1rem; margin-top: .5rem;
 }
 .prog-link-section .prog-list-empty { font-size: .78rem; color: #adb5bd; font-style: italic; padding: .2rem 0; }
+.dept-image-upload {
+  display:grid; grid-template-columns: 88px minmax(0, 1fr); gap: .9rem; align-items: center;
+}
+.dept-image-preview {
+  width: 88px; height: 88px; border-radius: 16px; overflow: hidden;
+  border: 1.5px dashed var(--border); background: var(--bg);
+  display:flex; align-items:center; justify-content:center;
+}
+.dept-image-preview img {
+  width:100%; height:100%; object-fit:cover; display:block;
+}
+.dept-image-fallback {
+  width:100%; height:100%; display:flex; align-items:center; justify-content:center;
+  font-size:1.4rem; font-weight:800; color:#fff;
+}
+.dept-image-hint {
+  font-size:.73rem; color:var(--text-muted); margin-top:.35rem;
+}
 
 /* Semester log & info */
 .sem-info-card {
@@ -1192,6 +1366,17 @@ body.dark .search-wrap .form-control { background: #253044; border-color: var(--
 @media (max-width: 768px) {
   .dept-meta-line { display: flex; }
   .stat-grid { grid-template-columns: 1fr 1fr; gap: .65rem; }
+  .stat-card {
+    min-height: 122px;
+    padding: .82rem .82rem .76rem;
+    border-radius: 16px;
+  }
+  .stat-val { font-size: 1.72rem; }
+  .stat-lbl { font-size: .78rem; }
+  .stat-foot-note { font-size: .64rem; }
+  .dash-analytics-grid { grid-template-columns:1fr; }
+  .analytics-chart-wrap { height:260px; }
+  .analytics-chart-wrap.compact { height:240px; }
   .dept-grid { grid-template-columns: 1fr; }
   .topnav { padding: 0 1rem; }
 }
@@ -2357,7 +2542,7 @@ body.dark #acctTable thead th:last-child { background: #1c2a3a; }
 }
 
 /* â•â• YS TABLES â€” RESPONSIVE â•â• */
-#section-yearsections .page-subtitle { max-width: 780px; }
+#section-academic .acad-sub { max-width: 780px; }
 .ys-config-card,
 .ys-summary-card {
   padding: 0;
@@ -2715,6 +2900,260 @@ body.dark #acctTable thead th:last-child { background: #1c2a3a; }
     display: block !important;
   }
 }
+
+/* Compact Academic Structure panel */
+.sr-only {
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+}
+.acad-page {
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:var(--shadow);
+}
+.acad-head {
+  padding:18px 20px 14px;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg,rgba(26,158,120,.045),transparent),var(--surface);
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:1rem;
+}
+.acad-title { font-size:1.15rem; font-weight:800; color:var(--text); line-height:1.2; }
+.acad-sub { font-size:.82rem; color:var(--text-muted); margin-top:.2rem; }
+.acad-crumb { font-size:.76rem; color:var(--text-muted); white-space:nowrap; }
+.acad-tab-bar {
+  display:flex;
+  gap:2px;
+  padding:10px 20px 0;
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  overflow-x:auto;
+}
+.acad-tab {
+  font-size:.8rem;
+  padding:8px 14px;
+  cursor:pointer;
+  border:none;
+  background:transparent;
+  color:var(--text-muted);
+  border-bottom:2px solid transparent;
+  font-family:inherit;
+  transition:all .12s;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  border-radius:8px 8px 0 0;
+  white-space:nowrap;
+}
+.acad-tab:hover { color:var(--text); background:var(--bg); }
+.acad-tab.on { color:var(--primary-dark); border-bottom-color:var(--primary-dark); font-weight:800; background:var(--bg); }
+.acad-tab .cnt {
+  font-size:.68rem;
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:999px;
+  padding:1px 7px;
+  color:var(--text-muted);
+  line-height:1.35;
+}
+.acad-tab.on .cnt { background:var(--primary-light); border-color:rgba(26,158,120,.28); color:var(--primary-dark); }
+.acad-panel { display:none; padding:18px 20px 20px; }
+.acad-panel.on { display:block; }
+.acad-toolbar {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:.75rem;
+  margin-bottom:14px;
+  flex-wrap:wrap;
+}
+.acad-section-label {
+  font-size:.67rem;
+  font-weight:900;
+  color:var(--text-muted);
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.acad-active-banner,
+.acad-info-banner {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:.8rem;
+  background:var(--primary-light);
+  border:1px solid rgba(26,158,120,.22);
+  border-radius:10px;
+  padding:10px 14px;
+  margin-bottom:14px;
+}
+.acad-info-banner {
+  justify-content:flex-start;
+  color:var(--primary-dark);
+  font-size:.78rem;
+}
+.acad-active-main { display:flex; align-items:center; gap:.45rem; min-width:0; color:var(--text-muted); font-size:.82rem; }
+.acad-active-dot {
+  width:8px; height:8px; border-radius:50%;
+  background:var(--primary-dark);
+  box-shadow:0 0 0 3px rgba(26,158,120,.16);
+  flex-shrink:0;
+}
+.acad-active-val { color:var(--primary-dark); font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.acad-page .btn-primary { background:var(--primary-dark); border-color:var(--primary-dark); }
+.acad-page .btn-ghost { background:var(--bg); border-color:var(--border); color:var(--text); }
+.acad-page .btn-sm { padding:.32rem .72rem; font-size:.74rem; }
+.acad-page .sem-row {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:1rem;
+  padding:12px 14px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  margin-bottom:8px;
+  background:var(--surface);
+  transition:background .12s,border-color .12s,box-shadow .12s;
+}
+.acad-page .sem-row:hover { background:var(--bg); box-shadow:var(--shadow); }
+.acad-page .sem-row.active-row { border-color:var(--primary-dark); background:linear-gradient(180deg,rgba(26,158,120,.05),transparent),var(--surface); }
+.acad-page .sem-name { font-size:.88rem; font-weight:800; color:var(--text); display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; }
+.acad-page .sem-date { font-size:.75rem; color:var(--text-muted); margin-top:3px; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+.acad-page .sem-actions { display:flex; align-items:center; justify-content:flex-end; gap:6px; flex-wrap:wrap; }
+.acad-badge {
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  font-size:.68rem;
+  font-weight:800;
+  padding:2px 8px;
+  border-radius:999px;
+  white-space:nowrap;
+}
+.acad-badge-active { background:var(--primary-light); color:var(--primary-dark); border:1px solid rgba(26,158,120,.32); }
+.acad-badge-inactive { background:var(--bg); color:var(--text-muted); border:1px solid var(--border); }
+.acad-badge-warning { background:#fff3cd; color:#92400e; border:1px solid #f59e0b; }
+.acad-linked-badge { background:var(--accent-light); color:var(--accent); border:1px solid rgba(31,115,219,.18); }
+.acad-table-wrap { border:1px solid var(--border); border-radius:10px; overflow:auto; }
+.prog-tbl {
+  width:100%;
+  border-collapse:collapse;
+  font-size:.8rem;
+  table-layout:fixed;
+  min-width:760px;
+}
+.prog-tbl thead tr { background:var(--primary-dark); }
+.prog-tbl thead th {
+  padding:8px 10px;
+  text-align:left;
+  font-size:.65rem;
+  font-weight:800;
+  color:#fff;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  border:none;
+}
+.prog-tbl thead th:not(:first-child) { text-align:center; }
+.prog-tbl tbody td { padding:10px; border-bottom:1px solid var(--border); color:var(--text-muted); vertical-align:middle; }
+.prog-tbl tbody tr:last-child td { border-bottom:none; }
+.prog-tbl tbody tr:hover td { background:var(--bg); }
+.ys-program-chip,
+.prog-code {
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:2px 8px;
+  font-size:.7rem;
+  font-weight:800;
+  color:var(--text);
+  white-space:nowrap;
+}
+.ys-count-pill {
+  background:var(--primary-light);
+  color:var(--primary-dark);
+  border:1px solid rgba(26,158,120,.26);
+  border-radius:999px;
+  font-size:.78rem;
+  font-weight:900;
+  padding:3px 11px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:34px;
+  cursor:pointer;
+}
+.ys-count-pill:hover { background:var(--primary); color:#fff; border-color:var(--primary); }
+.ys-empty-pill { color:var(--text-muted); opacity:.7; }
+.ys-empty-state { text-align:center; color:var(--text-muted); padding:1.5rem!important; }
+.ys-empty-state i { display:block; font-size:1.35rem; opacity:.28; margin-bottom:.35rem; }
+.acad-help { font-size:.75rem; color:var(--text-muted); margin-top:8px; }
+.acad-weeks-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+.acad-week-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+.acad-week-card-head {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:.75rem;
+  padding:10px 13px;
+  border-bottom:1px solid var(--border);
+  background:var(--bg);
+}
+.acad-week-card-title { font-size:.82rem; font-weight:800; color:var(--text); display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
+.acad-week-card-body { padding:10px 13px; }
+.acad-week-input-row {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding-bottom:10px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:10px;
+  flex-wrap:wrap;
+}
+.acad-week-input-row label { font-size:.75rem; color:var(--text-muted); white-space:nowrap; }
+.acad-week-input-row input {
+  width:68px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:5px 8px;
+  font-size:.8rem;
+  color:var(--text);
+  background:var(--surface);
+  font-family:inherit;
+  outline:none;
+}
+.acad-week-input-row input:focus { border-color:var(--primary); box-shadow:0 0 0 3px var(--primary-mid); }
+.acad-week-summary { display:flex; align-items:center; gap:8px; font-size:.75rem; color:var(--text-muted); flex-wrap:wrap; }
+.acad-week-summary strong { color:var(--text); }
+.acad-week-row { display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:5px 0; border-bottom:1px solid var(--border); }
+.acad-week-row:last-child { border-bottom:none; }
+.acad-week-num { font-size:.75rem; color:var(--text); font-weight:800; }
+.acad-week-dates { font-size:.7rem; color:var(--text-muted); }
+.acad-toast {
+  display:none;
+  align-items:center;
+  gap:8px;
+  background:var(--primary-light);
+  border:1px solid rgba(26,158,120,.25);
+  border-radius:10px;
+  padding:9px 13px;
+  margin-bottom:12px;
+  font-size:.8rem;
+  color:var(--primary-dark);
+}
+@media (max-width:900px) {
+  .acad-head { flex-direction:column; }
+  .acad-crumb { white-space:normal; }
+  .acad-weeks-grid { grid-template-columns:1fr; }
+}
+@media (max-width:640px) {
+  .acad-panel { padding:14px; }
+  .acad-tab-bar { padding-left:14px; padding-right:14px; }
+  .acad-page .sem-row { align-items:flex-start; flex-direction:column; }
+  .acad-page .sem-actions { width:100%; justify-content:flex-start; }
+}
 </style>
 
 </head>
@@ -2783,14 +3222,11 @@ body.dark #acctTable thead th:last-child { background: #1c2a3a; }
   <button class="nav-item" data-section="programs" onclick="showSection('programs')">
     <i class="fas fa-graduation-cap"></i><span class="sb-label">Programs</span>
   </button>
-  <button class="nav-item" data-section="yearsections" onclick="showSection('yearsections')">
-    <i class="fas fa-layer-group"></i><span class="sb-label">Year &amp; Sections</span>
+  <button class="nav-item" data-section="academic" onclick="showSection('academic')">
+    <i class="fas fa-layer-group"></i><span class="sb-label">Academic Structure</span>
   </button>
 
   <div class="nav-section-label">Settings</div>
-  <button class="nav-item" data-section="semester" onclick="showSection('semester')">
-    <i class="fas fa-calendar-alt"></i><span class="sb-label">Semester Settings</span>
-  </button>
   <button class="nav-item" data-section="calendar" onclick="showSection('calendar')">
     <i class="fas fa-calendar-day"></i><span class="sb-label">Calendar</span>
   </button>
@@ -2818,13 +3254,162 @@ body.dark #acctTable thead th:last-child { background: #1c2a3a; }
     </div>
 
     <div class="stat-grid">
-      <div class="stat-card"><div class="stat-icon si-g"><i class="fas fa-university"></i></div><div><div class="stat-val" id="st-depts">-</div><div class="stat-lbl">Departments</div></div></div>
-      <div class="stat-card"><div class="stat-icon si-b"><i class="fas fa-graduation-cap"></i></div><div><div class="stat-val" id="st-progs">-</div><div class="stat-lbl">Programs</div></div></div>
-      <div class="stat-card"><div class="stat-icon si-o"><i class="fas fa-chalkboard-teacher"></i></div><div><div class="stat-val" id="st-faculty">-</div><div class="stat-lbl">Faculty</div></div></div>
-      <div class="stat-card"><div class="stat-icon si-p"><i class="fas fa-user-graduate"></i></div><div><div class="stat-val" id="st-students">-</div><div class="stat-lbl">Students</div></div></div>
-      <div class="stat-card"><div class="stat-icon si-t"><i class="fas fa-book-open"></i></div><div><div class="stat-val" id="st-subjects">-</div><div class="stat-lbl">Subjects</div></div></div>
-      <div class="stat-card"><div class="stat-icon si-r"><i class="fas fa-chalkboard"></i></div><div><div class="stat-val" id="st-classes">-</div><div class="stat-lbl">Classes</div></div></div>
-      <div class="stat-card"><div class="stat-icon si-s"><i class="fas fa-user-tie"></i></div><div><div class="stat-val" id="st-deans">-</div><div class="stat-lbl">Active Deans</div></div></div>
+      <div class="stat-card sc-g">
+        <div class="stat-card-head">
+          <div class="stat-mini"><i class="fas fa-signal"></i> Live</div>
+          <div class="stat-icon si-g"><i class="fas fa-university"></i></div>
+        </div>
+        <div class="stat-card-main">
+          <div class="stat-val" id="st-depts">-</div>
+          <div class="stat-lbl">Departments</div>
+        </div>
+        <div class="stat-card-foot">
+          <div class="stat-foot-note"><i class="fas fa-circle"></i> Academic units</div>
+          <div class="stat-foot-arrow"><i class="fas fa-arrow-right"></i></div>
+        </div>
+      </div>
+      <div class="stat-card sc-b">
+        <div class="stat-card-head">
+          <div class="stat-mini"><i class="fas fa-signal"></i> Live</div>
+          <div class="stat-icon si-b"><i class="fas fa-graduation-cap"></i></div>
+        </div>
+        <div class="stat-card-main">
+          <div class="stat-val" id="st-progs">-</div>
+          <div class="stat-lbl">Programs</div>
+        </div>
+        <div class="stat-card-foot">
+          <div class="stat-foot-note"><i class="fas fa-circle"></i> Course offerings</div>
+          <div class="stat-foot-arrow"><i class="fas fa-arrow-right"></i></div>
+        </div>
+      </div>
+      <div class="stat-card sc-o">
+        <div class="stat-card-head">
+          <div class="stat-mini"><i class="fas fa-signal"></i> Live</div>
+          <div class="stat-icon si-o"><i class="fas fa-chalkboard-teacher"></i></div>
+        </div>
+        <div class="stat-card-main">
+          <div class="stat-val" id="st-faculty">-</div>
+          <div class="stat-lbl">Faculty</div>
+        </div>
+        <div class="stat-card-foot">
+          <div class="stat-foot-note"><i class="fas fa-circle"></i> Teaching staff</div>
+          <div class="stat-foot-arrow"><i class="fas fa-arrow-right"></i></div>
+        </div>
+      </div>
+      <div class="stat-card sc-p">
+        <div class="stat-card-head">
+          <div class="stat-mini"><i class="fas fa-signal"></i> Live</div>
+          <div class="stat-icon si-p"><i class="fas fa-user-graduate"></i></div>
+        </div>
+        <div class="stat-card-main">
+          <div class="stat-val" id="st-students">-</div>
+          <div class="stat-lbl">Students</div>
+        </div>
+        <div class="stat-card-foot">
+          <div class="stat-foot-note"><i class="fas fa-circle"></i> Current records</div>
+          <div class="stat-foot-arrow"><i class="fas fa-arrow-right"></i></div>
+        </div>
+      </div>
+      <div class="stat-card sc-t">
+        <div class="stat-card-head">
+          <div class="stat-mini"><i class="fas fa-signal"></i> Live</div>
+          <div class="stat-icon si-t"><i class="fas fa-book-open"></i></div>
+        </div>
+        <div class="stat-card-main">
+          <div class="stat-val" id="st-subjects">-</div>
+          <div class="stat-lbl">Subjects</div>
+        </div>
+        <div class="stat-card-foot">
+          <div class="stat-foot-note"><i class="fas fa-circle"></i> Catalog entries</div>
+          <div class="stat-foot-arrow"><i class="fas fa-arrow-right"></i></div>
+        </div>
+      </div>
+      <div class="stat-card sc-r">
+        <div class="stat-card-head">
+          <div class="stat-mini"><i class="fas fa-signal"></i> Live</div>
+          <div class="stat-icon si-r"><i class="fas fa-chalkboard"></i></div>
+        </div>
+        <div class="stat-card-main">
+          <div class="stat-val" id="st-classes">-</div>
+          <div class="stat-lbl">Classes</div>
+        </div>
+        <div class="stat-card-foot">
+          <div class="stat-foot-note"><i class="fas fa-circle"></i> Active sections</div>
+          <div class="stat-foot-arrow"><i class="fas fa-arrow-right"></i></div>
+        </div>
+      </div>
+      <div class="stat-card sc-s">
+        <div class="stat-card-head">
+          <div class="stat-mini"><i class="fas fa-signal"></i> Live</div>
+          <div class="stat-icon si-s"><i class="fas fa-user-tie"></i></div>
+        </div>
+        <div class="stat-card-main">
+          <div class="stat-val" id="st-deans">-</div>
+          <div class="stat-lbl">Active Deans</div>
+        </div>
+        <div class="stat-card-foot">
+          <div class="stat-foot-note"><i class="fas fa-circle"></i> Department leads</div>
+          <div class="stat-foot-arrow"><i class="fas fa-arrow-right"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dash-analytics-grid">
+      <div class="dash-analytics-stack">
+        <div class="analytics-card">
+          <div class="analytics-card-head">
+            <div>
+              <div class="analytics-card-title">Growth Trend</div>
+              <div class="analytics-card-sub">Recent student, faculty, and program additions across the whole system.</div>
+            </div>
+            <div class="analytics-kicker"><i class="fas fa-chart-line"></i> 6 Months</div>
+          </div>
+          <div class="analytics-chart-wrap">
+            <canvas id="adminGrowthChart"></canvas>
+          </div>
+        </div>
+
+        <div class="analytics-card">
+          <div class="analytics-card-head">
+            <div>
+              <div class="analytics-card-title">Department Academic Footprint</div>
+              <div class="analytics-card-sub">Compare how many programs, subjects, and classes each department is carrying.</div>
+            </div>
+            <div class="analytics-kicker"><i class="fas fa-layer-group"></i> Department Scope</div>
+          </div>
+          <div class="analytics-chart-wrap compact">
+            <canvas id="departmentFootprintChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="dash-analytics-stack">
+        <div class="analytics-card">
+          <div class="analytics-card-head">
+            <div>
+              <div class="analytics-card-title">Students Per Department</div>
+              <div class="analytics-card-sub">Quick view of where enrollment is concentrated right now.</div>
+            </div>
+            <div class="analytics-kicker"><i class="fas fa-users"></i> Enrollment</div>
+          </div>
+          <div class="analytics-chart-wrap compact">
+            <canvas id="departmentStudentsChart"></canvas>
+          </div>
+        </div>
+
+        <div class="analytics-card">
+          <div class="analytics-card-head">
+            <div>
+              <div class="analytics-card-title">Top Programs by Enrollment</div>
+              <div class="analytics-card-sub">Programs with the highest number of students across all departments.</div>
+            </div>
+            <div class="analytics-kicker"><i class="fas fa-graduation-cap"></i> Top 8</div>
+          </div>
+          <div class="top-program-list" id="topProgramList">
+            <div class="text-center text-muted py-3"><i class="fas fa-spinner fa-spin me-2"></i>Loading...</div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="section-divider">
@@ -3435,41 +4020,51 @@ body.dark #acctTable thead th:last-child { background: #1c2a3a; }
   </div>
 </div>
 
-<!-- SEMESTER SETTINGS PAGE -->
-<div id="section-semester" class="admin-section">
-  <div class="page-header">
-    <div>
-      <div class="page-title">School Year &amp; Semester</div>
-      <div class="page-subtitle">Manage academic periods and semester transitions</div>
+<!-- ACADEMIC STRUCTURE PAGE -->
+<div id="section-academic" class="admin-section">
+  <h2 class="sr-only">TERELEARN admin - unified Academic Structure settings</h2>
+  <div class="acad-page">
+    <div class="acad-head">
+      <div>
+        <div class="acad-title">Academic structure</div>
+        <div class="acad-sub">Manage semesters, year levels, sections, and academic week labels from one compact panel.</div>
+      </div>
+      <span class="acad-crumb">Dashboard / Academic structure</span>
     </div>
-    <div class="tl-breadcrumb">
-      <a href="#" onclick="showSection('dashboard');return false;">Dashboard</a>
-      <span class="sep">/</span><span class="cur">Semester Settings</span>
+    <div class="acad-tab-bar" role="tablist" aria-label="Academic structure settings">
+      <button class="acad-tab on" type="button" data-acad-tab="sem" onclick="switchAcademicTab('sem',this)">
+        <i class="fas fa-calendar-alt"></i> Semesters <span class="cnt" id="acadSemCount">0</span>
+      </button>
+      <button class="acad-tab" type="button" data-acad-tab="sec" onclick="switchAcademicTab('sec',this)">
+        <i class="fas fa-layer-group"></i> Year and sections <span class="cnt" id="acadYsCount">0</span>
+      </button>
+      <button class="acad-tab" type="button" data-acad-tab="wk" onclick="switchAcademicTab('wk',this)">
+        <i class="fas fa-clock"></i> Academic weeks <span class="cnt" id="acadWeekCount">0</span>
+      </button>
     </div>
-  </div>
-
+    <div class="acad-panel on" id="acad-tab-sem">
   <!-- Due-date alert banner (hidden until triggered) -->
-  <div id="semDueBanner" style="display:none;background:linear-gradient(135deg,#fff3cd,#ffeaa7);border:1.5px solid #f59e0b;border-radius:var(--radius);padding:14px 18px;margin-bottom:1.25rem;align-items:center;gap:12px;font-size:.88rem;">
-    <i class="fas fa-exclamation-triangle" style="color:#b45309;font-size:1.1rem;flex-shrink:0;"></i>
+  <div id="semDueBanner" style="display:none;background:linear-gradient(135deg,#fff3cd,#ffeaa7);border:1px solid #f59e0b;border-radius:10px;padding:10px 14px;margin-bottom:14px;align-items:center;gap:10px;font-size:.82rem;">
+    <i class="fas fa-exclamation-triangle" style="color:#b45309;flex-shrink:0;"></i>
     <div style="flex:1;">
-      <strong style="color:#78350f;">Semester Ended</strong>
+      <strong style="color:#78350f;">Semester ended</strong>
       <span id="semDueBannerText" style="color:#92400e;margin-left:6px;"></span>
     </div>
-    <button onclick="semOpenTransitionWizard()" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;border:1.5px solid #f59e0b;background:#b45309;color:#fff;font-size:.78rem;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;">
-      <i class="fas fa-arrow-right"></i> Start Transition
+    <button class="btn btn-primary btn-sm" type="button" onclick="semOpenTransitionWizard()">
+      <i class="fas fa-arrow-right"></i> Start transition
     </button>
     <button onclick="document.getElementById('semDueBanner').style.display='none'" style="border:none;background:none;color:#92400e;cursor:pointer;font-size:1rem;padding:0 4px;line-height:1;">Ã—</button>
   </div>
 
   <!-- Active banner -->
-  <div id="semActiveBanner" style="background:var(--primary-light);border:0.5px solid rgba(26,158,120,.25);border-radius:var(--radius);padding:12px 18px;margin-bottom:1.25rem;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
-    <div style="display:flex;align-items:center;gap:10px;font-size:.88rem;color:var(--text-muted);">
-      <span style="width:9px;height:9px;border-radius:50%;background:#16a34a;flex-shrink:0;display:inline-block;box-shadow:0 0 0 3px rgba(22,163,74,.2);"></span>
+  <div id="semActiveBanner" class="acad-active-banner">
+    <div class="acad-active-main">
+      <span class="acad-active-dot"></span>
       Active period:
-      <strong id="semActiveBannerText" style="color:var(--primary);margin-left:2px;">-</strong>
+      <strong id="semActiveBannerText" class="acad-active-val">-</strong>
     </div>
-    <button class="btn btn-success text-white fw-bold" onclick="openSemAdd()" style="border-radius:8px;font-size:.82rem;padding:.35rem .85rem;white-space:nowrap;">
-      <i class="fas fa-plus me-1"></i> Add Period
+    <button class="btn btn-primary btn-sm" type="button" onclick="openSemAdd()">
+      <i class="fas fa-plus"></i> Add period
     </button>
   </div>
 
@@ -3479,7 +4074,62 @@ body.dark #acctTable thead th:last-child { background: #1c2a3a; }
       <i class="fas fa-spinner fa-spin"></i> Loading...
     </div>
   </div>
-</div><!-- closes #section-semester -->
+    </div>
+
+    <div class="acad-panel" id="acad-tab-sec">
+      <div class="acad-toolbar">
+        <div>
+          <div class="acad-section-label">All programs overview</div>
+          <div class="acad-sub">Click a configured section count or the row menu to edit a program.</div>
+        </div>
+        <button class="btn btn-primary btn-sm" type="button" onclick="openAddYsModal()">
+          <i class="fas fa-plus"></i> Add config
+        </button>
+      </div>
+
+      <div class="acad-table-wrap">
+        <table class="prog-tbl" id="ysOverviewTable">
+          <thead>
+            <tr>
+              <th style="width:42px">#</th>
+              <th style="width:82px">Code</th>
+              <th>Program name</th>
+              <th style="width:90px;text-align:center">1st year</th>
+              <th style="width:90px;text-align:center">2nd year</th>
+              <th style="width:90px;text-align:center">3rd year</th>
+              <th style="width:90px;text-align:center">4th year</th>
+              <th style="width:42px"></th>
+            </tr>
+          </thead>
+          <tbody id="ysOverviewBody">
+            <tr><td colspan="8" class="text-center py-3"><i class="fas fa-spinner fa-spin me-2"></i>Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="acad-help">Dash means no sections are configured for that year level in the active setup.</p>
+    </div>
+
+    <div class="acad-panel" id="acad-tab-wk">
+      <div class="acad-info-banner">
+        <i class="fas fa-info-circle"></i>
+        <span>One academic week count applies to every semester and every year level.</span>
+      </div>
+
+      <div class="acad-weeks-grid" id="academicWeeksGrid">
+        <div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-muted);">
+          <i class="fas fa-spinner fa-spin"></i> Loading week setting...
+        </div>
+      </div>
+
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);display:flex;justify-content:flex-end">
+        <button class="btn btn-primary" type="button" onclick="saveAcademicWeeks()">
+          <i class="fas fa-save"></i> Save week configuration
+        </button>
+      </div>
+      <div id="wk-toast" class="acad-toast" style="margin-top:10px"><i class="fas fa-check-circle"></i> Week configuration saved.</div>
+    </div>
+  </div>
+</div>
 
 <!-- SEM ADD/EDIT MODAL -->
 <div class="modal fade tl-modal" id="semModal" tabindex="-1">
@@ -3592,62 +4242,7 @@ body.dark #acctTable thead th:last-child { background: #1c2a3a; }
   </div>
 </div>
 
-</div><!-- closes #section-semester -->
-
 <!-- â”€â”€ YEAR & SECTIONS â”€â”€ -->
-<div id="section-yearsections" class="admin-section">
-  <div class="page-header">
-    <div>
-      <div class="page-title">Year &amp; Sections</div>
-      <div class="page-subtitle">Configure section counts by department, program, and year level</div>
-    </div>
-    <div class="tl-breadcrumb">
-      <a href="#" onclick="showSection('dashboard');return false;">Dashboard</a>
-      <span class="sep">/</span><span class="cur">Year &amp; Sections</span>
-    </div>
-  </div>
-
-  <!-- ADD / EDIT ENTRY -->
-  <div class="tl-card mb-3 ys-config-card">
-    <div class="ys-card-head">
-      <div class="ys-card-head-main">
-        <div class="ys-card-title"><i class="fas fa-sliders-h"></i> Year Level Configuration</div>
-      </div>
-      <button class="ys-open-btn" onclick="openAddYsModal()">
-        <i class="fas fa-plus"></i> Add Config
-      </button>
-    </div>
-  </div>
-
-  <!-- ALL PROGRAMS OVERVIEW TABLE -->
-  <div class="tl-card ys-summary-card" id="ysAllCard">
-    <div class="ys-card-head">
-      <div class="ys-overview-title">
-        <div class="ys-card-head-main">
-          <div class="ys-card-title"><i class="fas fa-layer-group"></i> All Programs Overview</div>
-        </div>
-      </div>
-    </div>
-    <div class="acct-table-wrap">
-      <table class="table table-hover mb-0 tl-table" id="ysOverviewTable">
-        <thead><tr>
-          <th style="width:50px">#</th>
-          <th style="min-width:100px">Code</th>
-          <th style="min-width:200px">Program Name</th>
-          <th style="width:100px;text-align:center;">1st Year</th>
-          <th style="width:100px;text-align:center;">2nd Year</th>
-          <th style="width:100px;text-align:center;">3rd Year</th>
-          <th style="width:100px;text-align:center;">4th Year</th>
-          <th style="width:44px;padding:0;text-align:center;"></th>
-        </tr></thead>
-        <tbody id="ysOverviewBody">
-          <tr><td colspan="8" class="text-center py-3"><i class="fas fa-spinner fa-spin me-2"></i>Loading...</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
 <div class="modal fade tl-modal ys-modal" id="ysModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -3872,6 +4467,18 @@ body.dark #acctTable thead th:last-child { background: #1c2a3a; }
                 <div class="col-md-9"><label class="form-label">Department Name <span class="text-danger">*</span></label><input type="text" class="form-control" id="dept_name" placeholder="e.g. School of Information Technology" required></div>
               </div>
               <div class="row g-3 mt-1"><div class="col-12"><label class="form-label">Description</label><textarea class="form-control" id="dept_desc" rows="2" placeholder="Brief description..."></textarea></div></div>
+              <div class="row g-3 mt-1">
+                <div class="col-12">
+                  <label class="form-label">Department Photo</label>
+                  <div class="dept-image-upload">
+                    <div class="dept-image-preview" id="deptImagePreview"></div>
+                    <div>
+                      <input type="file" class="form-control" id="dept_image_file" accept="image/png,image/jpeg,image/webp,image/gif">
+                      <div class="dept-image-hint">Upload a department image or logo. Accepted: JPG, PNG, WEBP, GIF. Max 5 MB.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="form-section">
               <div class="section-label green"><i class="fas fa-graduation-cap"></i> Link Programs to this Department
@@ -4445,6 +5052,7 @@ body.dark #acctTable thead th:last-child { background: #1c2a3a; }
 <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+<script src="adminlte1/plugins/chart.js/Chart.min.js"></script>
 
 <script id="patch7-js">
 /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
@@ -4582,6 +5190,58 @@ function updateDeptStatsBar() { /* stats bar removed */ }
 /* Override the original deptSearch handler â€” remove old one and use this */
 $(document).off('input', '#deptSearch').on('input', '#deptSearch', applyDeptFilter);
 
+function deptInitials(name) {
+    return (name || '?').split(' ').slice(0, 2).map(w => w[0] || '').join('').toUpperCase() || '?';
+}
+
+function getDeptColorById(id) {
+    const idx = allDepts.findIndex(d => String(d.id) === String(id));
+    return DEPT_COLORS[(idx >= 0 ? idx : 0) % DEPT_COLORS.length];
+}
+
+function buildDeptImageMarkup(dept, color, sizeClass = 'dept-photo') {
+    const path = String(dept?.dept_image || '').trim();
+    if (path) return `<img src="${esc(path)}" alt="${esc(dept?.dept_name || 'Department')}" class="${sizeClass}">`;
+    return `<div class="${sizeClass}-fallback dept-photo-fallback" style="background:${color};">${esc(deptInitials(dept?.dept_name || 'Department'))}</div>`;
+}
+
+function renderDeptImagePreview(path = '', deptName = '') {
+    const preview = document.getElementById('deptImagePreview');
+    if (!preview) return;
+    const color = getDeptColorById(editingDeptId);
+    if (path) {
+        preview.innerHTML = `<img src="${esc(path)}" alt="${esc(deptName || 'Department')}">`;
+        return;
+    }
+    preview.innerHTML = `<div class="dept-image-fallback" style="background:${color};">${esc(deptInitials(deptName || document.getElementById('dept_name')?.value || 'Department'))}</div>`;
+}
+
+function uploadDepartmentImage(departmentId) {
+    return new Promise((resolve, reject) => {
+        const fileInput = document.getElementById('dept_image_file');
+        const file = fileInput?.files?.[0];
+        if (!file) { resolve(currentDeptImagePath || ''); return; }
+        const formData = new FormData();
+        formData.append('department_id', departmentId);
+        formData.append('department_image', file);
+        $.ajax({
+            url: 'API/Admin/upload_department_image.php',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            success(res) {
+                if (res.status !== 'success') return reject(new Error(res.message || 'Image upload failed.'));
+                currentDeptImagePath = res.image_path || '';
+                deptImageChanged = false;
+                resolve(currentDeptImagePath);
+            },
+            error() { reject(new Error('Department image upload failed.')); }
+        });
+    });
+}
+
 /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    DEPT v2 â€” CARD RENDERER
 â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
@@ -4597,8 +5257,6 @@ function renderDeptGridV2(targetId, depts, editable) {
         return;
     }
 
-    const initials = name => (name || '?').split(' ').slice(0, 2).map(w => w[0] || '').join('').toUpperCase();
-
     el.innerHTML = depts.map((d, idx) => {
         const color = DEPT_COLORS[idx % DEPT_COLORS.length];
         const inactive = parseInt(d.is_active) !== 1;
@@ -4610,7 +5268,7 @@ function renderDeptGridV2(targetId, depts, editable) {
         const personCell = (row, assignRole, labelText) => {
             if (row) {
                 return `<div class="dept-person-cell">
-                  <div class="dept-person-avatar" style="background:${color};">${initials(row.dean_name)}</div>
+                  <div class="dept-person-avatar" style="background:${color};">${deptInitials(row.dean_name)}</div>
                   <div style="min-width:0;">
                     <div class="dept-person-name">${esc(row.dean_name)}</div>
                     <div class="dept-person-sub">${esc(row.id_number || '—')}${row.dept_code ? ` - ${esc(row.dept_code)}` : ''}</div>
@@ -4651,9 +5309,12 @@ function renderDeptGridV2(targetId, depts, editable) {
           </td>
           <td style="font-size:.78rem;color:var(--text-muted);">${idx + 1}</td>
           <td>
-            <div style="display:flex;flex-direction:column;align-items:flex-start;gap:.28rem;">
-              <span class="dept-code-badge" style="background:${color}22;color:${color};border:1px solid ${color}44;">${esc(d.dept_code)}</span>
-              <div style="font-weight:600;font-size:.88rem;line-height:1.25;">${esc(d.dept_name)}</div>
+            <div style="display:flex;align-items:flex-start;gap:.8rem;">
+              ${buildDeptImageMarkup(d, color)}
+              <div style="display:flex;flex-direction:column;align-items:flex-start;gap:.28rem;min-width:0;">
+                <span class="dept-code-badge" style="background:${color}22;color:${color};border:1px solid ${color}44;">${esc(d.dept_code)}</span>
+                <div style="font-weight:600;font-size:.88rem;line-height:1.25;">${esc(d.dept_name)}</div>
+              </div>
             </div>
             ${d.description ? `<div style="font-size:.72rem;color:var(--text-muted);margin-top:.1rem;">${esc(d.description)}</div>` : ''}
             ${summaryLine}
@@ -5525,13 +6186,19 @@ let allPrograms2    = [];
 let currentSemLog   = [];
 let deptProgLinked  = [];
 let editingDeptId   = null;
+let deptImageChanged = false;
+let currentDeptImagePath = '';
+let dashboardGrowthChart = null;
+let dashboardDeptStudentsChart = null;
+let dashboardDeptFootprintChart = null;
 
 const TL_LAST_SECTION_KEY = 'tl_admin_last_section';
 function getSavedAdminSection() {
   try {
     const saved = localStorage.getItem(TL_LAST_SECTION_KEY);
     if (!saved) return null;
-    return document.getElementById('section-' + saved) ? saved : null;
+    const normalized = (saved === 'semester' || saved === 'yearsections') ? 'academic' : saved;
+    return document.getElementById('section-' + normalized) ? normalized : null;
   } catch (_) {
     return null;
   }
@@ -5740,6 +6407,7 @@ function otpHtml(uid, oe, fl) {
    SECTION NAV â€” now uses .active class instead of style display
 â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 function showSection(name) {
+    if (name === 'semester' || name === 'yearsections') name = 'academic';
     saveAdminSection(name);
     document.querySelectorAll('.admin-section').forEach(el => el.classList.remove('active'));
     const target = document.getElementById('section-' + name);
@@ -5756,38 +6424,189 @@ function showSection(name) {
     if (name === 'programs')     loadProgramsSection();
     if (name === 'deans')        loadDeanSection();
     if (name === 'accounts')     loadAccountsSection();
-    if (name === 'semester')     loadSemesterSection();
+    if (name === 'academic')     loadAcademicSection();
     if (name === 'students')     loadStudentsSection();
     if (name === 'calendar')     loadCalendar();
-    if (name === 'yearsections') {
-        const doInit = () => {
-            populateYsDeptDropdown();
-            populateYsCourseDropdown();
-            loadYsAllOverview();
-        };
-        if (allPrograms.length && allDepts.length) {
-            doInit();
-        } else {
-            $.when(
-                allPrograms.length
-                  ? $.Deferred().resolve().promise()
-                  : $.getJSON('API/Admin/fetch_programs_full.php', res => {
-                        if (res.status === 'success') {
-                            allPrograms  = res.data || [];
-                            allPrograms2 = res.data || [];
-                            buildProgSelectAdd();
-                        }
-                    }),
-                allDepts.length
-                  ? $.Deferred().resolve().promise()
-                  : $.getJSON('API/Admin/fetch_departments.php', data => {
-                        allDepts = Array.isArray(data) ? data : [];
-                    })
-            ).always(doInit);
-        }
-    }
  
     if (window.innerWidth <= 768) closeMobileSidebar();
+}
+
+function switchAcademicTab(id, el) {
+  document.querySelectorAll('.acad-tab').forEach(tab => tab.classList.remove('on'));
+  document.querySelectorAll('.acad-panel').forEach(panel => panel.classList.remove('on'));
+  const btn = el || document.querySelector(`.acad-tab[data-acad-tab="${id}"]`);
+  const panel = document.getElementById('acad-tab-' + id);
+  if (btn) btn.classList.add('on');
+  if (panel) panel.classList.add('on');
+  if (id === 'wk') loadAcademicWeekSetting();
+  if (id === 'sec') loadAcademicYearSections();
+}
+
+function loadAcademicSection() {
+  loadSemesterSection();
+  loadAcademicYearSections();
+  renderAcademicWeeks();
+  loadAcademicWeekSetting();
+}
+
+function loadAcademicYearSections() {
+  const doInit = () => {
+    populateYsDeptDropdown();
+    populateYsCourseDropdown();
+    loadYsAllOverview();
+  };
+  if (allPrograms.length && allDepts.length) {
+    doInit();
+    return;
+  }
+  $.when(
+    allPrograms.length
+      ? $.Deferred().resolve().promise()
+      : $.getJSON('API/Admin/fetch_programs_full.php', res => {
+          if (res.status === 'success') {
+            allPrograms  = res.data || [];
+            allPrograms2 = res.data || [];
+            buildProgSelectAdd();
+          }
+        }),
+    allDepts.length
+      ? $.Deferred().resolve().promise()
+      : $.getJSON('API/Admin/fetch_departments.php', data => {
+          allDepts = Array.isArray(data) ? data : [];
+        })
+  ).always(doInit);
+}
+
+const TL_ACAD_WEEK_KEY = 'tl_admin_academic_weeks';
+let tlGlobalAcademicWeeks = null;
+let tlAcademicWeeksLoading = false;
+function getGlobalAcademicWeeks() {
+  if (tlGlobalAcademicWeeks !== null) return tlGlobalAcademicWeeks;
+  try {
+    const raw = localStorage.getItem(TL_ACAD_WEEK_KEY);
+    if (!raw) return 18;
+    const parsed = JSON.parse(raw);
+    if (typeof parsed === 'number') return Math.max(1, Math.min(30, parsed || 18));
+    if (parsed && typeof parsed === 'object') {
+      if (parsed.global) return Math.max(1, Math.min(30, parseInt(parsed.global, 10) || 18));
+      const first = Object.values(parsed).find(v => parseInt(v, 10) > 0);
+      if (first) return Math.max(1, Math.min(30, parseInt(first, 10) || 18));
+    }
+  } catch (_) {
+    const n = parseInt(localStorage.getItem(TL_ACAD_WEEK_KEY), 10);
+    if (n > 0) return Math.max(1, Math.min(30, n));
+  }
+  return 18;
+}
+function setGlobalAcademicWeeks(weeks) {
+  tlGlobalAcademicWeeks = Math.max(1, Math.min(30, parseInt(weeks, 10) || 18));
+  try { localStorage.setItem(TL_ACAD_WEEK_KEY, JSON.stringify({ global: tlGlobalAcademicWeeks })); } catch (_) {}
+}
+async function loadAcademicWeekSetting() {
+  if (tlAcademicWeeksLoading) return;
+  tlAcademicWeeksLoading = true;
+  try {
+    const res = await fetch('API/Admin/academic_week_setting.php?_t=' + Date.now(), { cache: 'no-store' });
+    const data = await res.json();
+    if (data.status === 'success') {
+      setGlobalAcademicWeeks(data.week_count || 18);
+      renderAcademicWeeks();
+      renderSemPeriods();
+    }
+  } catch (_) {
+    renderAcademicWeeks();
+  } finally {
+    tlAcademicWeeksLoading = false;
+  }
+}
+function renderAcademicWeeks() {
+  const wrap = document.getElementById('academicWeeksGrid');
+  if (!wrap) return;
+  const weeks = getGlobalAcademicWeeks();
+  const countEl = document.getElementById('acadWeekCount');
+  if (countEl) countEl.textContent = String(weeks);
+  const semOrder = { '1st Semester': 0, '2nd Semester': 1 };
+  const periods = [...semPeriods].sort((a, b) => {
+    if (b.school_year !== a.school_year) return String(b.school_year || '').localeCompare(String(a.school_year || ''));
+    return (semOrder[a.semester] ?? 9) - (semOrder[b.semester] ?? 9);
+  });
+  const periodList = periods.length
+    ? periods.slice(0, 8).map(p => {
+        const active = +p.is_active === 1;
+        return `<div class="acad-week-row"><span class="acad-week-num">${esc(p.school_year || '')} - ${esc(p.semester || '')}</span><span class="acad-badge ${active ? 'acad-badge-active' : 'acad-badge-inactive'}">${active ? 'Active' : 'Inactive'}</span></div>`;
+      }).join('') + (periods.length > 8 ? `<div class="acad-week-row"><span class="acad-week-dates">+${periods.length - 8} more semesters</span><span class="acad-week-dates">${weeks} weeks each</span></div>` : '')
+    : '<div class="acad-week-row"><span class="acad-week-dates">No semester periods yet</span><span class="acad-week-dates">The global count will apply when periods are added.</span></div>';
+  wrap.innerHTML = `<div class="acad-week-card" style="grid-column:1/-1;">
+    <div class="acad-week-card-head">
+      <div class="acad-week-card-title">
+        <i class="fas fa-clock" style="color:var(--primary)"></i>
+        Global academic weeks
+        <span class="acad-badge acad-badge-active">Applies to all</span>
+      </div>
+    </div>
+    <div class="acad-week-card-body">
+      <div class="acad-week-input-row">
+        <label>Total weeks:</label>
+        <input type="number" id="acadGlobalWeeks" min="1" max="30" value="${weeks}" oninput="renderAcademicWeekPreview()">
+        <span style="font-size:.75rem;color:var(--text-muted)">for every semester and year level</span>
+      </div>
+      <div class="acad-week-summary">Configured: <strong id="acadGlobalWeekCount">${weeks} week${weeks === 1 ? '' : 's'}</strong> | Week 1 to Week ${weeks}</div>
+      <div id="acadGlobalWeekList" style="margin-top:10px;max-height:200px;overflow-y:auto"></div>
+      <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border);">
+        <div class="acad-section-label" style="margin-bottom:8px">Coverage</div>
+        ${periodList}
+        <div class="acad-week-row"><span class="acad-week-num">Year levels</span><span class="acad-week-dates">1st to 4th year use ${weeks} weeks</span></div>
+      </div>
+    </div>
+  </div>`;
+  renderAcademicWeekPreview();
+}
+function renderAcademicWeekPreview() {
+  const input = document.getElementById('acadGlobalWeeks');
+  const list = document.getElementById('acadGlobalWeekList');
+  const count = document.getElementById('acadGlobalWeekCount');
+  if (!input || !list || !count) return;
+  const weeks = Math.max(1, Math.min(30, parseInt(input.value, 10) || 1));
+  input.value = weeks;
+  count.textContent = `${weeks} week${weeks === 1 ? '' : 's'}`;
+  const tabCount = document.getElementById('acadWeekCount');
+  if (tabCount) tabCount.textContent = String(weeks);
+  if (weeks > 8) {
+    list.innerHTML = `<div style="font-size:.75rem;color:var(--text-muted);padding:4px 0">Week 1 through Week ${weeks} - labels generated automatically.</div>`;
+    return;
+  }
+  let html = '';
+  for (let i = 1; i <= weeks; i++) {
+    html += `<div class="acad-week-row"><span class="acad-week-num">Week ${i}</span><span class="acad-week-dates">Label: Week ${i}</span></div>`;
+  }
+  list.innerHTML = html;
+}
+async function saveAcademicWeeks() {
+  const input = document.getElementById('acadGlobalWeeks');
+  const weeks = Math.max(1, Math.min(30, parseInt(input?.value, 10) || 18));
+  try {
+    const res = await fetch('API/Admin/academic_week_setting.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ week_count: weeks })
+    });
+    const data = await res.json();
+    if (data.status !== 'success') throw new Error(data.message || 'Save failed');
+    setGlobalAcademicWeeks(data.week_count || weeks);
+    renderAcademicWeeks();
+    renderSemPeriods();
+    const toast = document.getElementById('wk-toast');
+    if (toast) {
+      toast.style.display = 'flex';
+      setTimeout(() => { toast.style.display = 'none'; }, 2800);
+    }
+    showToast(`Academic weeks set to ${weeks} for all semesters and year levels.`, 'success');
+  } catch (err) {
+    setGlobalAcademicWeeks(weeks);
+    renderAcademicWeeks();
+    renderSemPeriods();
+    showToast((err && err.message) || 'Saved locally only. Server sync failed.', 'warning');
+  }
 }
 
 /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
@@ -5937,7 +6756,200 @@ function loadDashboard() {
     $('#st-subjects').text(s.total_subjects);
     $('#st-classes').text(s.total_classes);
     $('#st-deans').text(s.active_deans);
+    renderAdminDashboardCharts(res.analytics || {});
   }).then(() => loadDeptGrid('dashDeptGrid', false));
+}
+
+function renderAdminDashboardCharts(analytics) {
+  if (typeof Chart === 'undefined') return;
+
+  const departments = Array.isArray(analytics.departments) ? analytics.departments : [];
+  const topPrograms = Array.isArray(analytics.top_programs) ? analytics.top_programs : [];
+  const trend = Array.isArray(analytics.trend) ? analytics.trend : [];
+
+  renderDashboardGrowthChart(trend);
+  renderDashboardDepartmentStudentsChart(departments);
+  renderDashboardDepartmentFootprintChart(departments);
+  renderDashboardTopPrograms(topPrograms);
+}
+
+function renderDashboardGrowthChart(rows) {
+  const ctx = document.getElementById('adminGrowthChart');
+  if (!ctx) return;
+  const labels = rows.map(row => row.label || '');
+  const students = rows.map(row => Number(row.students || 0));
+  const faculty = rows.map(row => Number(row.faculty || 0));
+  const programs = rows.map(row => Number(row.programs || 0));
+
+  if (dashboardGrowthChart) dashboardGrowthChart.destroy();
+  dashboardGrowthChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Students',
+          data: students,
+          borderColor: '#1a9e78',
+          backgroundColor: 'rgba(26,158,120,.14)',
+          fill: true,
+          borderWidth: 3,
+          pointRadius: 3,
+          pointHoverRadius: 4,
+          tension: .35
+        },
+        {
+          label: 'Faculty',
+          data: faculty,
+          borderColor: '#1f73db',
+          backgroundColor: 'rgba(31,115,219,.08)',
+          fill: false,
+          borderWidth: 2.5,
+          pointRadius: 3,
+          pointHoverRadius: 4,
+          tension: .35
+        },
+        {
+          label: 'Programs',
+          data: programs,
+          borderColor: '#f57c00',
+          backgroundColor: 'rgba(245,124,0,.08)',
+          fill: false,
+          borderWidth: 2.5,
+          borderDash: [6, 6],
+          pointRadius: 3,
+          pointHoverRadius: 4,
+          tension: .3
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { position: 'top', align: 'start', labels: { boxWidth: 12, usePointStyle: true } }
+      },
+      scales: {
+        x: { grid: { display: false } },
+        y: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: 'rgba(148,163,184,.16)' } }
+      }
+    }
+  });
+}
+
+function renderDashboardDepartmentStudentsChart(rows) {
+  const ctx = document.getElementById('departmentStudentsChart');
+  if (!ctx) return;
+  const sorted = [...rows].sort((a, b) => Number(b.students || 0) - Number(a.students || 0));
+  const labels = sorted.map(row => row.code || row.name || '—');
+  const values = sorted.map(row => Number(row.students || 0));
+
+  if (dashboardDeptStudentsChart) dashboardDeptStudentsChart.destroy();
+  dashboardDeptStudentsChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Students',
+        data: values,
+        backgroundColor: ['#1a9e78', '#1f73db', '#f57c00', '#7b1fa2', '#c62828', '#00838f', '#455a64', '#3949ab'],
+        borderRadius: 10,
+        borderSkipped: false,
+        maxBarThickness: 28
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      indexAxis: 'y',
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            title(items) {
+              const row = sorted[items[0]?.dataIndex ?? 0];
+              return row ? `${row.code} - ${row.name}` : '';
+            },
+            label(ctx) { return `${ctx.raw} students`; }
+          }
+        }
+      },
+      scales: {
+        x: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: 'rgba(148,163,184,.16)' } },
+        y: { grid: { display: false } }
+      }
+    }
+  });
+}
+
+function renderDashboardDepartmentFootprintChart(rows) {
+  const ctx = document.getElementById('departmentFootprintChart');
+  if (!ctx) return;
+  const sorted = [...rows].sort((a, b) => Number(b.students || 0) - Number(a.students || 0));
+  const labels = sorted.map(row => row.code || row.name || '—');
+
+  if (dashboardDeptFootprintChart) dashboardDeptFootprintChart.destroy();
+  dashboardDeptFootprintChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Programs',
+          data: sorted.map(row => Number(row.programs || 0)),
+          backgroundColor: 'rgba(31,115,219,.88)',
+          borderRadius: 8,
+          borderSkipped: false
+        },
+        {
+          label: 'Subjects',
+          data: sorted.map(row => Number(row.subjects || 0)),
+          backgroundColor: 'rgba(245,124,0,.82)',
+          borderRadius: 8,
+          borderSkipped: false
+        },
+        {
+          label: 'Classes',
+          data: sorted.map(row => Number(row.classes || 0)),
+          backgroundColor: 'rgba(26,158,120,.82)',
+          borderRadius: 8,
+          borderSkipped: false
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { position: 'top', align: 'start', labels: { boxWidth: 12, usePointStyle: true } }
+      },
+      scales: {
+        x: { grid: { display: false } },
+        y: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: 'rgba(148,163,184,.16)' } }
+      }
+    }
+  });
+}
+
+function renderDashboardTopPrograms(rows) {
+  const el = document.getElementById('topProgramList');
+  if (!el) return;
+  if (!rows.length) {
+    el.innerHTML = '<div class="text-center text-muted py-3">No program analytics available yet.</div>';
+    return;
+  }
+
+  el.innerHTML = rows.map(row => `
+    <div class="top-program-item">
+      <div class="top-program-main">
+        <div class="top-program-title">${esc(row.code || '—')} - ${esc(row.name || 'Unnamed Program')}</div>
+        <div class="top-program-meta">${esc(row.department_code || '—')} • ${esc(row.department_name || 'No Department')}</div>
+      </div>
+      <div class="top-program-count">${Number(row.students || 0)}</div>
+    </div>
+  `).join('');
 }
 
 /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
@@ -5981,6 +6993,7 @@ function renderDeptGrid(targetId, depts, editable) {
       <button class="btn btn-sm btn-success text-white" onclick="openAssignFromDept(${d.id})" title="Assign dean"><i class="fas fa-user-plus"></i></button>` : '';
     return `<div class="dept-card${inactive?' opacity-50':''}">
       <div class="dept-header" style="border-left:4px solid ${color};">
+        ${buildDeptImageMarkup(d, color)}
         <div class="dept-dot" style="background:${color};"></div>
         <span class="dept-code-badge" style="background:${color}22;color:${color};border:1px solid ${color}44;">${esc(d.dept_code)}</span>
         <div class="dept-name">${esc(d.dept_name)}</div>
@@ -5997,9 +7010,12 @@ function renderDeptGrid(targetId, depts, editable) {
 
 function openDeptModal() {
   editingDeptId = null; deptProgLinked = [];
+  currentDeptImagePath = ''; deptImageChanged = false;
   $('#deptModalTitle').text('Add Department');
   $('#deptForm')[0].reset(); $('#dept_id').val('');
+  const fileInput = document.getElementById('dept_image_file'); if (fileInput) fileInput.value = '';
   renderDeptProgList();
+  renderDeptImagePreview('', '');
   bootstrap.Modal.getOrCreateInstance(document.getElementById('deptModal')).show();
 }
 function editDept(id) {
@@ -6007,10 +7023,30 @@ function editDept(id) {
   editingDeptId = id; $('#deptModalTitle').text('Edit Department');
   $('#dept_id').val(d.id); $('#dept_code').val(d.dept_code);
   $('#dept_name').val(d.dept_name); $('#dept_desc').val(d.description || '');
+  currentDeptImagePath = d.dept_image || '';
+  deptImageChanged = false;
+  const fileInput = document.getElementById('dept_image_file'); if (fileInput) fileInput.value = '';
   deptProgLinked = allPrograms.filter(p => p.department_id == id);
   renderDeptProgList();
+  renderDeptImagePreview(currentDeptImagePath, d.dept_name || '');
   bootstrap.Modal.getOrCreateInstance(document.getElementById('deptModal')).show();
 }
+document.getElementById('dept_image_file')?.addEventListener('change', function() {
+  const file = this.files && this.files[0];
+  if (!file) {
+    renderDeptImagePreview(currentDeptImagePath, document.getElementById('dept_name')?.value || '');
+    return;
+  }
+  deptImageChanged = true;
+  const reader = new FileReader();
+  reader.onload = e => renderDeptImagePreview(String(e.target?.result || ''), document.getElementById('dept_name')?.value || '');
+  reader.readAsDataURL(file);
+});
+document.getElementById('dept_name')?.addEventListener('input', function() {
+  const fileInput = document.getElementById('dept_image_file');
+  if (fileInput?.files?.length) return;
+  renderDeptImagePreview(currentDeptImagePath, this.value || '');
+});
 function renderDeptProgList() {
   const el = document.getElementById('deptProgList');
   if (!deptProgLinked.length) { el.innerHTML = '<div class="prog-list-empty">No programs linked yet. Select from the dropdown above.</div>'; return; }
@@ -6028,6 +7064,9 @@ function removeProgFromDept(id) { deptProgLinked = deptProgLinked.filter(p => St
 function submitDept() {
   const code = $('#dept_code').val().trim(), name = $('#dept_name').val().trim();
   if (!code || !name) { showToast('Code and name are required.','error'); return; }
+  const fileInput = document.getElementById('dept_image_file');
+  const file = fileInput?.files?.[0];
+  if (file && file.size > 5 * 1024 * 1024) { showToast('Department image must be 5 MB or smaller.','error'); return; }
   $.ajax({
     url:'API/Admin/save_department.php', type:'POST', contentType:'application/json',
     data:JSON.stringify({id:$('#dept_id').val()||null,dept_code:code,dept_name:name,description:$('#dept_desc').val().trim()}),
@@ -6035,17 +7074,32 @@ function submitDept() {
     success(r) {
       if (r.status !== 'success') { showToast(r.message,'error'); return; }
       const savedDeptId = parseInt(r.id) || parseInt($('#dept_id').val()) || editingDeptId;
-      if (savedDeptId) {
-        $.ajax({
-          url:'API/Admin/link_programs_to_dept.php', type:'POST', contentType:'application/json',
-          data:JSON.stringify({department_id:savedDeptId,program_ids:deptProgLinked.map(p=>parseInt(p.id))}),
-          dataType:'json',
-          success(lr){const linked=lr.linked||0;showToast(linked?`${r.message} (${linked} program${linked!==1?'s':''} linked)`:r.message,'success');},
-          error(){showToast(r.message+' - but program linking failed.','warning');}
-        });
-      } else { showToast(r.message,'success'); }
-      bootstrap.Modal.getInstance(document.getElementById('deptModal')).hide();
-      loadDeptGrid('deptGrid',true); loadDeptGrid('dashDeptGrid',false); loadProgramsDropdown();
+      const finishSave = () => {
+        if (savedDeptId) {
+          $.ajax({
+            url:'API/Admin/link_programs_to_dept.php', type:'POST', contentType:'application/json',
+            data:JSON.stringify({department_id:savedDeptId,program_ids:deptProgLinked.map(p=>parseInt(p.id))}),
+            dataType:'json',
+            success(lr){const linked=lr.linked||0;showToast(linked?`${r.message} (${linked} program${linked!==1?'s':''} linked)`:r.message,'success');},
+            error(){showToast(r.message+' - but program linking failed.','warning');}
+          });
+        } else { showToast(r.message,'success'); }
+        bootstrap.Modal.getInstance(document.getElementById('deptModal')).hide();
+        loadDeptGrid('deptGrid',true); loadDeptGrid('dashDeptGrid',false); loadProgramsDropdown();
+      };
+
+      if (savedDeptId && file) {
+        uploadDepartmentImage(savedDeptId)
+          .then(() => finishSave())
+          .catch(err => {
+            showToast((err && err.message) ? `${r.message} - ${err.message}` : `${r.message} - image upload failed.`, 'warning');
+            bootstrap.Modal.getInstance(document.getElementById('deptModal')).hide();
+            loadDeptGrid('deptGrid',true); loadDeptGrid('dashDeptGrid',false); loadProgramsDropdown();
+          });
+        return;
+      }
+
+      finishSave();
     },
     error(){showToast('Server error.','error');}
   });
@@ -6205,12 +7259,17 @@ function loadDeptDropdown() {
 let semPeriods = [];
 
 async function loadSemPeriods() {
-  document.getElementById('semPeriodList').innerHTML =
-    '<div style="text-align:center;padding:2rem;color:var(--text-muted);"><i class="fas fa-spinner fa-spin"></i> Loading...</div>';
+  const listEl = document.getElementById('semPeriodList');
+  if (listEl) {
+    listEl.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text-muted);"><i class="fas fa-spinner fa-spin"></i> Loading...</div>';
+  }
   try {
     const r = await (await fetch('API/Admin/get_all_semesters.php')).json();
     semPeriods = r.data || [];
+    const semCount = document.getElementById('acadSemCount');
+    if (semCount) semCount.textContent = String(semPeriods.length);
     renderSemPeriods();
+    renderAcademicWeeks();
     checkSemesterDue();
   } catch { showToast('Failed to load periods', 'error'); }
 }
@@ -6273,24 +7332,15 @@ function renderSemPeriods() {
       ? `${fmtDate(p.start_date)} - ${fmtDate(p.end_date)}`
       : 'No dates set';
 
-    let statusBadge = '';
+    let statusBadge = '<span class="acad-badge acad-badge-inactive">Inactive</span>';
     if (isActive && isExpired) {
-      statusBadge = `<span style="display:inline-flex;align-items:center;gap:4px;background:#fff3cd;color:#b45309;border:1px solid #f59e0b;border-radius:20px;padding:2px 10px;font-size:.7rem;font-weight:700;white-space:nowrap;">
-        <i class="fas fa-exclamation-triangle" style="font-size:.55rem;"></i>Ended
-      </span>`;
+      statusBadge = '<span class="acad-badge acad-badge-warning"><i class="fas fa-exclamation-triangle"></i> Ended</span>';
     } else if (isActive) {
-      statusBadge = `<span style="display:inline-flex;align-items:center;gap:4px;background:var(--primary-light);color:var(--primary);border:1px solid var(--primary);border-radius:20px;padding:2px 10px;font-size:.7rem;font-weight:700;white-space:nowrap;">
-        <span style="width:6px;height:6px;border-radius:50%;background:#16a34a;display:inline-block;"></span>Active
-      </span>`;
+      statusBadge = '<span class="acad-badge acad-badge-active"><span style="width:6px;height:6px;border-radius:50%;background:#16a34a;display:inline-block;"></span> Active</span>';
     }
 
     const setActiveBtnHtml = !isActive ? `
-      <button onclick="semSetActive(${p.id})"
-        style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:var(--radius-sm);
-               border:1.5px solid var(--border);background:transparent;font-size:.78rem;font-weight:600;
-               color:var(--text-muted);cursor:pointer;white-space:nowrap;font-family:inherit;transition:all .15s;"
-        onmouseover="this.style.borderColor='var(--primary)';this.style.color='var(--primary)';this.style.background='var(--primary-light)'"
-        onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-muted)';this.style.background='transparent'">
+      <button class="btn btn-ghost btn-sm" onclick="semSetActive(${p.id})">
         <i class="fas fa-check" style="font-size:.65rem;"></i> Set active
       </button>` : '';
 
@@ -6298,20 +7348,18 @@ function renderSemPeriods() {
       ? `disabled title="Deactivate this semester first before deleting" style="opacity:.35;cursor:not-allowed;"`
       : `onclick="semOpenDelete(${p.id})" title="Delete"`;
 
-    return `<div style="background:var(--surface);border:${isActive ? '2px solid var(--primary)' : '1px solid var(--border)'};
-               border-radius:var(--radius);padding:14px 18px;display:flex;align-items:center;gap:14px;
-               transition:box-shadow .15s,border-color .15s;" class="sem-period-row"
-           onmouseover="this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.boxShadow='none'">
+    return `<div class="sem-row${isActive ? ' active-row' : ''}">
       <div style="flex:1;min-width:0;">
-        <div style="font-size:.92rem;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <div class="sem-name">
           ${esc(p.school_year)} - ${esc(p.semester)}
           ${statusBadge}
         </div>
-        <div style="font-size:.76rem;color:var(--text-muted);margin-top:3px;">
+        <div class="sem-date">
           <i class="fas fa-calendar me-1" style="opacity:.5;"></i>${dateStr}
+          <span class="acad-badge acad-linked-badge">${getGlobalAcademicWeeks()} weeks</span>
         </div>
       </div>
-      <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+      <div class="sem-actions">
         ${setActiveBtnHtml}
         <button class="btn-act btn-act-edit" onclick="semOpenEdit(${p.id})" title="Edit">
           <i class="fas fa-pencil-alt"></i> Edit
@@ -6695,7 +7743,7 @@ function ysEdit(id) {
     $('#ysCourse').val(r.course_id);
     $('#ysYear').val(r.year_level);
     $('#ysSectionCount').val(r.section_count);
-    document.getElementById('section-yearsections').scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('section-academic')?.scrollIntoView({ behavior: 'smooth' });
     showToast('Loaded for editing - change values and click Save Config.', 'info');
 }
 
@@ -6833,7 +7881,7 @@ function loadYsAllOverview() {
       });
 }
 
-/* Called by showSection('yearsections') */
+/* Called by showSection('academic') */
 function initYsSection() {
     populateYsDeptDropdown();
     populateYsCourseDropdown(document.getElementById('ysDept')?.value || '');
@@ -7078,6 +8126,7 @@ function loadYsAllOverview(deptId = '') {
 
     $.getJSON('API/Admin/fetch_year_section_config.php', res => {
         let all = res.data || [];
+        allYsConfigs = all;
         if (deptId) {
             const courseIds = new Set((allPrograms || [])
                 .filter(p => String(p.department_id || '') === String(deptId))
@@ -7086,6 +8135,8 @@ function loadYsAllOverview(deptId = '') {
         }
 
         if (!all.length) {
+            const count = document.getElementById('acadYsCount');
+            if (count) count.textContent = '0';
             tbody.innerHTML = '<tr><td colspan="8" class="ys-empty-state"><i class="fas fa-layer-group"></i>No configurations set yet.</td></tr>';
             return;
         }
@@ -7098,16 +8149,21 @@ function loadYsAllOverview(deptId = '') {
                     course_id: r.course_id,
                     course_code: r.course_code,
                     course_name: r.course_name,
-                    levels: {1:0,2:0,3:0,4:0}
+                    levels: {1:null,2:null,3:null,4:null}
                 };
             }
-            grouped[key].levels[r.year_level] = parseInt(r.section_count) || 0;
+            grouped[key].levels[r.year_level] = {
+                id: r.id,
+                count: parseInt(r.section_count) || 0
+            };
         });
 
         const rows = Object.values(grouped).sort((a,b) => a.course_code.localeCompare(b.course_code));
+        const count = document.getElementById('acadYsCount');
+        if (count) count.textContent = String(rows.length);
         tbody.innerHTML = rows.map((g, i) => {
-            const pill = n => n > 0
-              ? `<span class="ys-count-pill">${n}</span>`
+            const pill = cfg => cfg && cfg.count > 0
+              ? `<button type="button" class="ys-count-pill" onclick="ysEdit('${esc(cfg.id)}')" title="Edit this year level">${cfg.count}</button>`
               : '<span class="ys-empty-pill">-</span>';
             return `<tr>
               <td>${i + 1}</td>

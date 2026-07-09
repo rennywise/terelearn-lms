@@ -104,4 +104,23 @@ while($qr && $q=$qr->fetch_assoc()){
 $aid=$conn->real_escape_string($att['id']);$ans=[];
 $ar=$conn->query("SELECT question_id,selected_choice_id,answered_at FROM tblquizanswer WHERE attempt_id='$aid'");
 while($ar && $a=$ar->fetch_assoc())$ans[$a['question_id']]=$a;
-ok(['attempt'=>$att,'post'=>['id'=>$p['id'],'title'=>$p['title'],'post_type'=>$p['post_type'],'time_mode'=>$p['time_mode'],'quiz_mode'=>$p['quiz_mode'],'time_limit_seconds'=>$p['time_limit_seconds'],'close_at'=>$p['close_at'],'max_attempts'=>$p['max_attempts']],'questions'=>$qs,'answers'=>$ans]);
+ok(['attempt'=>$att,'post'=>[
+  'id'=>$p['id'],
+  'title'=>$p['title'],
+  'post_type'=>$p['post_type'],
+  'time_mode'=>$p['time_mode'],
+  'quiz_mode'=>$p['quiz_mode'],
+  'time_limit_seconds'=>$p['time_limit_seconds'],
+  'close_at'=>$p['close_at'],
+  'max_attempts'=>$p['max_attempts'],
+  'class_code'=>$p['class_code'] ?? '',
+  'class_semester'=>$p['class_semester'] ?? '',
+  'section'=>$p['section'] ?? '',
+  'year_level'=>$p['year_level'] ?? '',
+  'schedule'=>$p['schedule'] ?? '',
+  'subject_code'=>$p['subject_code'] ?? '',
+  'subject_name'=>$p['subject_name'] ?? '',
+  'course_code'=>$p['course_code'] ?? '',
+  'course_name'=>$p['course_name'] ?? '',
+  'faculty_name'=>$p['faculty_name'] ?? ''
+],'questions'=>$qs,'answers'=>$ans]);

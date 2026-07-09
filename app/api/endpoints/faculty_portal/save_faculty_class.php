@@ -15,6 +15,18 @@ session_start();
 require_once __DIR__ . '/../../core/db_connect.php';
 require_once __DIR__ . '/subject_palette_helper.php';
 
+function generateJoinCode(mysqli $conn): string {
+    for ($attempt = 0; $attempt < 20; $attempt++) {
+        $code = strtoupper(substr(bin2hex(random_bytes(4)), 0, 7));
+        $chk = $conn->prepare("SELECT id FROM tblclass WHERE join_code = ? LIMIT 1");
+        $chk->bind_param('s', $code);
+        $chk->execute();
+        $exists = $chk->get_result()->fetch_assoc();
+        $chk->close();
+        if (!$exists) return $code;
+    }
+    return strtoupper(substr(md5(uniqid((string)mt_rand(), true)), 0, 7));
+}
 
 if (!isset($_SESSION['user_id']) || (int)($_SESSION['user_level_id'] ?? 0) !== 2) {
     http_response_code(401);
@@ -198,6 +210,8 @@ if ($class_id) {
     if (!$prefix) $prefix = 'CLS';
     $rand       = strtoupper(substr(md5(uniqid('', true)), 0, 5));
     $class_code = $prefix . '-' . $rand;
+    $join_code = generateJoinCode($conn);
+    $join_link_token = bin2hex(random_bytes(24));
 
     /* UUID v4 */
     $new_id = sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
@@ -212,14 +226,14 @@ if ($class_id) {
         INSERT INTO tblclass
             (id, class_code, subject_id, course_id, section, class_semester,
              semester_setting_id, year_level, schedule, break_time, class_days,
-             faculty_id, source, banner_palette, is_active, is_deleted)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'faculty', ?, 1, 0)
+             faculty_id, source, banner_palette, join_code, join_link_token, is_active, is_deleted)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'faculty', ?, ?, ?, 1, 0)
     ");
-    $ins->bind_param('ssssssissssss',
+    $ins->bind_param('ssssssissssssss',
         $new_id, $class_code, $subject_id, $course_id, $section,
         $class_semester, $semester_setting_id, $year_level,
         $schedule, $break_time, $class_days, $faculty_id,
-        $banner_palette
+        $banner_palette, $join_code, $join_link_token
     );
 
     if (!$ins->execute()) {
@@ -235,6 +249,8 @@ if ($class_id) {
         'message'         => 'Class created successfully.',
         'class_id'        => $new_id,
         'banner_palette'  => $banner_palette,
+        'join_code'       => $join_code,
+        'join_token'      => $join_link_token,
     ]);
 }
 

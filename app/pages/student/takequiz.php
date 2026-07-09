@@ -123,6 +123,90 @@ body{
   border-radius:var(--radius);box-shadow:var(--shadow);
   overflow:hidden;
 }
+.tq-exam-paper{
+  display:none;
+  padding:1.05rem 1.25rem 1rem;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg,#fff,var(--bg));
+}
+.tq-exam-title{
+  text-align:center;
+  font-size:1rem;
+  font-weight:800;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  color:var(--text);
+}
+.tq-exam-sub{
+  text-align:center;
+  margin-top:.18rem;
+  font-size:.78rem;
+  font-weight:700;
+  color:var(--text-muted);
+}
+.tq-exam-meta{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:.45rem .8rem;
+  margin-top:.85rem;
+  padding-top:.8rem;
+  border-top:1px solid var(--border);
+}
+.tq-exam-meta-row{
+  display:grid;
+  grid-template-columns:92px minmax(0,1fr);
+  gap:.35rem;
+  align-items:baseline;
+  font-size:.78rem;
+  min-width:0;
+}
+.tq-exam-meta-row span{
+  color:var(--text-muted);
+  font-weight:700;
+}
+.tq-exam-meta-row strong{
+  color:var(--text);
+  font-weight:800;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.tq-exam-instructions{
+  margin-top:.85rem;
+  padding:.7rem .8rem;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:var(--surface);
+  color:var(--text-muted);
+  font-size:.76rem;
+  line-height:1.45;
+}
+.tq-exam-instructions strong{
+  display:block;
+  margin-bottom:.25rem;
+  color:var(--text);
+  font-size:.72rem;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+}
+.tq-exam-test-label{
+  margin-top:.8rem;
+  padding:.48rem .65rem;
+  border-radius:8px;
+  background:var(--primary-light);
+  color:var(--primary-dark);
+  font-size:.74rem;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.03em;
+}
+@media(max-width:620px){
+  .tq-exam-paper{padding:.9rem .9rem .85rem;}
+  .tq-exam-meta{grid-template-columns:1fr;gap:.38rem;}
+  .tq-exam-meta-row{grid-template-columns:86px minmax(0,1fr);font-size:.74rem;}
+  .tq-exam-title{font-size:.92rem;}
+}
 
 /* Question header */
 .tq-q-header{
@@ -378,6 +462,23 @@ body{
 
     <!-- Quiz card -->
     <div id="tqCard" class="tq-card" style="display:none">
+      <div id="tqExamPaper" class="tq-exam-paper">
+        <div class="tq-exam-title" id="tqExamTitle">Examination</div>
+        <div class="tq-exam-sub" id="tqExamSubtitle">Academic Year</div>
+        <div class="tq-exam-meta">
+          <div class="tq-exam-meta-row"><span>Course Code:</span><strong id="tqExamCourseCode">-</strong></div>
+          <div class="tq-exam-meta-row"><span>Course Title:</span><strong id="tqExamCourseTitle">-</strong></div>
+          <div class="tq-exam-meta-row"><span>Duration:</span><strong id="tqExamDuration">-</strong></div>
+          <div class="tq-exam-meta-row"><span>Date:</span><strong id="tqExamDate">-</strong></div>
+          <div class="tq-exam-meta-row"><span>Section:</span><strong id="tqExamSection">-</strong></div>
+          <div class="tq-exam-meta-row"><span>Instructor:</span><strong id="tqExamInstructor">Faculty</strong></div>
+        </div>
+        <div class="tq-exam-instructions">
+          <strong>General Instruction</strong>
+          Read each question carefully. Choose the best answer and submit only when you are finished. Leaving or refreshing the page may interrupt your exam.
+        </div>
+        <div class="tq-exam-test-label" id="tqExamTestLabel">TEST I. MULTIPLE CHOICE</div>
+      </div>
       <!-- Question header -->
       <div class="tq-q-header">
         <span class="tq-q-counter" id="tqQCounter">Question 1 of —</span>
@@ -501,6 +602,48 @@ window.addEventListener('beforeunload', e => {
 });
 
 function esc(v){ return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function setText(id, value){
+  const el = document.getElementById(id);
+  if (el) el.textContent = value || '-';
+}
+function formatExamDuration(seconds){
+  const s = parseInt(seconds, 10) || 0;
+  if (!s) return 'No time limit';
+  const h = Math.floor(s / 3600);
+  const m = Math.round((s % 3600) / 60);
+  if (h && m) return `${h} hr ${m} min`;
+  if (h) return `${h} hr${h === 1 ? '' : 's'}`;
+  return `${Math.max(1, m)} min`;
+}
+function formatExamDate(value){
+  const raw = value ? String(value).replace(' ', 'T') : '';
+  const d = raw ? new Date(raw) : new Date();
+  if (Number.isNaN(d.getTime())) return new Date().toLocaleDateString(undefined, { month:'short', day:'numeric', year:'numeric' });
+  return d.toLocaleDateString(undefined, { month:'short', day:'numeric', year:'numeric' });
+}
+function renderExamTemplate(post, questions){
+  const paper = document.getElementById('tqExamPaper');
+  if (!paper) return;
+  const isExam = normalizeAssessmentKind(post?.post_type || assessmentKind) === 'exam';
+  paper.style.display = isExam ? 'block' : 'none';
+  if (!isExam) return;
+
+  const title = String(post?.title || 'Examination').trim();
+  const semester = String(post?.class_semester || '').trim();
+  const section = [post?.year_level, post?.section].filter(Boolean).join('-') || post?.class_code || '-';
+  const points = (questions || []).reduce((sum, q) => sum + (parseFloat(q.points) || 1), 0);
+  const pointText = points ? ` (${Number(points.toFixed(2)).toString().replace(/\.0+$/,'').replace(/(\.\d*[1-9])0+$/,'$1')} pts)` : '';
+
+  setText('tqExamTitle', /\bexam/i.test(title) ? title.toUpperCase() : `${title} EXAMINATION`.toUpperCase());
+  setText('tqExamSubtitle', semester || 'Examination');
+  setText('tqExamCourseCode', post?.subject_code || post?.course_code || post?.class_code || '-');
+  setText('tqExamCourseTitle', post?.subject_name || post?.course_name || '-');
+  setText('tqExamDuration', formatExamDuration(post?.time_limit_seconds));
+  setText('tqExamDate', formatExamDate(post?.close_at));
+  setText('tqExamSection', section);
+  setText('tqExamInstructor', post?.faculty_name || 'Faculty');
+  setText('tqExamTestLabel', `TEST I. MULTIPLE CHOICE: Choose the best answer.${pointText}`);
+}
 function showState(id){
   ['tqStateLoading','tqStateError','tqStateWaiting','tqCard','tqResult'].forEach(s=>{
     const el=document.getElementById(s);
@@ -649,6 +792,7 @@ async function _beginAttempt(){
         state.answers[qid] = answers[qid].selected_choice_id || null;
       });
     }
+    renderExamTemplate(post || {}, questions || []);
 
     state.current = 0;
 

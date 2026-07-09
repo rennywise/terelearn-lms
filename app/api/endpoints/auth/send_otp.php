@@ -13,6 +13,10 @@
 header('Content-Type: application/json');
 ob_start();
 
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
+
 // ── CONFIG ────────────────────────────────────────────────────────
 define('SMTP_HOST',               'smtp.gmail.com');
 define('SMTP_PORT',               587);
@@ -116,10 +120,23 @@ try {
     ob_end_clean();
 
     if ($sent === true) {
-        echo json_encode([
+        if ($channel === 'recovery') {
+            $_SESSION['recovery_otp'][$user['id']] = [
+                'attempts' => 0,
+                'locked_until' => 0
+            ];
+        }
+
+        $payload = [
             'success'     => true,
             'destination' => maskEmail($user['email'])
-        ]);
+        ];
+
+        if ($channel === 'recovery') {
+            $payload['user_id'] = $user['id'];
+        }
+
+        echo json_encode($payload);
     } else {
         // Return the exact SMTP error so you can debug it
         echo json_encode([

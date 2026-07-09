@@ -44,13 +44,27 @@ function get_quiz_post(mysqli $conn, string $pid, string $sid): array {
             q.time_limit_seconds,
             q.due_date AS quiz_due_date,
             q.live_started_at,
-            q.live_ended_at
+            q.live_ended_at,
+            cl.class_code,
+            cl.class_semester,
+            cl.section,
+            cl.year_level,
+            cl.schedule,
+            subj.subject_code,
+            subj.subject_name,
+            crs.course_code,
+            crs.course_name,
+            TRIM(CONCAT(COALESCE(fac.first_name, ''), ' ', COALESCE(fac.last_name, ''))) AS faculty_name
         FROM tblpost p
         INNER JOIN tblquiz q ON $joinQuiz
         INNER JOIN tblclassenrollment ce
             ON ce.class_id = p.class_id
            AND ce.student_id = '$esid'
            AND ce.enrollment_status = 'enrolled'
+        LEFT JOIN tblclass cl ON cl.id = p.class_id
+        LEFT JOIN tblsubject subj ON subj.id = cl.subject_id
+        LEFT JOIN tblcourse crs ON crs.id = cl.course_id
+        LEFT JOIN tblfaculty fac ON fac.id = cl.faculty_id
         WHERE p.id = '$epid'
           AND p.is_deleted = 0
           AND LOWER(COALESCE(p.post_type, '')) IN ('quiz', 'exam')

@@ -6,6 +6,11 @@
 header('Content-Type: application/json');
 require_once __DIR__ . '/../../core/db_connect.php';
 
+$colRes = $conn->query("SHOW COLUMNS FROM tbldepartment LIKE 'dept_image'");
+if ($colRes && $colRes->num_rows === 0) {
+    @$conn->query("ALTER TABLE tbldepartment ADD COLUMN dept_image varchar(255) DEFAULT NULL AFTER description");
+}
+
 $rows = [];
 $res = $conn->query("
     SELECT
@@ -13,6 +18,7 @@ $res = $conn->query("
         d.dept_code,
         d.dept_name,
         d.description,
+        d.dept_image,
         d.is_active,
         d.is_deleted,
         COUNT(c.id) AS program_count

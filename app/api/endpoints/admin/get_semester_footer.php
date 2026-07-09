@@ -16,6 +16,25 @@ $res = $conn->query(
 );
 $row = $res ? $res->fetch_assoc() : null;
 
+$weekCount = 18;
+$settingsTable = $conn->query(
+    "SELECT 1
+     FROM INFORMATION_SCHEMA.TABLES
+     WHERE TABLE_SCHEMA = DATABASE()
+       AND TABLE_NAME = 'tblacademicsettings'
+     LIMIT 1"
+);
+if ($settingsTable && $settingsTable->num_rows > 0) {
+    $weekRes = $conn->query(
+        "SELECT setting_value
+         FROM tblacademicsettings
+         WHERE setting_key = 'global_academic_weeks'
+         LIMIT 1"
+    );
+    $weekRow = $weekRes ? $weekRes->fetch_assoc() : null;
+    $weekCount = max(1, min(30, (int)($weekRow['setting_value'] ?? 18) ?: 18));
+}
+
 $conn->close();
 
 if ($row) {
@@ -23,11 +42,13 @@ if ($row) {
         'status'      => 'success',
         'semester'    => $row['semester'],
         'school_year' => $row['school_year'],
+        'week_count'  => $weekCount,
     ]);
 } else {
     echo json_encode([
         'status'      => 'success',
         'semester'    => 'Not Set',
+        'week_count'  => $weekCount,
         'school_year' => '—',
     ]);
 }

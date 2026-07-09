@@ -62,6 +62,10 @@ if (($file['size'] ?? 0) > 15 * 1024 * 1024) {
 $mcqCount = max(0, (int)($_POST['mcq_count'] ?? 10));
 $pointsPerQuestion = max(0, (float)($_POST['points_per_question'] ?? 0));
 $totalPoints = max(0, (float)($_POST['total_points'] ?? 0));
+$assessmentKind = strtolower(trim((string)($_POST['assessment_kind'] ?? 'quiz')));
+$assessmentKind = $assessmentKind === 'exam' ? 'exam' : 'quiz';
+$assessmentLabel = $assessmentKind === 'exam' ? 'exam' : 'quiz';
+$assessmentTitle = $assessmentKind === 'exam' ? 'examination' : 'quiz';
 $cognitiveList = "remembering, understanding, applying, analyzing, evaluating, creating";
 $defaultModel = trim($openaiApiKey) !== '' ? 'openai:gpt-4.1-mini' : 'gemini:gemini-2.5-flash-lite';
 $aiModelRaw = trim((string)($_POST['ai_model'] ?? $defaultModel));
@@ -603,18 +607,19 @@ if ($aiProvider === 'openai' && trim($extractedText) === '') {
 }
 
 $prompt = "
-You are helping a faculty member create a quiz for an LMS.
+You are helping a faculty member create a {$assessmentTitle} for an LMS.
 
-Generate quiz questions from the uploaded learning material.
+Generate {$assessmentLabel} questions from the uploaded learning material.
 
 Requirements:
 - Create exactly {$mcqCount} multiple-choice questions.
 - Total questions: {$totalQuestions}.
-- Use clear classroom-friendly wording.
+- Use clear classroom-friendly wording suitable for a formal {$assessmentTitle}.
 - Avoid questions that are too vague.
 - Provide exactly 4 choices per question.
 - Only one choice must be correct.
 - Return JSON only. No markdown. No explanation.
+- When this is an exam, treat the questions as TEST I. MULTIPLE CHOICE from the examination template.
 
 Difficulty Distribution (STRICTLY FOLLOW THESE EXACT COUNTS):
 - {$easyCount} questions must have difficulty: \"easy\" (basic recall, definitions, direct facts).

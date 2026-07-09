@@ -2,6 +2,19 @@
     header('Content-Type: application/json');
 require_once __DIR__ . '/../../core/db_connect.php';
 
+    function generateJoinCode($conn) {
+        for ($attempt = 0; $attempt < 20; $attempt++) {
+            $code = strtoupper(substr(bin2hex(random_bytes(4)), 0, 7));
+            $chk = $conn->prepare("SELECT id FROM tblclass WHERE join_code = ? LIMIT 1");
+            $chk->bind_param("s", $code);
+            $chk->execute();
+            $exists = $chk->get_result()->fetch_assoc();
+            $chk->close();
+            if (!$exists) return $code;
+        }
+        return strtoupper(substr(md5(uniqid((string)mt_rand(), true)), 0, 7));
+    }
+
     try {
         $raw = file_get_contents('php://input');
         $json = json_decode($raw, true);
@@ -114,21 +127,23 @@ require_once __DIR__ . '/../../core/db_connect.php';
             if ($insert_class_code === '') {
                 $insert_class_code = $subject_prefix . '-' . strtoupper(substr(md5(uniqid((string)mt_rand(), true)), 0, 5));
             }
+            $join_code = generateJoinCode($conn);
+            $join_link_token = bin2hex(random_bytes(24));
             
             $sql = "INSERT INTO tblclass
                     (id, class_code, subject_id, course_id, faculty_id, section,
                     class_semester, year_level, schedule, break_time, class_days,
-                    is_active, is_deleted, created_at, updated_at)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 0, NOW(), NOW())";
+                    join_code, join_link_token, is_active, is_deleted, created_at, updated_at)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 0, NOW(), NOW())";
             
             $stmt = $conn->prepare($sql);
             if (!$stmt) {
                 throw new Exception("Prepare failed: " . $conn->error);
             }
             
-            $stmt->bind_param("sssssssssss", 
+            $stmt->bind_param("sssssssssssss", 
                 $class_id, $insert_class_code, $subject_id, $course_id, $faculty_id, $section,
-                $semester, $year_level, $schedule, $break_time, $class_days);
+                $semester, $year_level, $schedule, $break_time, $class_days, $join_code, $join_link_token);
                 
             if (!$stmt->execute()) {
                 throw new Exception("Execute failed: " . $stmt->error);

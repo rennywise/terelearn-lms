@@ -33,7 +33,11 @@ $esc = $conn->real_escape_string($sid);
 // Find class
 $cr = $conn->query("SELECT id, faculty_id, class_code, section, year_level, class_semester,
                            semester_setting_id, is_active, subject_id
-                    FROM tblclass WHERE join_code='$jc' AND is_deleted=0 LIMIT 1");
+                    FROM tblclass
+                    WHERE (join_code='$jc' OR class_code='$jc')
+                      AND is_deleted=0
+                    ORDER BY CASE WHEN join_code='$jc' THEN 0 ELSE 1 END
+                    LIMIT 1");
 if (!$cr || !$cr->num_rows) { echo json_encode(['status'=>'error','message'=>'Class code not found.']); exit; }
 $cls = $cr->fetch_assoc();
 

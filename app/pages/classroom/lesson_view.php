@@ -12,6 +12,13 @@ if ($post_id === '') {
     header('Location: ' . TERELEARN_BASE_URL . 'student.php');
     exit;
 }
+
+$target = TERELEARN_BASE_URL . 'submitwork.php?post_id=' . urlencode($post_id);
+if ($class_id !== '') {
+    $target .= '&class_id=' . urlencode($class_id);
+}
+header('Location: ' . $target);
+exit;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -72,8 +79,27 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .empty{padding:1.5rem .8rem;text-align:center;color:var(--text-muted);font-size:.9rem}
 .state{padding:3rem 1rem;text-align:center;color:var(--text-muted)}
 .spinner{width:34px;height:34px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .75s linear infinite;margin:0 auto .8rem}
+.viewer-backdrop{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:1rem;background:rgba(9,17,30,.72);backdrop-filter:blur(4px)}
+.viewer-backdrop.show{display:flex}
+.viewer-shell{width:min(1100px,100%);height:min(760px,calc(100vh - 2rem));display:flex;flex-direction:column;overflow:hidden;border-radius:14px;background:#0b1220;box-shadow:0 22px 70px rgba(0,0,0,.35)}
+.viewer-toolbar{height:54px;display:flex;align-items:center;gap:.55rem;padding:.55rem .75rem;background:#121b2b;color:#fff;border-bottom:1px solid rgba(255,255,255,.1)}
+.viewer-title{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.9rem;font-weight:800}
+.viewer-badge{flex-shrink:0;border:1px solid rgba(126,224,191,.28);border-radius:999px;background:rgba(26,158,120,.16);color:#7ee0bf;padding:.18rem .5rem;font-size:.68rem;font-weight:900}
+.viewer-btn{width:34px;height:34px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.14);border-radius:9px;background:rgba(255,255,255,.06);color:#fff;text-decoration:none;cursor:pointer}
+.viewer-btn:hover{background:rgba(255,255,255,.12)}
+.viewer-body{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;overflow:auto;background:#0b1220}
+.viewer-frame{width:100%;height:100%;border:0;background:#fff}
+.viewer-img{display:block;max-width:100%;max-height:100%;object-fit:contain}
+.viewer-media{width:min(900px,92%);max-height:86%}
+.viewer-text{align-self:stretch;width:100%;min-height:100%;margin:0;padding:1rem;overflow:auto;background:#fff;color:#1c2027;white-space:pre-wrap;font:500 .86rem/1.55 Consolas,Monaco,monospace}
+.viewer-message{max-width:520px;padding:2rem;text-align:center;color:#cbd5e1}
+.viewer-message i{font-size:2.2rem;color:#7ee0bf;margin-bottom:.8rem}
+.viewer-message h3{font-size:1.05rem;color:#fff;margin-bottom:.35rem}
+.viewer-message p{font-size:.9rem;line-height:1.5;margin-bottom:1rem}
+.viewer-actions{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center}
+.viewer-actions a{display:inline-flex;align-items:center;gap:.4rem;padding:.58rem .85rem;border-radius:9px;background:var(--primary);color:#fff;text-decoration:none;font-weight:800;font-size:.82rem}
 @keyframes spin{to{transform:rotate(360deg)}}
-@media(max-width:780px){.hero-inner{flex-direction:column}.lesson-grid{grid-template-columns:1fr}.topbar{padding:0 .8rem}.hero{padding:1.2rem .9rem}.tabs-bar{padding:0 .8rem}}
+@media(max-width:780px){.hero-inner{flex-direction:column}.lesson-grid{grid-template-columns:1fr}.topbar{padding:0 .8rem}.hero{padding:1.2rem .9rem}.tabs-bar{padding:0 .8rem}.viewer-backdrop{padding:.45rem}.viewer-shell{height:calc(100vh - .9rem);border-radius:10px}.viewer-title{font-size:.8rem}}
 </style>
 </head>
 <body>
@@ -136,9 +162,26 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </section>
 </main>
 
+<div class="viewer-backdrop" id="fileViewer" aria-hidden="true">
+  <div class="viewer-shell" role="dialog" aria-modal="true" aria-labelledby="viewerTitle">
+    <div class="viewer-toolbar">
+      <span class="viewer-title" id="viewerTitle">File</span>
+      <span class="viewer-badge" id="viewerBadge">FILE</span>
+      <a class="viewer-btn" id="viewerDownload" href="#" target="_blank" download title="Download file"><i class="fas fa-download"></i></a>
+      <button class="viewer-btn" type="button" id="viewerClose" title="Close viewer"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="viewer-body" id="viewerBody"></div>
+  </div>
+</div>
+
 <script>
 const POST_ID = <?= json_encode($post_id) ?>;
 const darkToggle = document.getElementById('darkToggle');
+const fileViewer = document.getElementById('fileViewer');
+const viewerBody = document.getElementById('viewerBody');
+const viewerTitle = document.getElementById('viewerTitle');
+const viewerBadge = document.getElementById('viewerBadge');
+const viewerDownload = document.getElementById('viewerDownload');
 
 function esc(value) {
   return String(value == null ? '' : value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -146,6 +189,12 @@ function esc(value) {
 
 function shortUrl(url) {
   return String(url || '').replace(/^https?:\/\//, '').substring(0, 54);
+}
+
+function fileExt(name) {
+  const clean = String(name || '').split('?')[0].split('#')[0];
+  const part = clean.split('.').pop();
+  return part && part !== clean ? part.toLowerCase() : '';
 }
 
 function fileIcon(mime, name) {
@@ -167,12 +216,18 @@ function resourceCard(item) {
   const name = isLink ? shortUrl(href) : (item.file_name || item.name || 'File');
   const icon = type === 'youtube' ? 'fab fa-youtube' : `fas ${isLink ? 'fa-link' : fileIcon(item.mime_type || '', name)}`;
   const iconClass = type === 'youtube' ? 'resource-icon is-youtube' : 'resource-icon';
-  const sub = isLink ? 'Open this review link' : 'Open or download this lesson material';
-  return `<a class="resource-card" href="${esc(href)}" target="_blank" rel="noopener">
+  if (isLink) {
+    return `<a class="resource-card" href="${esc(href)}" target="_blank" rel="noopener">
+      <div class="${iconClass}"><i class="${icon}"></i></div>
+      <div class="resource-meta"><div class="resource-title">${esc(name)}</div><div class="resource-sub">Open this review link</div></div>
+      <i class="fa-solid fa-up-right-from-square resource-open"></i>
+    </a>`;
+  }
+  return `<button type="button" class="resource-card" data-file-trigger data-url="${esc(href)}" data-name="${esc(name)}" data-mime="${esc(item.mime_type || '')}" data-attach-id="${esc(item.id || '')}">
     <div class="${iconClass}"><i class="${icon}"></i></div>
-    <div class="resource-meta"><div class="resource-title">${esc(name)}</div><div class="resource-sub">${esc(sub)}</div></div>
-    <i class="fa-solid fa-up-right-from-square resource-open"></i>
-  </a>`;
+    <div class="resource-meta"><div class="resource-title">${esc(name)}</div><div class="resource-sub">View this lesson material</div></div>
+    <i class="fa-solid fa-eye resource-open"></i>
+  </button>`;
 }
 
 function renderList(el, items) {
@@ -219,6 +274,99 @@ async function loadLesson() {
   }
 }
 
+function closeFileViewer() {
+  fileViewer.classList.remove('show');
+  fileViewer.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+  viewerBody.innerHTML = '';
+}
+
+function showFrame(src, title) {
+  viewerBody.innerHTML = `<iframe class="viewer-frame" src="${esc(src)}" title="${esc(title || 'File preview')}"></iframe>`;
+}
+
+function showImage(src, label) {
+  viewerBody.innerHTML = '';
+  const img = document.createElement('img');
+  img.className = 'viewer-img';
+  img.alt = label || 'File preview';
+  img.src = src;
+  img.onerror = () => showNoPreview(src, label);
+  viewerBody.appendChild(img);
+}
+
+function showMedia(src, type, mime) {
+  viewerBody.innerHTML = '';
+  const media = document.createElement(type);
+  media.className = 'viewer-media';
+  media.controls = true;
+  media.src = src;
+  if (mime) media.type = mime;
+  media.onerror = () => showNoPreview(src, type);
+  viewerBody.appendChild(media);
+}
+
+function showText(src, label) {
+  viewerBody.innerHTML = '<div class="viewer-message"><i class="fas fa-spinner fa-spin"></i><h3>Loading preview</h3></div>';
+  fetch(src, { credentials: 'same-origin' })
+    .then(r => {
+      if (!r.ok) throw new Error('Preview unavailable');
+      return r.text();
+    })
+    .then(text => {
+      const pre = document.createElement('pre');
+      pre.className = 'viewer-text';
+      pre.textContent = text;
+      viewerBody.innerHTML = '';
+      viewerBody.appendChild(pre);
+    })
+    .catch(() => showNoPreview(src, label));
+}
+
+function showNoPreview(src, label) {
+  viewerBody.innerHTML = `<div class="viewer-message">
+    <i class="fas fa-file-arrow-down"></i>
+    <h3>Preview not available</h3>
+    <p>${esc(label || 'This file')} cannot be previewed directly.</p>
+    <div class="viewer-actions">
+      <a href="${esc(src || '#')}" target="_blank" rel="noopener"><i class="fas fa-up-right-from-square"></i> Open file</a>
+      <a href="${esc(src || '#')}" download><i class="fas fa-download"></i> Download file</a>
+    </div>
+  </div>`;
+}
+
+function openFileViewer(url, name, mime, attachId) {
+  const label = name || 'File';
+  const ext = fileExt(label) || fileExt(url);
+  const mimeText = String(mime || '').toLowerCase();
+  viewerTitle.textContent = label;
+  viewerBadge.textContent = (ext || 'file').toUpperCase();
+  viewerDownload.href = url || '#';
+  viewerDownload.setAttribute('download', label);
+  viewerBody.innerHTML = '<div class="viewer-message"><i class="fas fa-spinner fa-spin"></i><h3>Loading preview</h3></div>';
+  fileViewer.classList.add('show');
+  fileViewer.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+
+  if (!url && !attachId) {
+    showNoPreview('#', label);
+  } else if (ext === 'pdf' || mimeText.includes('pdf')) {
+    showFrame(url, label);
+  } else if (['ppt', 'pptx'].includes(ext) && attachId) {
+    showFrame(`API/student/studentClassroom/get_attachment_preview.php?attach_id=${encodeURIComponent(attachId)}`, label);
+  } else if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp', 'avif'].includes(ext) || mimeText.startsWith('image/')) {
+    showImage(url, label);
+  } else if (['mp4', 'webm', 'ogg', 'mov'].includes(ext) || mimeText.startsWith('video/')) {
+    showMedia(url, 'video', mime);
+  } else if (['mp3', 'wav', 'aac', 'm4a', 'ogg'].includes(ext) || mimeText.startsWith('audio/')) {
+    showMedia(url, 'audio', mime);
+  } else if (['txt', 'csv', 'json', 'xml', 'css', 'js', 'md', 'sql', 'log'].includes(ext) || mimeText.startsWith('text/')) {
+    showText(url, label);
+  } else {
+    showNoPreview(url, label);
+  }
+}
+
 function applyTheme() {
   const dark = localStorage.getItem('tl_dark') === '1';
   document.body.classList.toggle('dark', dark);
@@ -229,6 +377,21 @@ darkToggle.addEventListener('click', () => {
   const next = document.body.classList.contains('dark') ? '0' : '1';
   localStorage.setItem('tl_dark', next);
   applyTheme();
+});
+
+document.addEventListener('click', e => {
+  const trigger = e.target.closest('[data-file-trigger]');
+  if (trigger) {
+    openFileViewer(trigger.dataset.url || '', trigger.dataset.name || '', trigger.dataset.mime || '', trigger.dataset.attachId || '');
+  }
+});
+
+document.getElementById('viewerClose').addEventListener('click', closeFileViewer);
+fileViewer.addEventListener('click', e => {
+  if (e.target === fileViewer) closeFileViewer();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && fileViewer.classList.contains('show')) closeFileViewer();
 });
 
 applyTheme();
